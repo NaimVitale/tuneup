@@ -6,7 +6,7 @@ import LupaBusqueda from "../assets/lupa_busqueda.webp"
 
 function Header() {
   return (
-    <header className="bg-[#D9D9D9] shadow-xl p-4 ">
+    <header className="bg-[#f8f8f8] shadow-xl p-4 sticky top-0 z-99">
       <div className="flex items-center justify-between w-[90%] m-auto">
         <div className="w-[30%]">
           <img src={TuneUpHeader} alt="TuneUp Header" className="w-20 cursor-pointer" />

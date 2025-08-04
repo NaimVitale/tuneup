@@ -17,7 +17,7 @@ function Cardproduct () {
                 </div>
                 <div className="flex items-end justify-between">
                     <p className="text-xl text-[#C122ED]">Desde 79€</p>
-                    <button className='bg-[#C122ED] py-3 px-4 rounded-md text-white font-bold w-max'>Comprar</button>
+                    <button className='py-3 px-4 btn-primary w-max'>Comprar</button>
                 </div>
             </div>
         </div>
