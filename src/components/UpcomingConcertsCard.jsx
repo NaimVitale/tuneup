@@ -17,7 +17,7 @@ function UpcomingConcertsCard() {
             </div>
             <div className="flex flex-col gap-3 justify-end text-l">
                 <p>50mil les interesa</p>
-                <button className="px-6 py-2 rounded-2xl border border-black">Me interesa</button>
+                <button className="px-6 py-2 btn-secondary">Me interesa</button>
             </div>
         </div>
     );

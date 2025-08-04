@@ -2,7 +2,7 @@ import CardSpotifySong from "./CardSpotifySong"
 
 function CardProfileHome() {
     return(
-        <div className="bg-white py-2 px-6 rounded-2xl">
+        <div className="bg-white py-4 px-10 rounded-2xl">
             <div className="flex items-center gap-3">
                 <img src="https://images.icon-icons.com/3446/PNG/512/account_profile_user_avatar_icon_219236.png" alt=""  className="h-20 w-20"/>
                 <div className="flex flex-col gap-1">
