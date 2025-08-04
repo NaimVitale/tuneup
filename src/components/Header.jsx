@@ -15,11 +15,11 @@ function Header() {
           <input type="search" name="" id="" className="rounded-2xl w-full py-2 placeholder:p-5 border-1 shadow-sm border-black relative" placeholder="Buscar..." />
           <img src={LupaBusqueda} alt="search" className="w-6 h-6 absolute right-3 top-1/2 transform -translate-y-1/2" />
         </div>
-        <nav className="flex items-center justify-end gap-6 w-[30%]">
+        <div className="flex items-center justify-end gap-6 w-[30%]">
           <img src={CampanaNotificacion} alt="Notificación" className="w-6 h-6 cursor-pointer" />
           <img src={CarroComprasPng} alt="Carro de compra" className="w-8 h-8 cursor-pointer" />
           <img src={PerfilHeader} alt="Perfil" className="w-8 h-8 cursor-pointer" />
-        </nav>
+        </div>
       </div>
     </header>
   )

@@ -13,7 +13,7 @@ function CardProfileHome() {
             <div className="border border-black mt-3 mb-6"></div>
             <div>
                 <div className='flex justify-between items-center mb-6'>
-                        <h2 className='text-xl'>Mi musica</h2>
+                        <h3 className='text-xl'>Mi musica</h3>
                         <a className='text-md text-[#C122ED]'>Conectar con Spotify</a>
                 </div>
                 <div className="flex gap-3 flex-col">
