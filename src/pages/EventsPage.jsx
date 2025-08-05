@@ -1,0 +1,63 @@
+import Cardproduct from "../components/CardProduct";
+import HeroEvents from "../components/HeroEvents";
+import UpcomingConcertsCard from "../components/UpcomingConcertsCard"
+import SelectFilter from "../components/SelectFilter";
+import { useParams } from 'react-router-dom';
+
+const tiposValidos = ['conciertos', 'festivales'];
+
+export default function EventsPage() {
+    const { tipo } = useParams();
+
+    if (!tiposValidos.includes(tipo)) {
+    return <Navigate to="/404" replace />;
+    }
+
+    return (
+        <div className="">
+            <HeroEvents titulo = { tipo }></HeroEvents>
+            <div className="w-[90%] m-auto">
+                <div className="pb-6 pt-12">
+                    <div className="w-[50%] grid grid-cols-3 gap-6">
+                        <SelectFilter nombreCategoria="Genero"></SelectFilter>
+                        <SelectFilter nombreCategoria="Fecha"></SelectFilter>
+                        <SelectFilter nombreCategoria="Ubicacion"></SelectFilter>
+                    </div>
+                </div>
+                <div className=" pb-12 pt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:row-span-1 gap-8">
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                        <Cardproduct></Cardproduct>
+                    </div>
+                    <div>
+                        <div className="border border-[#C122ED] mt-20 mb-20"></div>
+                    </div>
+                    <div id="proximamente" className="flex gap-8">
+                            <div className="w-[100%] flex flex-col gap-4">
+                                <h3 className="text-xl">300 Proximos {tipo}</h3>
+                                <UpcomingConcertsCard></UpcomingConcertsCard>
+                                <UpcomingConcertsCard></UpcomingConcertsCard>
+                                <UpcomingConcertsCard></UpcomingConcertsCard>
+                                <UpcomingConcertsCard></UpcomingConcertsCard>
+                            </div>
+                            <div className="w-[25%]">
+                                <div className="color-primary rounded-2xl text-white p-4">
+                                    <h3></h3>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
