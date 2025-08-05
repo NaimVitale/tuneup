@@ -27,14 +27,34 @@ body {
     background-color: #C122ED;
     border: 1px #C122ED solid;
     color: white;
+    cursor: pointer;
 }
 
 .btn-primary:hover{
     background-color: transparent;
     border: 1px #C122ED solid;
     color: #C122ED;
+    cursor: pointer;
 }
 
 h2{
     font-size: 42px;
+}
+
+.nav-separated li:not(:first-child) {
+  border-left: 1px solid white;
+}
+
+.swiper-pagination{
+    margin-bottom: 6px;
+}
+
+.swiper-pagination-bullet {
+  background-color: white !important;
+  opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #C122ED !important;
+  opacity: 1;
 }
