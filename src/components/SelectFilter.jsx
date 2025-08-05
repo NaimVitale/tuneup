@@ -1,7 +1,7 @@
 function SelectFilter({ nombreCategoria }) {
     return (
         <div className="relative">
-            <select name="" id={nombreCategoria} className='rounded-3xl py-2 px-5 border-[#C122ED] border-1 text-center text-black text-xl w-full appearance-none'>
+            <select name="" id={nombreCategoria} className='rounded-3xl py-2 px-5 border-[#C122ED] border-1 text-center text-black text-lg w-full appearance-none'>
                 <option value="">{nombreCategoria}</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center px-2 text-gray-700">

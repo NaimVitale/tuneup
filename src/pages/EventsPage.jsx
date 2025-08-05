@@ -19,7 +19,7 @@ export default function EventsPage() {
             <div className="w-[90%] m-auto">
                 <div className="pb-6 pt-12">
                     <div className="w-[50%] grid grid-cols-3 gap-6">
-                        <SelectFilter nombreCategoria="Genero"></SelectFilter>
+                        {tipo == 'festivales' ? (null) : (<SelectFilter nombreCategoria="Genero"></SelectFilter>)}
                         <SelectFilter nombreCategoria="Fecha"></SelectFilter>
                         <SelectFilter nombreCategoria="Ubicacion"></SelectFilter>
                     </div>
