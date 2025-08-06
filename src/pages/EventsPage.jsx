@@ -14,7 +14,7 @@ export default function EventsPage() {
     }
 
     return (
-        <div className="">
+        <div className="mb-20">
             <HeroEvents titulo = { tipo }></HeroEvents>
             <div className="w-[90%] m-auto">
                 <div className="pb-6 pt-12">
@@ -42,19 +42,21 @@ export default function EventsPage() {
                     <div>
                         <div className="border border-[#C122ED] mt-20 mb-20"></div>
                     </div>
-                    <div id="proximamente" className="flex gap-8">
+                    <div id="proximamente">
+                        <h3 className="text-xl">300 Proximos {tipo}</h3>
+                        <div className="flex gap-8 mt-6">
                             <div className="w-[100%] flex flex-col gap-4">
-                                <h3 className="text-xl">300 Proximos {tipo}</h3>
                                 <UpcomingConcertsCard></UpcomingConcertsCard>
                                 <UpcomingConcertsCard></UpcomingConcertsCard>
                                 <UpcomingConcertsCard></UpcomingConcertsCard>
                                 <UpcomingConcertsCard></UpcomingConcertsCard>
                             </div>
                             <div className="w-[25%]">
-                                <div className="color-primary rounded-2xl text-white p-4">
+                                <div className="color-primary rounded-2xl text-white p-4 h-[30vh]">
                                     <h3></h3>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>

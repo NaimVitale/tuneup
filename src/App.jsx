@@ -9,6 +9,7 @@ import Footer from './components/Footer'
 import NavCategories from './components/NavCategories'
 import EventsPage from './pages/EventsPage';
 import ScrollToTop from './components/ScrollToTop';
+import SingleEventPage from './pages/SingleEventPage';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage/>}></Route>
           <Route path='/eventos/:tipo' element={<EventsPage/>}></Route>
+          <Route path='/evento/:tipo/:id' element={<SingleEventPage/>}/>
         </Routes>
     </main>
     <Footer></Footer>
