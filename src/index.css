@@ -58,3 +58,10 @@ h2{
   background-color: #C122ED !important;
   opacity: 1;
 }
+
+.centrado-absoluto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
