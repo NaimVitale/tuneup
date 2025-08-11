@@ -8,6 +8,22 @@ body {
     background-color:#C122ED;
 }
 
+.btn-hero {
+    background-color:#C122ED;
+    border: 1px #C122ED solid;
+    border-radius: 50px;
+    font-weight: 500;
+    color: white;
+    transition: all 0.5s;
+}
+
+.btn-hero:hover{
+    background-color: transparent;
+    border: 1px white solid;
+    color: white;
+    cursor: pointer;
+}
+
 .btn-primary {
     background-color:#C122ED;
     border: 1px #C122ED solid;
@@ -15,6 +31,13 @@ body {
     font-weight: 500;
     color: white;
     transition: all 0.5s;
+}
+
+.btn-primary:hover{
+    background-color: transparent;
+    border: 1px #C122ED solid;
+    color: #C122ED;
+    cursor: pointer;
 }
 
 .btn-secondary{
@@ -27,13 +50,6 @@ body {
     background-color: #C122ED;
     border: 1px #C122ED solid;
     color: white;
-    cursor: pointer;
-}
-
-.btn-primary:hover{
-    background-color: transparent;
-    border: 1px #C122ED solid;
-    color: #C122ED;
     cursor: pointer;
 }
 

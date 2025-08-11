@@ -46,7 +46,7 @@ const HeroHome = () => {
                 <div className="flex flex-col gap-6 w-[60%]">
                   <h1 className="text-6xl font-bold text-white whitespace-pre-line">{slide.title}</h1>
                   <p className="text-2xl text-white mb-6">{slide.text}</p>
-                  <button className="btn-primary py-3 px-5 text-lg w-max">
+                  <button className="btn-hero py-3 px-5 text-lg w-max">
                     Consigue tu entrada
                   </button>
                 </div>
