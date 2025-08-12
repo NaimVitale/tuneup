@@ -17,7 +17,7 @@ export default function EventsPage() {
     }
  
     useEffect(() => {
-        axios.get(`http://localhost:3000/${tipo}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/${tipo}`)
         .then(response => {
             console.log(response.data);
             setEvents(response.data);
