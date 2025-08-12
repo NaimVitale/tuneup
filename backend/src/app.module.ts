@@ -2,6 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConciertosModule } from './conciertos/conciertos.module';
+import { Concierto } from './conciertos/entities/concierto.entity';
+import { ArtistasModule } from './artistas/artistas.module';
+import { Artista } from './artistas/entities/artista.entity';
+import { RecintosModule } from './recintos/recintos.module';
+import { Recinto } from './recintos/entities/recinto.entity';
 
 @Module({
   imports: [
@@ -19,11 +24,12 @@ import { ConciertosModule } from './conciertos/conciertos.module';
         password: configService.get<string>('DB_PASS'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: true, // solo para dev, en prod usa migraciones
         logging: true, // <== así ves en consola las consultas y conexión
       }),
     }),
     ConciertosModule,
+    ArtistasModule,
+    RecintosModule,
   ],
 })
 export class AppModule {}

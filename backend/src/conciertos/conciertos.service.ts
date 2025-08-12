@@ -1,15 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Concierto } from './entities/concierto.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ConciertosService {
+  constructor(
+    @InjectRepository(Concierto)
+    private readonly conciertoRepository: Repository<Concierto>,
+  ) {}
+
   create(createConciertoDto: CreateConciertoDto) {
     return 'This action adds a new concierto';
   }
 
   findAll() {
-    return `This action returns all conciertos`;
+    return this.conciertoRepository
+    .createQueryBuilder('concierto')
+    .leftJoinAndSelect('concierto.artista', 'artista')
+    .leftJoinAndSelect('concierto.recinto', 'recinto')
+    .select([
+      'concierto.id',
+      'concierto.fecha',
+      'artista.id',
+      'artista.nombre',
+      'artista.img_card',
+      'recinto.id',
+      'recinto.nombre',
+      'recinto.ubicacion',
+    ])
+    .orderBy('concierto.fecha', 'ASC')
+    .getMany();
   }
 
   findOne(id: number) {

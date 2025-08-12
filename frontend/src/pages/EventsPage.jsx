@@ -3,15 +3,29 @@ import HeroEvents from "../components/HeroEvents";
 import UpcomingConcertsCard from "../components/UpcomingConcertsCard"
 import SelectFilter from "../components/SelectFilter";
 import { useParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 const tiposValidos = ['conciertos', 'festivales'];
 
 export default function EventsPage() {
+    const [events, setEvents] = useState([]);
     const { tipo } = useParams();
 
     if (!tiposValidos.includes(tipo)) {
     return <Navigate to="/404" replace />;
     }
+ 
+    useEffect(() => {
+        axios.get(`http://localhost:3000/${tipo}`)
+        .then(response => {
+            console.log(response.data);
+            setEvents(response.data);
+        })
+        .catch(error => {
+            console.error('Error al cargar conciertos:', error);
+        });
+    }, []);
 
     return (
         <div className="mb-20">
@@ -26,18 +40,11 @@ export default function EventsPage() {
                 </div>
                 <div className=" pb-12 pt-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:row-span-1 gap-8">
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
+                        {
+                            events.map( event => (
+                                <Cardproduct information={event} key={event.id}></Cardproduct>
+                            ))
+                        }
                     </div>
                     <div>
                         <div className="border border-[#C122ED] mt-20 mb-20"></div>

@@ -11,6 +11,7 @@ import EventsPage from './pages/EventsPage';
 import ScrollToTop from './components/ScrollToTop';
 import SingleEventPage from './pages/SingleEventPage';
 
+
 function App() {
   const [count, setCount] = useState(0)
 
