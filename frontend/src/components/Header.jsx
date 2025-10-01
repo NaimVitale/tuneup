@@ -18,7 +18,6 @@ function Header() {
         </div>
         <div className="flex items-center justify-end gap-6 w-[30%]">
           <img src={CampanaNotificacion} alt="Notificación" className="w-6 h-6 cursor-pointer" />
-          <img src={CarroComprasPng} alt="Carro de compra" className="w-8 h-8 cursor-pointer" />
           <img src={PerfilHeader} alt="Perfil" className="w-8 h-8 cursor-pointer" />
         </div>
       </div>
