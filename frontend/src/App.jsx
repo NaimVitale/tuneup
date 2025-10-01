@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage/>}></Route>
           <Route path=':tipo' element={<EventsPage/>}></Route>
-          <Route path=':tipo/:id' element={<SingleEventPage/>}/>
+          <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
         </Routes>
     </main>
     <Footer></Footer>

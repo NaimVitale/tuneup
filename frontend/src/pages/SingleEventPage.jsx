@@ -4,7 +4,6 @@ import SeatMap from "../components/SeatMap";
 import SelectFilter from "../components/SelectFilter";
 
 export default function SingleEventPage () {
-    
     const [entradasSelecionadas, setEntradasSelecionadas] = useState(null);
 
     return (
