@@ -9,7 +9,7 @@ export default function LoginPage(){
                 <form action="" className="w-full flex flex-col gap-4">
                     <InputForm label={"Correo electrónico*"} type="text" id={"email"}></InputForm>
                     <InputForm label={"Contraseña*"} type="password" id={"password"}></InputForm>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center mb-2">
                         <button className="btn-primary py-2 px-4 text-md w-max">Iniciar sesión</button>
                         <p className="text-sm">¿No tienes cuenta? <Link to={"/register"} className="text-[#C122ED] underline">Registrarte</Link></p>
                     </div>
