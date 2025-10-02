@@ -22,7 +22,7 @@ export default function EventsPage() {
         .then(response => {
             console.log(response.data);
             setEvents(response.data);
-            isLoading(false);
+            setIsLoading(false);
         })
         .catch(error => {
             console.error('Error al cargar conciertos:', error);
