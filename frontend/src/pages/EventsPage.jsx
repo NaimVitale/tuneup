@@ -10,6 +10,7 @@ const tiposValidos = ['conciertos', 'festivales'];
 
 export default function EventsPage() {
     const [events, setEvents] = useState([]);
+    const [isLoading, setIsLoading] = useState(true)
     const { tipo } = useParams();
 
     if (!tiposValidos.includes(tipo)) {
@@ -21,6 +22,7 @@ export default function EventsPage() {
         .then(response => {
             console.log(response.data);
             setEvents(response.data);
+            isLoading(false);
         })
         .catch(error => {
             console.error('Error al cargar conciertos:', error);
@@ -39,13 +41,17 @@ export default function EventsPage() {
                     </div>
                 </div>
                 <div className=" pb-12 pt-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:row-span-1 gap-8">
-                        {
-                            events.map( event => (
-                                <Cardproduct information={event} key={event.id}></Cardproduct>
-                            ))
-                        }
-                    </div>
+                    {isLoading ? (
+                        <div className="text-center py-10 text-lg text-gray-700">
+                        Cargando eventos, por favor espera...
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                        {events.map(event => (
+                            <Cardproduct information={event} key={event.id} />
+                        ))}
+                        </div>
+                    )}
                     <div>
                         <div className="border border-[#C122ED] mt-20 mb-20"></div>
                     </div>

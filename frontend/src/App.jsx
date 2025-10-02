@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import {Routes,Route} from "react-router-dom";
 import './App.css'
 import Header from './components/Header'
@@ -11,6 +9,7 @@ import EventsPage from './pages/EventsPage';
 import ScrollToTop from './components/ScrollToTop';
 import SingleEventPage from './pages/SingleEventPage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 
 function App() {
@@ -27,6 +26,7 @@ function App() {
           <Route path=':tipo' element={<EventsPage/>}></Route>
           <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
           <Route path='/login' element={<LoginPage/>}></Route>
+          <Route path='/register' element={<RegisterPage/>}></Route>
         </Routes>
     </main>
     <Footer></Footer>
