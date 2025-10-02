@@ -10,6 +10,7 @@ import NavCategories from './components/NavCategories'
 import EventsPage from './pages/EventsPage';
 import ScrollToTop from './components/ScrollToTop';
 import SingleEventPage from './pages/SingleEventPage';
+import LoginPage from './pages/LoginPage';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path='/' element={<HomePage/>}></Route>
           <Route path=':tipo' element={<EventsPage/>}></Route>
           <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
+          <Route path='/login' element={<LoginPage/>}></Route>
         </Routes>
     </main>
     <Footer></Footer>
