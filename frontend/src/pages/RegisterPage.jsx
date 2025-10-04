@@ -4,10 +4,11 @@ import { Bell, CheckCircle, Shield, Ticket } from "lucide-react";
 
 export default function RegisterPage(){
     return(
-        <div className="h-[80vh] flex justify-center items-center text-black">
-                <div className="p-[4em] rounded-2xl bg-white shadow-lg flex gap-12">
+        <div className="h-[90vh] flex justify-center items-center text-black bg-gradient-to-l from-[#D946EF]/70 via-[#9333EA]/50 to-[#6D28D9]/40">
+                <div className="p-[4em] w-[50%] rounded-2xl bg-white shadow-lg flex gap-12">
                     <div className="md:w-1/2 flex flex-col justify-start gap-6 mb-8 md:mb-0 pr-6">
-                        <h2 className="text-2xl font-semibold">Disfruta de ventajas exclusivas</h2>
+                        <h1 className="text-6xl font-semibold mb-2">Registrate</h1>
+                        <h3 className="text-2xl font-semibold">Disfruta de ventajas exclusivas</h3>
                         <ul className="flex flex-col gap-6 text-gray-700">
                             <li className="flex items-center gap-2">
                             <CheckCircle className="text-[#C122ED]" size={20} />

@@ -6,7 +6,7 @@ function CardProfileHome() {
             <div className="flex items-center gap-3">
                 <img src="https://images.icon-icons.com/3446/PNG/512/account_profile_user_avatar_icon_219236.png" alt=""  className="h-20 w-20"/>
                 <div className="flex flex-col gap-1">
-                    <p className="text-2xl">Naim</p>
+                    <p className="text-2xl">%User%</p>
                     <p>Usuario desde Nov 2023</p>
                 </div>
             </div>

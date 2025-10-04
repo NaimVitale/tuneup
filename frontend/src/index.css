@@ -53,6 +53,21 @@ body {
     cursor: pointer;
 }
 
+.btn-light{
+    border: 1px white solid;
+    background-color: white;
+    color: #C122ED;
+    border-radius: 50px;
+    transition: all 0.5s;
+}
+
+.btn-light:hover{
+    background-color: transparent;
+    border: 1px white  solid;
+    color: white;
+    cursor: pointer;
+}
+
 h2{
     font-size: 42px;
 }

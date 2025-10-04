@@ -3,7 +3,7 @@ import InputForm from "../components/InputForm";
 
 export default function LoginPage(){
     return(
-        <div className="h-[80vh] flex justify-center items-center text-black">
+        <div className="h-[90vh] flex justify-center items-center text-black bg-gradient-to-r from-[#D946EF]/70 via-[#A21CAF]/50 to-[#7C3AED]/40">
             <div className="p-[4em] h-[40vh] w-[30vw] rounded-2xl flex flex-col items-center justify-center gap-12 bg-white shadow-lg">
                 <h1 className="text-5xl">Iniciar sesión</h1>
                 <form action="" className="w-full flex flex-col gap-4">

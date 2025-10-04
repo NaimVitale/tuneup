@@ -10,6 +10,7 @@ import ScrollToTop from './components/ScrollToTop';
 import SingleEventPage from './pages/SingleEventPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
 
 
 function App() {
@@ -22,11 +23,12 @@ function App() {
     <main>
         <ScrollToTop></ScrollToTop>
         <Routes>
-          <Route path='/' element={<HomePage/>}></Route>
-          <Route path=':tipo' element={<EventsPage/>}></Route>
+          <Route path='/' element={<HomePage/>}/>
+          <Route path=':tipo' element={<EventsPage/>}/>
           <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
-          <Route path='/login' element={<LoginPage/>}></Route>
-          <Route path='/register' element={<RegisterPage/>}></Route>
+          <Route path='/login' element={<LoginPage/>}/>
+          <Route path='/register' element={<RegisterPage/>}/>
+          <Route path='/perfil/:id' element={<ProfilePage/>}/>
         </Routes>
     </main>
     <Footer></Footer>
