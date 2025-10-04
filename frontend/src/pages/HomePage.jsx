@@ -4,11 +4,13 @@ import CTAinformacion from '../components/CTAInformacion';
 import HeroHome from '../components/HeroHome';
 import SelectFilter from '../components/SelectFilter';
 import UpcomingConcertsCard from '../components/UpcomingConcertsCard';
+import { useAuth } from "../context/AuthContext";
 import { Link } from 'react-router-dom';
 
 function Homepage() {
+    const { user, token} = useAuth();
     return (
-        <div id="container" className='flex flex-col gap-8 mb-20'>
+        <div id="container" className='flex flex-col gap-8'>
             <HeroHome></HeroHome>
             <div className='m-auto flex flex-col gap-30 pt-12'>
                 <div id="destacados" className='w-[90%] m-auto'>
@@ -43,17 +45,19 @@ function Homepage() {
                     </div>
                 </div>
                 <CTAinformacion></CTAinformacion>
-                <div id="perfil" className='w-[90%] m-auto'>
-                    <div className='flex justify-between items-end mb-10'>
-                        <h2 className='text-3xl'>Mi perfil</h2>
-                        <Link to={"perfil/1"} className='text-xl text-[#C122ED] flex items-center'>Ver perfil completo
-                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-narrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M15 16l4 -4" /><path d="M15 8l4 4" /></svg>
-                        </Link>
+                {token && (
+                    <div id="perfil" className='w-[90%] m-auto mb-30'>
+                        <div className='flex justify-between items-end mb-10'>
+                            <h2 className='text-3xl'>Mi perfil</h2>
+                            <Link to={"perfil/1"} className='text-xl text-[#C122ED] flex items-center'>Ver perfil completo
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-narrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M15 16l4 -4" /><path d="M15 8l4 4" /></svg>
+                            </Link>
+                        </div>
+                        <div className='mt-2'>
+                            <CardProfileHome usuario={user}></CardProfileHome>
+                        </div>
                     </div>
-                    <div className='mt-2'>
-                        <CardProfileHome></CardProfileHome>
-                    </div>
-                </div>
+                )}
             </div>
         </div>
     )

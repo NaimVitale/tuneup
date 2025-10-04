@@ -11,12 +11,14 @@ import SingleEventPage from './pages/SingleEventPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
+import { AuthProvider } from './context/AuthContext';
 
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
+    <AuthProvider>
     <div>
     <Header></Header>
     <NavCategories></NavCategories>
@@ -33,6 +35,7 @@ function App() {
     </main>
     <Footer></Footer>
     </div>
+    </AuthProvider>
   )
 }
 
