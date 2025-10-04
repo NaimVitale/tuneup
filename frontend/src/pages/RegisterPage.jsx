@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputForm from "../components/InputForm";
+import { useRegisterForm } from "../hooks/useRegisterForm"
 import { Bell, CheckCircle, Shield, Ticket } from "lucide-react";
 
 export default function RegisterPage(){
+    
+    const navigate = useNavigate();
+    const { formData, handleChange, handleSubmit, loading, error } = useRegisterForm(navigate);
+
     return(
         <div className="h-[90vh] flex justify-center items-center text-black bg-gradient-to-l from-[#D946EF]/70 via-[#9333EA]/50 to-[#6D28D9]/40">
                 <div className="p-[4em] w-[50%] rounded-2xl bg-white shadow-lg flex gap-12">
@@ -29,13 +35,24 @@ export default function RegisterPage(){
                         </ul>
                     </div>
                     <div className="md:w-1/2 flex flex-col items-center justify-center gap-12">
-                        <form action="" className="w-full flex flex-col gap-4">
-                            <InputForm label={"Nombre*"} type="text" id={"nombre"}></InputForm>
-                            <InputForm label={"Apellido"} type="text" id={"apellido"}></InputForm>
-                            <InputForm label={"Correo electrónico*"} type="text" id={"email"}></InputForm>
-                            <InputForm label={"Teléfono"} type="text" id={"telefono"}></InputForm>
-                            <InputForm label={"Contraseña*"} type="password" id={"password"}></InputForm>
-                            <button className="btn-primary py-2 px-4 text-md w-max">Registrate</button>
+                        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+                            <div className="flex flex-col gap-1">
+                                <InputForm label={"Nombre*"} type="text" id={"nombre"} value={formData.nombre} onChange={handleChange}></InputForm>
+                                {error?.nombre && <p className="text-red-500 text-sm pl-4">{error?.nombre}</p>}
+                             </div>
+                             <div className="flex flex-col gap-1">
+                                <InputForm label={"Apellido"} type="text" id={"apellido"} value={formData.apellido} onChange={handleChange}></InputForm>
+                                {error?.apellido && <p className="text-red-500 text-sm pl-4">{error?.apellido}</p>}
+                            </div>
+                             <div className="flex flex-col gap-1">
+                                <InputForm label={"Correo electrónico*"} type="text" id={"email"} value={formData.email} onChange={handleChange}></InputForm>
+                                {error?.email && <p className="text-red-500 text-sm pl-4">{error?.email}</p>}
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <InputForm label={"Contraseña*"} type="password" id={"password"} value={formData.password} onChange={handleChange}></InputForm>
+                                {error?.password && <p className="text-red-500 text-sm pl-4">{error?.password}</p>}
+                            </div>
+                            <button className="btn-primary py-2 px-4 text-md w-max" type="submit">Registrate</button>
                         </form>
                     </div>
             </div>
