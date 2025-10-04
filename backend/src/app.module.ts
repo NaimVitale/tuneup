@@ -8,6 +8,7 @@ import { Artista } from './artistas/entities/artista.entity';
 import { RecintosModule } from './recintos/recintos.module';
 import { Recinto } from './recintos/entities/recinto.entity';
 import { UsuarioModule } from './usuarios/usuario.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UsuarioModule } from './usuarios/usuario.module';
     ArtistasModule,
     RecintosModule,
     UsuarioModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

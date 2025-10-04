@@ -6,8 +6,10 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
+  const frontendUrl = process.env.FRONTEND_URL;
+
   app.enableCors({
-    origin: ['https://tuneup-blush.vercel.app'],
+    origin: frontendUrl,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     // credentials: true,
   });
