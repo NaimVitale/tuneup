@@ -10,8 +10,9 @@ import ScrollToTop from './components/ScrollToTop';
 import SingleEventPage from './pages/SingleEventPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import ProfilePage from './pages/ProfilePage';
 import { AuthProvider } from './context/AuthContext';
+import ProfileLayout from './layouts/ProfileLayout';
+import ProfileInfoPage from './pages/ProfilePageInfo';
 
 
 function App() {
@@ -30,7 +31,9 @@ function App() {
           <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
-          <Route path='/perfil/:id' element={<ProfilePage/>}/>
+          <Route path='/perfil' element={<ProfileLayout/>}>
+            <Route path="ajustes/:id" element={<ProfileInfoPage/>}/>
+          </Route>
         </Routes>
     </main>
     <Footer></Footer>

@@ -17,20 +17,20 @@ export default function RegisterPage(){
                         <h3 className="text-2xl font-semibold">Disfruta de ventajas exclusivas</h3>
                         <ul className="flex flex-col gap-6 text-gray-700">
                             <li className="flex items-center gap-2">
-                            <CheckCircle className="text-[#C122ED]" size={20} />
-                            Accede a ofertas y promociones especiales
+                                <CheckCircle className="text-[#C122ED]" size={20} />
+                                Accede a ofertas y promociones especiales
                             </li>
                             <li className="flex items-center gap-2">
-                            <Ticket className="text-[#C122ED]" size={20} />
-                            Guarda tus entradas favoritas fácilmente
+                                <Ticket className="text-[#C122ED]" size={20} />
+                                Guarda tus entradas favoritas fácilmente
                             </li>
                             <li className="flex items-center gap-2">
-                            <Bell className="text-[#C122ED]" size={20} />
-                            Recibe alertas de conciertos y eventos
+                                <Bell className="text-[#C122ED]" size={20} />
+                                Recibe alertas de conciertos y eventos
                             </li>
                             <li className="flex items-center gap-2">
-                            <Shield className="text-[#C122ED]" size={20} />
-                            Gestiona tus compras de forma segura
+                                <Shield className="text-[#C122ED]" size={20} />
+                                Gestiona tus compras de forma segura
                             </li>
                         </ul>
                     </div>

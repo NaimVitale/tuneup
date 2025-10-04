@@ -30,7 +30,7 @@ function Header() {
         {token && (
           <div className="flex items-center justify-end gap-6 w-[30%]">
             <Bell className="text-[#C122ED]" size={20}/>
-            <Link to={"/perfil/1"} className="flex items-center justify-end gap-2">
+            <Link to={"/perfil/ajustes/1"} className="flex items-center justify-end gap-2">
               <User className="text-[#C122ED]" size={22}/>
               <p className="text-lg">Hola, {user.nombre}</p>
             </Link>
