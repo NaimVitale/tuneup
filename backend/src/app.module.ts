@@ -7,6 +7,7 @@ import { ArtistasModule } from './artistas/artistas.module';
 import { Artista } from './artistas/entities/artista.entity';
 import { RecintosModule } from './recintos/recintos.module';
 import { Recinto } from './recintos/entities/recinto.entity';
+import { UsuarioModule } from './usuarios/usuario.module';
 
 @Module({
   imports: [
@@ -24,12 +25,14 @@ import { Recinto } from './recintos/entities/recinto.entity';
         password: configService.get<string>('DB_PASS'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        synchronize:false,
         logging: true, // <== así ves en consola las consultas y conexión
       }),
     }),
     ConciertosModule,
     ArtistasModule,
     RecintosModule,
+    UsuarioModule,
   ],
 })
 export class AppModule {}
