@@ -40,14 +40,7 @@ export const useLoginForm = (navigate) => {
             login(user.usuario, user.token);
             navigate("/");
         } catch (err) {
-          const response = err
-          if (response?.errors) {
-            setError(response.errors);
-          } else if (response?.field && response?.message) {
-            setError({ [response.field]: response.message });
-          } else {
-            setError({ general: 'Error al registrar usuario' });
-          }
+          setError(prev => ({ ...prev, unauthorized: err.message }));
         } finally {
           setLoading(false);
         }

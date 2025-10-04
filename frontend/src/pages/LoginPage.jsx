@@ -11,8 +11,14 @@ export default function LoginPage(){
             <div className="p-[4em] h-[40vh] w-[30vw] rounded-2xl flex flex-col items-center justify-center gap-12 bg-white shadow-lg">
                 <h1 className="text-5xl">Iniciar sesión</h1>
                 <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-                    <InputForm label={"Correo electrónico*"} type="text" id={"email"} value={formData.email} onChange={handleChange}></InputForm>
-                    <InputForm label={"Contraseña*"} type="password" id={"password"} value={formData.password} onChange={handleChange}></InputForm>
+                    <div className="flex flex-col gap-1">
+                        <InputForm label={"Correo electrónico*"} type="text" id={"email"} value={formData.email} onChange={handleChange}></InputForm>
+                        {error?.email && <p className="text-red-500 text-sm pl-4">{error?.email}</p>}
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <InputForm label={"Contraseña*"} type="password" id={"password"} value={formData.password} onChange={handleChange}></InputForm>
+                        {error?.unauthorized && <p className="text-red-500 text-sm pl-4">{error?.unauthorized}</p>}
+                    </div>
                     <div className="flex justify-between items-center mt-2">
                         <button className="btn-primary py-2 px-4 text-md w-max">Iniciar sesión</button>
                         <p className="text-sm">¿No tienes cuenta? <Link to={"/register"} className="text-[#C122ED] underline">Registrarte</Link></p>
