@@ -1,18 +1,16 @@
 import { useState } from 'react'
 import {Routes,Route} from "react-router-dom";
 import './App.css'
-import Header from './components/Header'
 import HomePage from './pages/HomePage'
-import Footer from './components/Footer'
-import NavCategories from './components/NavCategories'
 import EventsPage from './pages/EventsPage';
-import ScrollToTop from './components/ScrollToTop';
 import SingleEventPage from './pages/SingleEventPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import { AuthProvider } from './context/AuthContext';
 import ProfileLayout from './layouts/ProfileLayout';
 import ProfileInfoPage from './pages/ProfilePageInfo';
+import PublicLayout from './layouts/PublicLayout';
+import AdminLayout from './layouts/AdminLayout';
 
 
 function App() {
@@ -20,24 +18,21 @@ function App() {
 
   return (
     <AuthProvider>
-    <div>
-    <Header></Header>
-    <NavCategories></NavCategories>
-    <main>
-        <ScrollToTop></ScrollToTop>
-        <Routes>
-          <Route path='/' element={<HomePage/>}/>
-          <Route path=':tipo' element={<EventsPage/>}/>
-          <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
-          <Route path='/login' element={<LoginPage/>}/>
-          <Route path='/register' element={<RegisterPage/>}/>
-          <Route path='/perfil' element={<ProfileLayout/>}>
-            <Route path="ajustes/:id" element={<ProfileInfoPage/>}/>
-          </Route>
-        </Routes>
-    </main>
-    <Footer></Footer>
-    </div>
+          <Routes>
+            <Route element={<PublicLayout/>}>
+              <Route path='/'element={<HomePage/>}/>
+              <Route path=':tipo' element={<EventsPage/>}/>
+              <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
+              <Route path='/login' element={<LoginPage/>}/>
+              <Route path='/register' element={<RegisterPage/>}/>
+              <Route path='/perfil' element={<ProfileLayout/>}>
+                  <Route path="ajustes/:id" element={<ProfileInfoPage/>}/>
+              </Route>
+            </Route>
+
+            <Route path='/admin' element={<AdminLayout/>}>
+            </Route>
+          </Routes>
     </AuthProvider>
   )
 }
