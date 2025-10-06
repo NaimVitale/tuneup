@@ -51,7 +51,7 @@ function Homepage() {
                     <div id="perfil" className='w-[90%] m-auto mb-30'>
                         <div className='flex justify-between items-end mb-10'>
                             <h2 className='text-3xl'>Mi perfil</h2>
-                            <Link to={"perfil/ajustes/1"} className='text-xl text-[#C122ED] flex items-center'>Ver perfil completo
+                            <Link to={`perfil/ajustes/${user.id}`} className='text-xl text-[#C122ED] flex items-center'>Ver perfil completo
                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-narrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M15 16l4 -4" /><path d="M15 8l4 4" /></svg>
                             </Link>
                         </div>
