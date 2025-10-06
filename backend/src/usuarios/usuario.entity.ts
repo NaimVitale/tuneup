@@ -1,5 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
+export enum RolUsuario {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Entity('usuarios')
 export class Usuario {
   @PrimaryGeneratedColumn()
@@ -16,6 +21,13 @@ export class Usuario {
 
   @Column({ type: 'varchar', length: 20 })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: RolUsuario,
+    default: RolUsuario.USER,
+  })
+  readonly rol: RolUsuario;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
