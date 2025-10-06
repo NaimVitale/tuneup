@@ -1,9 +1,12 @@
 import { Ticket, LogOut, Settings, Star } from "lucide-react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function ProfileLayout() {
-    const { logout } = useAuth();
+    const { token, logout } = useAuth();
+
+    if (!token) return <Navigate to="/login" replace/>;
+
     return (
         <div className="h-[90vh] flex justify-center items-center w-full bg-gradient-to-l from-[#6B21A8]/70 via-[#7E22CE]/50 to-[#9333EA]/30">
                 <div className="p-[3em] rounded-2xl bg-white shadow-lg flex gap-12 w-[60%] h-[60vh]">

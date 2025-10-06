@@ -1,8 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import HeaderAdmin from "../components/HeaderAdmin";
+import { useAuth } from "../context/AuthContext";
 
 
 export default function AdminLayout(){
+    const { token, user } = useAuth();
+
+    if (!token) return <Navigate to="/" replace/>;
+    if (user.rol !== "admin") return <Navigate to="/" replace/>;
+
     return(
         <div className="flex">
             <div className="w-[20%]">
