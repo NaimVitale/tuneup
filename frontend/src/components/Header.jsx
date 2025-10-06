@@ -33,7 +33,7 @@ function Header() {
                 <LayoutDashboardIcon className="text-[#C122ED]" size={22}/>
               </Link>
             )}
-            <Link to={"/perfil/ajustes/1"} className="flex items-center justify-end gap-2">
+            <Link to={`/perfil/ajustes/${user.id}`} className="flex items-center justify-end gap-2">
               <User className="text-[#C122ED]" size={22}/>
               <p className="text-lg">Hola, {user.nombre}</p>
             </Link>
