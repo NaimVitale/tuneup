@@ -23,7 +23,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
 
-    const payload = { sub: usuario.id, email: usuario.email };
+    const payload = { sub: usuario.id, rol: usuario.rol };
     const token = this.jwtService.sign(payload);
 
     return { token, usuario: { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol, fecha: usuario.createdAt} };
