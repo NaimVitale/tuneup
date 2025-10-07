@@ -73,8 +73,6 @@ export const useUpdateUser = ({ userData}) => {
 
       updateUser({
         nombre: form.nombre,
-        apellido: form.apellido,
-        email: form.email,
       });
 
       setSuccess(true);
