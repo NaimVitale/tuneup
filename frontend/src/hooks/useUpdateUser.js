@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { patchUser } from "../services/userServices";
+import { useAuth } from "../context/AuthContext";
 
 export const useUpdateUser = ({ userData}) => {
   const [form, setForm] = useState({
@@ -9,6 +10,7 @@ export const useUpdateUser = ({ userData}) => {
     telefono: ""
   });
 
+  const {updateUser} = useAuth();
   const [loading, setLoading] = useState(false);
   const [errorUpdate, setErrorUpdate] = useState(null);
   const [updatedUser, setUpdatedUser] = useState(null);
@@ -68,6 +70,12 @@ export const useUpdateUser = ({ userData}) => {
       userData.nombre = form.nombre;
       userData.apellido = form.apellido;
       userData.email = form.email;
+
+      updateUser({
+        nombre: form.nombre,
+        apellido: form.apellido,
+        email: form.email,
+      });
 
       setSuccess(true);
       return data;
