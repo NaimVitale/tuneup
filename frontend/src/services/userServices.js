@@ -34,3 +34,35 @@ export const getUser = async(id, token) => {
     throw error.response?.data || error;
   }
 }
+
+export const patchUserPassword = async(id, userData, token) => {
+  try{
+    const response = await axios.patch(
+      `${API_URL}/${id}/password`,
+      userData,
+      {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data;
+  }catch (error) {
+    throw error.response?.data || error;
+  }
+}
+
+export const patchUser = async(id, userData, token) => {
+  try{
+    const response = await axios.patch(
+      `${API_URL}/${id}`,
+      userData,
+      {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data;
+  }catch (error) {
+    throw error.response?.data || error;
+  }
+}
