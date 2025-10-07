@@ -3,6 +3,8 @@ import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dtos/create-usuario.dto';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UpdateUsuarioDto } from './dtos/update-usuario.dto';
+import { UpdatePasswordDto } from './dtos/update-password-usuario.dto';
 
 @Controller('usuarios')
 export class UsuarioController {
@@ -33,10 +35,15 @@ export class UsuarioController {
     return usuario;
   }
 
-  /*@Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usuarioService.update(id, updateUserDto);
-  }*/
+  @Patch(':id')
+  updateUsuario(@Param('id') id: string, @Body() dto: UpdateUsuarioDto) {
+    return this.usuarioService.update(+id, dto);
+  }
+
+  @Patch(':id/password')
+  updatePassword(@Param('id') id: string, @Body() dto: UpdatePasswordDto) {
+    return this.usuarioService.updatePassword(+id, dto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: number) {
