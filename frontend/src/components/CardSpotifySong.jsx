@@ -1,3 +1,5 @@
+import { PlayCircle } from "lucide-react"
+
 function CardSpotifySong() {
     return (
         <div className="bg-[#D9D9D9] flex justify-between rounded-2xl px-6 py-4 items-center">
@@ -10,7 +12,7 @@ function CardSpotifySong() {
             </div>
             <div className="flex items-center gap-3">
                 <p>3:45</p>
-                <img src="https://icons.veryicon.com/png/o/internet--web/web-video-clip/play-332.png" alt="" className="h-6 w-6" />
+                <PlayCircle size={22} className="text-[#C122ED]"/>
             </div>
         </div>
     )

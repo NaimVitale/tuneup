@@ -3,7 +3,7 @@ import PerfilHeader from "../assets/perfil_header.webp"
 import LupaBusqueda from "../assets/lupa_busqueda.webp"
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-import { Bell, LayoutDashboardIcon, LogOut, User} from "lucide-react"
+import { Bell, LayoutDashboardIcon, LogOut, SearchIcon, User} from "lucide-react"
 
 function Header() {
   const { user, token, logout } = useAuth();
@@ -15,7 +15,7 @@ function Header() {
         </div>
         <div className="relative w-[40%]">
           <input type="search" name="" id="" className="rounded-2xl w-full py-2 placeholder:p-5 border-1 shadow-sm border-black relative" placeholder="Buscar..." />
-          <img src={LupaBusqueda} alt="search" className="w-6 h-6 absolute right-3 top-1/2 transform -translate-y-1/2" />
+          <SearchIcon size={22} className="w-6 h-6 absolute right-3 top-1/2 transform -translate-y-1/2" />
         </div>
         {!token && (
           <div className="flex items-center justify-end gap-2 w-[30%]">

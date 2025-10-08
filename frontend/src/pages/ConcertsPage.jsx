@@ -2,39 +2,19 @@ import Cardproduct from "../components/CardProduct";
 import HeroEvents from "../components/HeroEvents";
 import UpcomingConcertsCard from "../components/UpcomingConcertsCard"
 import SelectFilter from "../components/SelectFilter";
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from "react";
-import axios from 'axios';
+import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 
-const tiposValidos = ['conciertos', 'festivales'];
-
-export default function EventsPage() {
-    const [events, setEvents] = useState([]);
-    const [isLoading, setIsLoading] = useState(true)
-    const { tipo } = useParams();
-
-    if (!tiposValidos.includes(tipo)) {
-    return <Navigate to="/404" replace />;
-    }
+export default function ConcertsPage() {
+    
+    const { data: conciertos, isLoading, isError } = useGetConciertos();
  
-    useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/${tipo}`)
-        .then(response => {
-            setEvents(response.data);
-            setIsLoading(false);
-        })
-        .catch(error => {
-            console.error('Error al cargar conciertos:', error);
-        });
-    }, []);
-
     return (
         <div className="mb-20">
-            <HeroEvents titulo = { tipo }></HeroEvents>
+            <HeroEvents></HeroEvents>
             <div className="w-[90%] m-auto">
                 <div className="pb-6 pt-12">
                     <div className="w-[50%] grid grid-cols-3 gap-6">
-                        {tipo == 'festivales' ? (null) : (<SelectFilter nombreCategoria="Genero"></SelectFilter>)}
+                        <SelectFilter nombreCategoria="Genero"></SelectFilter>
                         <SelectFilter nombreCategoria="Fecha"></SelectFilter>
                         <SelectFilter nombreCategoria="Ubicacion"></SelectFilter>
                     </div>
@@ -46,8 +26,8 @@ export default function EventsPage() {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-                        {events.map(event => (
-                            <Cardproduct information={event} key={event.id} />
+                        {conciertos.map( c => (
+                            <Cardproduct information={c} key={c.id} />
                         ))}
                         </div>
                     )}
@@ -55,7 +35,7 @@ export default function EventsPage() {
                         <div className="border border-[#C122ED] mt-20 mb-20"></div>
                     </div>
                     <div id="proximamente">
-                        <h3 className="text-xl">300 Proximos {tipo}</h3>
+                        <h3 className="text-xl">300 Proximos Conciertos</h3>
                         <div className="flex gap-8 mt-6">
                             <div className="w-[100%] flex flex-col gap-4">
                                 <UpcomingConcertsCard></UpcomingConcertsCard>

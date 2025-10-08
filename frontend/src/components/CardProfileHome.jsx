@@ -3,9 +3,9 @@ import CardSpotifySong from "./CardSpotifySong"
 
 function CardProfileHome({ usuario }) {
     return(
-        <div className="bg-white py-4 px-10 rounded-2xl">
+        <div className="bg-white py-6 px-10 rounded-2xl">
             <div className="flex items-center gap-3">
-                <img src="https://images.icon-icons.com/3446/PNG/512/account_profile_user_avatar_icon_219236.png" alt=""  className="h-20 w-20"/>
+                <img src="https://images.icon-icons.com/3446/PNG/512/account_profile_user_avatar_icon_219236.png" alt=""  className="h-20 w-20" loading="lazy"/>
                 <div className="flex flex-col gap-1">
                     <p className="text-2xl">{usuario.nombre}</p>
                     <p>{dateFormatDateOnly(usuario.fecha)}</p>
