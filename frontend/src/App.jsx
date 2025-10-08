@@ -12,6 +12,8 @@ import ProfileInfoPage from './pages/ProfilePageInfo';
 import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
 import AdminConcertsPage from './pages/AdminPages/AdminConcertsPage';
+import FestivalsPage from './pages/FestivalsPage';
+import ArtistPage from './pages/ArtistPage';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +26,8 @@ function App() {
                 <Route path='/'element={<HomePage/>}/>
                 <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
                 <Route path='/conciertos' element={<EventsPage/>}/>
+                <Route path='/festivales' element={<FestivalsPage/>}></Route>
+                <Route path='/artista/:slug' element={<ArtistPage/>}></Route>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/perfil' element={<ProfileLayout/>}>

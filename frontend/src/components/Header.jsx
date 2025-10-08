@@ -11,7 +11,7 @@ function Header() {
     <header className="bg-[#f8f8f8] shadow-xl py-4 sticky top-0 z-99">
       <div className="flex items-center w-[90%] m-auto">
         <div className="w-[30%]">
-          <Link to={"/"}><img src={TuneUpHeader} alt="TuneUp Header" className="w-20 cursor-pointer" /></Link>
+          <Link to={"/"}><img src={TuneUpHeader} alt="TuneUp Header" className="w-20 cursor-pointer" loading="lazy"/></Link>
         </div>
         <div className="relative w-[40%]">
           <input type="search" name="" id="" className="rounded-2xl w-full py-2 placeholder:p-5 border-1 shadow-sm border-black relative" placeholder="Buscar..." />
@@ -21,7 +21,7 @@ function Header() {
           <div className="flex items-center justify-end gap-2 w-[30%]">
             <Link to={"/login"} className="flex items-center justify-end gap-2">
               <p className="text-lg">Acceder/Registrarse</p>
-              <img src={PerfilHeader} alt="Perfil" className="w-8 h-8 cursor-pointer" />
+              <img src={PerfilHeader} alt="Perfil" className="w-8 h-8 cursor-pointer" loading="lazy"/>
             </Link>
           </div>
         )}
@@ -29,7 +29,7 @@ function Header() {
           <div className="flex items-center justify-end gap-6 w-[30%]">
             <Bell className="text-[#C122ED]" size={20}/>
             {user.rol === "admin" && (
-              <Link to={"/admin"} className="flex items-center justify-end gap-2">
+              <Link to={"/admin/dashboard"} className="flex items-center justify-end gap-2">
                 <LayoutDashboardIcon className="text-[#C122ED]" size={22}/>
               </Link>
             )}

@@ -13,7 +13,6 @@ export function dateFormatWithTime(fechaISO) {
   });
 }
 
-// Formato solo fecha
 export function dateFormatDateOnly(fechaISO) {
   if (!fechaISO) return '';
 
