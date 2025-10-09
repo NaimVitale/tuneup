@@ -4,10 +4,10 @@ import { useAuth } from "../context/AuthContext";
 
 
 export default function AdminLayout(){
-    const { token, user } = useAuth();
+    const { token, rol } = useAuth();
 
     if (!token) return <Navigate to="/" replace/>;
-    if (user.rol !== "admin") return <Navigate to="/" replace/>;
+    if (rol !== "admin") return <Navigate to="/" replace/>;
 
     return(
         <div className="flex">

@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { Bell, LayoutDashboardIcon, LogOut, SearchIcon, User} from "lucide-react"
 
 function Header() {
-  const { user, token, logout } = useAuth();
+  const { user, rol, token, logout } = useAuth();
   return (
     <header className="bg-[#f8f8f8] shadow-xl py-4 sticky top-0 z-99">
       <div className="flex items-center w-[90%] m-auto">
@@ -28,7 +28,7 @@ function Header() {
         {token && (
           <div className="flex items-center justify-end gap-6 w-[30%]">
             <Bell className="text-[#C122ED]" size={20}/>
-            {user.rol === "admin" && (
+            {rol === "admin" && (
               <Link to={"/admin/dashboard"} className="flex items-center justify-end gap-2">
                 <LayoutDashboardIcon className="text-[#C122ED]" size={22}/>
               </Link>
