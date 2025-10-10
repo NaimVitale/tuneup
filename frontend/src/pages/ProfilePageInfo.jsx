@@ -9,7 +9,7 @@ export default function ProfileInfoPage(){
     const { id: userId } = useParams();
     const { userData, loading, error } = useGetUser(userId);
     const { form, handleChange, handleSubmit, loadingUpdate, errorUpdate, updatedUser, success} = useUpdateUser({userData})
-     const { form: passwordForm, handleChangePassword, handleSubmitPassword, loading: loadingPassword, errorPassword, success: successPassword,} = useUpdateUserPassword();
+    const { form: passwordForm, handleChangePassword, handleSubmitPassword, loading: loadingPassword, errorPassword, success: successPassword,} = useUpdateUserPassword();
 
     return(
         <div>
