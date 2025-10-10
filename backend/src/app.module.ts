@@ -2,11 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConciertosModule } from './conciertos/conciertos.module';
-import { Concierto } from './conciertos/entities/concierto.entity';
-import { ArtistasModule } from './artistas/artistas.module';
-import { Artista } from './artistas/entities/artista.entity';
+import { ArtistaModule } from './artistas/artista.module';
 import { RecintosModule } from './recintos/recintos.module';
-import { Recinto } from './recintos/entities/recinto.entity';
 import { UsuarioModule } from './usuarios/usuario.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -31,7 +28,7 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
     ConciertosModule,
-    ArtistasModule,
+    ArtistaModule,
     RecintosModule,
     UsuarioModule,
     AuthModule,

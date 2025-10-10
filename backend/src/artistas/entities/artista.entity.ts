@@ -10,11 +10,17 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
         @Column({ type: 'varchar', length: 60 })
         nombre: string;
 
+        @Column({ type: 'varchar', length: 200 })
+        slug: string;
+
         @Column({ type: 'varchar', length: 500 })
         descripcion: string;
 
         @Column({ type: 'varchar', length: 500 })
         img_card: string;
+
+        @Column({ type: 'longtext' })
+        img_hero: any;
 
         @Column({ type: 'json' })
         images: any;
