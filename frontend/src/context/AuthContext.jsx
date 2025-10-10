@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
   const [rol, setRol] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const [token, setToken] = useState(() => localStorage.getItem("token") || null);
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       setRol(null);
     }
+    setLoading(false);
   }, [token]);
 
   const login = (userData, jwtToken) => {
@@ -53,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, rol, login, logout, updateUser}}>
+    <AuthContext.Provider value={{ user, token, rol, login, logout, loading, updateUser}}>
       {children}
     </AuthContext.Provider>
   );
