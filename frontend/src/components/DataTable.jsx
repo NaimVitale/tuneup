@@ -15,9 +15,9 @@ export default function DataTable({ columns, data, actions }) {
         <tbody>
           {data?.length > 0 ? (
             data.map((item, index) => (
-              <tr key={item.id || index} className="border-b hover:bg-gray-50 transition-colors">
+              <tr key={item.id || index} className="border-b hover:bg-gray-50 transition-colors" >
                 {columns.map((col) => (
-                  <td key={col.key} className="px-6 py-4">
+                  <td key={col.key} className="px-6 py-4 max-w-[100px] truncate" title={item[col.key]}>
                     {col.render ? col.render(item, index) : item[col.key] ?? "-"}
                   </td>
                 ))}

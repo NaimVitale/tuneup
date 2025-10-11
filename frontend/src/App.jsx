@@ -14,6 +14,7 @@ import AdminLayout from './layouts/AdminLayout';
 import AdminConcertsPage from './pages/AdminPages/AdminConcertsPage';
 import FestivalsPage from './pages/FestivalsPage';
 import ArtistPage from './pages/ArtistPage';
+import AdminArtistPage from './pages/AdminPages/AdminArtistPage';
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ function App() {
 
               <Route path='/admin/dashboard' element={<AdminLayout/>}>
                 <Route path='conciertos' element={<AdminConcertsPage/>}/>
+                <Route path='artistas' element={<AdminArtistPage/>}/>
               </Route>
             </Routes>
       </AuthProvider>

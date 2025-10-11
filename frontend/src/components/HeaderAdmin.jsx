@@ -32,7 +32,7 @@ export default function HeaderAdmin(){
                         </Link>
                     </li>
                     <li className="border-b py-4 border-gray-300 px-10">
-                        <Link to={""} className="flex items-center gap-4">
+                        <Link to={"artistas"} className="flex items-center gap-4">
                             <Paintbrush className="text-[#C122ED]" size={23} />
                             Artistas
                         </Link>
