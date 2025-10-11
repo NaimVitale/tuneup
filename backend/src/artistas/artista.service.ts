@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistaDto } from './dto/create-artista.dto';
 import { UpdateArtistaDto } from './dto/update-artista.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Artista } from './entities/artista.entity';
 import { Repository } from 'typeorm';
+import slugify from 'slugify';
+import { ReadArtistaDto } from './dto/read-artista.dto';
 
 @Injectable()
 export class ArtistaService {
@@ -12,12 +14,19 @@ export class ArtistaService {
       private readonly artistaRepo: Repository<Artista>,
     ) {}
   
-  create(createArtistaDto: CreateArtistaDto) {
-    return 'This action adds a new artista';
+    async create(dto: CreateArtistaDto): Promise<Artista> {
+    const slug = slugify(dto.nombre, { lower: true, strict: true });
+
+    const artista = this.artistaRepo.create({
+      ...dto,
+      slug,
+    });
+
+    return this.artistaRepo.save(artista);
   }
 
-  findAll() {
-    return `This action returns all artistas`;
+  async getAll() {
+    return await this.artistaRepo.find();
   }
 
   async findBySlug(slug: string) {
@@ -38,8 +47,24 @@ export class ArtistaService {
     return artista;
   }
 
-  update(id: number, updateArtistaDto: UpdateArtistaDto) {
-    return `This action updates a #${id} artista`;
+  async update(id: number, dto: UpdateArtistaDto) {
+    const artista = await this.artistaRepo.findOne({ where: { id }, select: ['id', 'nombre', 'descripcion', 'slug', 'img_card', 'img_hero', 'images'] });
+
+    if (!artista) throw new NotFoundException('Artista no encontrado');
+
+    if (dto.nombre && dto.nombre !== artista.nombre) {
+      const newSlug = slugify(dto.nombre, { lower: true, strict: true });
+      const exists = await this.artistaRepo.findOne({ where: { slug: newSlug } });
+      if (exists && exists.id !== id) throw new BadRequestException('Ya existe un artista con ese nombre');
+      artista.slug = newSlug;
+    }
+
+    Object.entries(dto).forEach(([key, value]) => {
+      if (value !== undefined) artista[key] = value;
+    });
+
+    return await this.artistaRepo.save(artista);
+
   }
 
   remove(id: number) {

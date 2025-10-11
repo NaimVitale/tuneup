@@ -1,20 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ArtistaService } from './artista.service';
 import { CreateArtistaDto } from './dto/create-artista.dto';
 import { UpdateArtistaDto } from './dto/update-artista.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
 
 @Controller('artistas')
 export class ArtistaController {
   constructor(private readonly artistaService: ArtistaService) {}
 
+  @UseGuards(JwtRolesGuard)
   @Post()
+  @Roles('admin')
   create(@Body() createArtistaDto: CreateArtistaDto) {
     return this.artistaService.create(createArtistaDto);
   }
 
+  @UseGuards(JwtRolesGuard)
   @Get()
+  @Roles('admin')
   findAll() {
-    return this.artistaService.findAll();
+    return this.artistaService.getAll();
   }
 
   @Get(':slug')
@@ -23,9 +29,11 @@ export class ArtistaController {
     return artista;
   }
 
+  @UseGuards(JwtRolesGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArtistaDto: UpdateArtistaDto) {
-    return this.artistaService.update(+id, updateArtistaDto);
+  @Roles('admin')
+  update(@Param('id') id: number, @Body() dto: UpdateArtistaDto) {
+    return this.artistaService.update(id, dto);
   }
 
   @Delete(':id')
