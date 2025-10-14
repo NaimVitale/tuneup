@@ -9,6 +9,8 @@ export const CloudinaryProvider = {
     const api_key = configService.get('CLOUDINARY_API_KEY');
     const api_secret = configService.get('CLOUDINARY_API_SECRET');
 
+    cloudinary.config({ cloud_name, api_key, api_secret });
+    
     return cloudinary;
   },
 };
