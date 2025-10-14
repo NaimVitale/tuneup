@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 export default function HeaderAdmin(){
     const { user, token, logout } = useAuth();
     return(
-    <header className="bg-[#f8f8f8] shadow-xl z-99 h-[100vh]">
+    <header className="bg-[#f8f8f8] shadow-xl z-99 min-h-[100vh]">
         <div className="flex flex-col py-10 m-auto gap-8">
             <div className="px-10">
                 <Link to={"/"}><img src={TuneUpHeader} alt="TuneUp Header" className="w-40 cursor-pointer" loading="lazy"/></Link>

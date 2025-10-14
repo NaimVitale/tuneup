@@ -26,3 +26,19 @@ export const getAllArtist = async(token) => {
     throw error.response?.data || error;
   }
 }
+
+//Actualiza los datos del artista
+export const PatchArtist = async(token, slug, artistData) => {
+   try{
+    console.log("Sending PATCH:", artistData)
+    const response = await axios.patch(`${API_URL}/${slug}`, artistData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data;
+  }catch(error){
+    throw error.response?.data || error;
+  }
+}

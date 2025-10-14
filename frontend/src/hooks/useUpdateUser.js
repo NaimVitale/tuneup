@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { patchUser } from "../services/userServices";
 import { useAuth } from "../context/AuthContext";
 
-export const useUpdateUser = ({ userData}) => {
+export const useUpdateUser = ({userData}) => {
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
