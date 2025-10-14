@@ -6,6 +6,8 @@ import { ArtistaModule } from './artistas/artista.module';
 import { RecintosModule } from './recintos/recintos.module';
 import { UsuarioModule } from './usuarios/usuario.module';
 import { AuthModule } from './auth/auth.module';
+import { UploadModule } from './upload/upload.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { AuthModule } from './auth/auth.module';
     RecintosModule,
     UsuarioModule,
     AuthModule,
+    UploadModule,
+    CloudinaryModule,
   ],
 })
 export class AppModule {}

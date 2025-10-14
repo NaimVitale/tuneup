@@ -27,6 +27,7 @@ export class ConciertosService {
       'artista.id',
       'artista.nombre',
       'artista.img_card',
+      'artista.slug',
       'recinto.id',
       'recinto.nombre',
       'recinto.ubicacion',

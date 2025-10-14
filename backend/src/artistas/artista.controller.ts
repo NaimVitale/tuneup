@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { ArtistaService } from './artista.service';
 import { CreateArtistaDto } from './dto/create-artista.dto';
-import { UpdateArtistaDto } from './dto/update-artista.dto';
+import { ALLOWED_FILE_FIELDS, UpdateArtistaDto } from './dto/update-artista.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
 @Controller('artistas')
 export class ArtistaController {
@@ -30,10 +31,12 @@ export class ArtistaController {
   }
 
   @UseGuards(JwtRolesGuard)
-  @Patch(':id')
+  @Patch(':slug')
+  @UseInterceptors(
+  FileFieldsInterceptor(ALLOWED_FILE_FIELDS.map((name) => ({ name, maxCount: 1 }))))
   @Roles('admin')
-  update(@Param('id') id: number, @Body() dto: UpdateArtistaDto) {
-    return this.artistaService.update(id, dto);
+  update(@Param('slug') slug: string, @Body() dto: UpdateArtistaDto, @UploadedFiles() files: Record<string, Express.Multer.File[]>) {
+    return this.artistaService.update(slug, dto, files);
   }
 
   @Delete(':id')
