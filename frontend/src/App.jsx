@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {Routes,Route} from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import './App.css'
 import HomePage from './pages/HomePage'
 import EventsPage from './pages/ConcertsPage';
@@ -44,6 +45,16 @@ function App() {
                 <Route path=':resource/:slug/editar' element={<AdminEditPage/>}/>
               </Route>
             </Routes>
+
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3000,
+                style: { background: "#333", color: "black" },
+                success: { style: { background: "#fff"} },
+                error: { style: { background: "#fff" } },
+              }}
+            />
       </AuthProvider>
     </QueryClientProvider>
   )

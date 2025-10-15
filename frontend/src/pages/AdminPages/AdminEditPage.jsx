@@ -15,7 +15,6 @@ export default function AdminEditPage() {
                 {<span className="pl-1 text-blue-600">{artist?.nombre}</span>}
             </h1>
 
-            {/* Mostrar el formulario correspondiente */}
             {resource === "artistas" && <ArtistEditForm data={artist} />}
           </div>
         </div>

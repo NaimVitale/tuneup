@@ -30,7 +30,6 @@ export const getAllArtist = async(token) => {
 //Actualiza los datos del artista
 export const PatchArtist = async(token, slug, artistData) => {
    try{
-    console.log("Sending PATCH:", artistData)
     const response = await axios.patch(`${API_URL}/${slug}`, artistData, {
       headers: {
         Authorization: `Bearer ${token}`,

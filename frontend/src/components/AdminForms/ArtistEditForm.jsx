@@ -7,7 +7,7 @@ import { useEffect } from "react";
 export default function ArtistEditForm(artist) {
     const { slug } = useParams();
     const navigate = useNavigate();
-    const { form, handleChange, handleFileChange, handleSubmit, errorUpdate, newSlug} = usePatchArtist(slug, artist.data)
+    const { form, handleChange, handleFileChange, handleSubmit, newSlug, success, errors} = usePatchArtist(slug, artist.data)
 
     useEffect(() => {
         if (newSlug && newSlug !== slug) {

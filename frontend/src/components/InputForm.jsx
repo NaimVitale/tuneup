@@ -11,16 +11,29 @@ export default function InputForm({ label, type = "text", id, value, onChange}) 
 
   const hasValue = value && value.length > 0;
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto";
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+    }
+  }, [value]);
+
   return (
     <div className="relative w-full flex items-center">
       {isTextarea ? (
-              <textarea
+        <textarea
           ref={inputRef}
           id={id}
           placeholder={label}
-          className="peer w-full border rounded-2xl px-5 py-3 min-h-[120px] resize-y placeholder-transparent focus:outline-none focus:ring-2 focus:ring-[#C122ED]"
+          className="peer w-full border rounded-2xl px-5 py-3 min-h-[120px] resize-none overflow-hidden placeholder-transparent focus:outline-none focus:ring-2 focus:ring-[#C122ED]"
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e);
+
+            const el = e.target;
+            el.style.height = "auto";
+            el.style.height = `${el.scrollHeight}px`;
+          }}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
