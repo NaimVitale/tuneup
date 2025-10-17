@@ -27,6 +27,7 @@ const slides = [
 const HeroHome = () => {
   return (
     <section className="relative w-full h-[80vh]">
+      <h1 className="sr-only">TuneUp – vive la música en vivo como nunca antes</h1>
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 10000}}
@@ -44,7 +45,7 @@ const HeroHome = () => {
               <div className="absolute inset-0 bg-[#C122ED] opacity-50 mix-blend-multiply z-0"></div>
               <div className="relative z-10 w-[90%] m-auto">
                 <div className="flex flex-col gap-6 w-[60%]">
-                  <h1 className="text-6xl font-bold text-white whitespace-pre-line">{slide.title}</h1>
+                  <h2 className="h2-slider text-white whitespace-pre-line ">{slide.title}</h2>
                   <p className="text-2xl text-white mb-6">{slide.text}</p>
                   <button className="btn-hero py-3 px-5 text-lg w-max">
                     Consigue tu entrada

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import InputFile from "../InputFile";
-import InputForm from "../InputForm";
-import { usePatchArtist } from "../../hooks/artist/usePatchArtist";
+import InputFile from "../../InputFile";
+import InputForm from "../../InputForm";
+import { usePatchArtist } from "../../../hooks/artist/usePatchArtist";
 import { useEffect } from "react";
 
 export default function ArtistEditForm(artist) {

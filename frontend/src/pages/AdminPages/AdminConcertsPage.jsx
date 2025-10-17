@@ -3,8 +3,10 @@ import { useGetConciertos } from "../../hooks/concerts/useGetConcerts";
 import { dateFormatWithTime } from "../../utils/dateFormat";
 import DataTable from "../../components/DataTable";
 import Spinner from "../../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminConcertsPage() {
+  const navigate = useNavigate()
   const columns = [
     { key: "index", label: "#", render: (c, i) => i + 1 },
     { key: "artista", label: "Artista", render: (c) => c.artista.nombre },
@@ -15,7 +17,7 @@ export default function AdminConcertsPage() {
   const actions = [
     {
       icon: <Pencil size={18} />,
-      onClick: (c) => console.log("Editar", c.id),
+      onClick: (c) => navigate(`${c.id}/editar`),
       className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {

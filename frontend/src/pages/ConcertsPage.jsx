@@ -3,10 +3,14 @@ import HeroEvents from "../components/HeroEvents";
 import UpcomingConcertsCard from "../components/UpcomingConcertsCard"
 import SelectFilter from "../components/SelectFilter";
 import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
+import InputSelect from "../components/InputSelect";
+import InputDate from "../components/InputDate";
+import { useState } from "react";
 
 export default function ConcertsPage() {
     
     const { data: conciertos, isLoading, isError } = useGetConciertos();
+    const [fecha, setFecha] = useState(null);
  
     return (
         <div className="mb-20">
@@ -14,9 +18,25 @@ export default function ConcertsPage() {
             <div className="w-[90%] m-auto">
                 <div className="pb-6 pt-12">
                     <div className="w-[50%] grid grid-cols-3 gap-6">
-                        <SelectFilter nombreCategoria="Genero"></SelectFilter>
-                        <SelectFilter nombreCategoria="Fecha"></SelectFilter>
-                        <SelectFilter nombreCategoria="Ubicacion"></SelectFilter>
+                        <InputSelect placeholder="Ubicación" id="genero" valueonChange
+                            options={[
+                            { label: "Barcelona", value: "barcelona" },
+                            { label: "Madrid", value: "madrid" },
+                            { label: "Valencia", value: "valencia" },
+                            { label: "Sevilla", value: "sevilla" },
+                        ]}/>
+                        <InputSelect placeholder="Genero" id="genero"
+                            options={[
+                            { label: "Rock", value: "rock" },
+                            { label: "Pop", value: "pop" },
+                            { label: "Reggaeton", value: "reggaeton" },
+                            { label: "Electrónica", value: "electro" },
+                        ]}/>
+                        <InputDate
+                            value={fecha}
+                            onChange={setFecha}
+                            placeholder="Filtrar por fecha"
+                        />
                     </div>
                 </div>
                 <div className=" pb-12 pt-6">

@@ -15,7 +15,7 @@ function Homepage() {
             <div className='m-auto flex flex-col gap-30 pt-12'>
                 <div id="destacados" className='w-[90%] m-auto'>
                     <div className='flex justify-between items-end mb-10'>
-                        <h2 className='text-3xl'>Conciertos destacados</h2>
+                        <h2>Conciertos destacados</h2>
                         <Link to="/conciertos" className='text-xl text-[#C122ED] flex items-center'>Ver mas
                             <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-arrow-narrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M15 16l4 -4" /><path d="M15 8l4 4" /></svg>
                         </Link>
