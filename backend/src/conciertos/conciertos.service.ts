@@ -3,7 +3,7 @@ import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Concierto } from './entities/concierto.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class ConciertosService {

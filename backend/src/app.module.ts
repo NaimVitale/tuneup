@@ -8,6 +8,7 @@ import { UsuarioModule } from './usuarios/usuario.module';
 import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     AuthModule,
     UploadModule,
     CloudinaryModule,
+    SearchModule
   ],
 })
 export class AppModule {}

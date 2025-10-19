@@ -10,5 +10,6 @@ import { UploadModule } from 'src/upload/upload.module';
   imports:[TypeOrmModule.forFeature([Artista]), AuthModule, UploadModule],
   controllers: [ArtistaController],
   providers: [ArtistaService],
+  exports: [ArtistaService]
 })
 export class ArtistaModule {}

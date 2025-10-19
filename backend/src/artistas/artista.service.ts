@@ -3,7 +3,7 @@ import { CreateArtistaDto } from './dto/create-artista.dto';
 import { ALLOWED_FILE_FIELDS, UpdateArtistaDto } from './dto/update-artista.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Artista } from './entities/artista.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import slugify from 'slugify';
 import { UploadService } from 'src/upload/upload.service';
 
@@ -24,6 +24,22 @@ export class ArtistaService {
     });
 
     return this.artistaRepo.save(artista);
+  }
+
+  async searchByName(query: string) {
+    return await this.artistaRepo
+      .createQueryBuilder('artista')
+      .leftJoin('artista.conciertos', 'concierto')
+      .where('LOWER(artista.nombre) LIKE LOWER(:nombre)', { nombre: `%${query}%` })
+      .select([
+        'artista.id',
+        'artista.nombre',
+        'artista.slug',
+        'artista.img_card',
+      ])
+      .addSelect('COUNT(concierto.id)', 'numConciertos')
+      .groupBy('artista.id')
+      .getRawMany();
   }
 
   async getAll() {
