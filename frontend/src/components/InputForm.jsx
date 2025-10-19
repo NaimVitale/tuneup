@@ -43,7 +43,7 @@ export default function InputForm({ label, type = "text", id, value, onChange}) 
           type={isPassword && showPassword ? "text" : type}
           id={id}
           placeholder={label}
-          className="peer w-full border rounded-full px-5 py-3 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-[#C122ED]"
+          className="peer w-full border rounded-full px-5 py-3 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-[#C122ED] z-2"
           value={value}  
           onChange={onChange} 
           onFocus={() => setIsFocused(true)}
@@ -52,8 +52,8 @@ export default function InputForm({ label, type = "text", id, value, onChange}) 
       )}
       <label
         htmlFor={id}
-        className={`absolute left-3 transition-all bg-white px-1
-          ${hasValue || isFocused ? "-top-2 text-sm text-[#C122ED]" : "top-3 text-md text-gray-500"}`}
+        className={`absolute left-3 transition-all bg-white px-1 z-1
+          ${hasValue || isFocused ? "-top-2 text-sm text-[#C122ED] z-3" : "top-3 text-md text-gray-500"}`}
       >
         {label}
       </label>

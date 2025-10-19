@@ -18,7 +18,7 @@ export default function ConcertsPage() {
             <div className="w-[90%] m-auto">
                 <div className="pb-6 pt-12">
                     <div className="w-[50%] grid grid-cols-3 gap-6">
-                        <InputSelect placeholder="Ubicación" id="genero" valueonChange
+                        <InputSelect placeholder="Ciudad" id="ciudad" valueonChange
                             options={[
                             { label: "Barcelona", value: "barcelona" },
                             { label: "Madrid", value: "madrid" },

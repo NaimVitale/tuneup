@@ -26,7 +26,7 @@ const slides = [
 
 const HeroHome = () => {
   return (
-    <section className="relative w-full h-[80vh]">
+    <section className="relative w-full h-[80vh] md:h-[60vh] lg:h-[80vh]">
       <h1 className="sr-only">TuneUp – vive la música en vivo como nunca antes</h1>
       <Swiper
         modules={[Autoplay, Pagination]}
@@ -39,12 +39,12 @@ const HeroHome = () => {
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div
-              className="relative h-[80vh] bg-cover bg-no-repeat bg-position-[center_top_35%] flex items-center"
+              className="relative h-[80vh] md:h-[60vh] lg:h-[80vh] bg-cover bg-no-repeat bg-position-[center_top_35%] flex items-center"
               style={{ backgroundImage: `url(${slide.image})` }}
             >
               <div className="absolute inset-0 bg-[#C122ED] opacity-50 mix-blend-multiply z-0"></div>
               <div className="relative z-10 w-[90%] m-auto">
-                <div className="flex flex-col gap-6 w-[60%]">
+                <div className="flex flex-col gap-6 lg:w-[60%]">
                   <h2 className="h2-slider text-white whitespace-pre-line ">{slide.title}</h2>
                   <p className="text-2xl text-white mb-6">{slide.text}</p>
                   <button className="btn-hero py-3 px-5 text-lg w-max">
