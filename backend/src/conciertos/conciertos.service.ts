@@ -36,8 +36,18 @@ export class ConciertosService {
     .getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} concierto`;
+  async findOne(id: number) {
+    return this.conciertoRepository.findOne({
+      where: { id },
+      relations: ['recinto', 'artista'],
+      select: {
+        artista: {
+          nombre: true,
+          img_card: true,
+          slug: true,
+        },
+      },
+    });
   }
 
   update(id: number, updateConciertoDto: UpdateConciertoDto) {

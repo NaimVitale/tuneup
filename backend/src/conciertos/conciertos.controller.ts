@@ -17,10 +17,10 @@ export class ConciertosController {
     return this.conciertosService.findAll();
   }
 
-  /*@Get(':id')
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.conciertosService.findOne(+id);
-  }
+  }/*
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateConciertoDto: UpdateConciertoDto) {
