@@ -18,7 +18,7 @@ function Cardproduct ({information}) {
                 </div>
                 <div className="flex items-center justify-between mt-4">
                     <p className="text-md text-[#C122ED]">Desde 79€</p>
-                    <Link to={"/evento/the-rolling-stones/1"}><button className='py-1.5 px-4 btn-primary w-max'>Comprar</button></Link>
+                    <Link to={"/conciertos/the-rolling-stones/1"}><button className='py-1.5 px-4 btn-primary w-max'>Comprar</button></Link>
                 </div>
             </div>
         </div>

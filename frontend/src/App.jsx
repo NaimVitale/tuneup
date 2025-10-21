@@ -28,7 +28,7 @@ function App() {
             <Routes>
               <Route element={<PublicLayout/>}>
                 <Route path='/'element={<HomePage/>}/>
-                <Route path='evento/:tipo/:id' element={<SingleEventPage/>}/>
+                <Route path=':evento/:slug/:id' element={<SingleEventPage/>}/>
                 <Route path='/conciertos' element={<EventsPage/>}/>
                 <Route path='/festivales' element={<FestivalsPage/>}></Route>
                 <Route path='/artistas/:slug' element={<ArtistPage/>}></Route>

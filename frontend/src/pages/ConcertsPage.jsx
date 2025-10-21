@@ -1,7 +1,6 @@
 import Cardproduct from "../components/CardProduct";
 import HeroEvents from "../components/HeroEvents";
 import UpcomingConcertsCard from "../components/UpcomingConcertsCard"
-import SelectFilter from "../components/SelectFilter";
 import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 import InputSelect from "../components/InputSelect";
 import InputDate from "../components/InputDate";

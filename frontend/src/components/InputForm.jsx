@@ -63,7 +63,7 @@ export default function InputForm({ label, type = "text", id, value, onChange}) 
           type="button"
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 text-gray-500 top-4"
+          className="absolute right-4 text-gray-500 top-4 z-3"
         >
           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
         </button>

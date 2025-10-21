@@ -43,7 +43,7 @@ export default function NavCategories() {
         className="bg-[#C122ED] text-white relative z-20"
         onMouseLeave={() => setHoveredCategory(null)}
       >
-        <ul className="w-[90%] m-auto flex items-center py-3 font-medium text-lg gap-10 justify-center md:justify-start">
+        <ul className="w-[90%] m-auto flex items-center py-3 font-medium text-lg gap-10 justify-around md:justify-start">
           {categories.map((cat, i) => (
             <li
               key={i}
