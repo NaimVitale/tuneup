@@ -1,72 +1,85 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
+import parseRectAttributes from "../utils/parseRectAttributes";
 
-  const zonas = [
-    { id: "seccion-a", nombre: "Sección A", precio: 85,},
-    { id: "seccion-b", nombre: "Sección B", precio: 70,},
-    { id: "seccion-c", nombre: "Sección C", precio: 55,},
-    { id: "seccion-d", nombre: "Sección B", precio: 80,},
-    { id: "seccion-vip", nombre: "Sección VIP", precio: 100,}
-  ];
-
-export default function SeatMap() {
+export default function SeatMap({ secciones, onSelect }) {
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
+  const [hoverZona, setHoverZona] = useState(null);
   const [posMouse, setPosMouse] = useState({ x: 0, y: 0 });
+  const containerRef = useRef(null);
 
   const manejarMouseMove = (e) => {
-    setPosMouse({
-      x: e.clientX + window.scrollX,
-      y: e.clientY + window.scrollY,
-    });
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const offset = 10; // margen mínimo del tooltip respecto al borde
+    let x = e.clientX - rect.left - 150;
+    let y = e.clientY - rect.top - 50;
+
+    const tooltipWidth = 150;
+    const tooltipHeight = 50;
+
+    if (x + tooltipWidth > rect.width) x = rect.width - tooltipWidth - offset;
+    if (x < 0) x = offset;
+
+    // Ajuste vertical
+    if (y < 0) y = e.clientY - rect.top + 20; // debajo del cursor si top < 0
+    if (y + tooltipHeight > rect.height) y = rect.height - tooltipHeight - offset;
+
+    setPosMouse({ x, y });
   };
 
-  const manejarSeleccion = (id) => {
-    const zona = zonas.find((z) => z.id === id);
-    setZonaSeleccionada(zona);
-  };
-
-  const getFill = (id) => {
-    return zonaSeleccionada?.id === id ? "#9333ea" : "#fffdfdff";
+  const manejarSeleccion = (seccion) => {
+    setZonaSeleccionada(seccion);
+    console.log("Sección seleccionada:", seccion.nombre, "Precio:", seccion.precio);
+    if (onSelect) onSelect(seccion);
   };
 
   return (
-     <div className="py-20 flex justify-center">
-        <svg width="395" height="541" viewBox="0 0 395 541" fill="none" xmlns="http://www.w3.org/2000/svg" className="cursor-pointer">
-            <path id="seccion-c" d="M260 161V400C260 411.046 251.046 420 240 420H157C145.954 420 137 411.046 137 400V161H260Z" fill={getFill("seccion-c")} onMouseEnter={(e) => manejarSeleccion(e.target.id)} onMouseLeave={() => setZonaSeleccionada(null)}  onMouseMove={manejarMouseMove}/>
-            <path id="seccion-vip" d="M240 77C251.046 77 260 85.9543 260 97V152H137V97C137 85.9543 145.954 77 157 77H240Z" fill={getFill("seccion-vip")} onMouseEnter={(e) => manejarSeleccion(e.target.id)} onMouseLeave={() => setZonaSeleccionada(null)} onMouseMove={manejarMouseMove}/>
-            <rect x="251" width="68" height="108" transform="rotate(90 251 0)" fill="#D9D9D9"/>
-            <path d="M176.744 31.1818C176.668 30.5341 176.357 30.0313 175.811 29.6733C175.266 29.3153 174.597 29.1364 173.804 29.1364C173.224 29.1364 172.717 29.2301 172.283 29.4176C171.852 29.6051 171.516 29.8629 171.273 30.1911C171.034 30.5192 170.915 30.892 170.915 31.3097C170.915 31.6591 170.998 31.9595 171.164 32.2109C171.335 32.4581 171.552 32.6648 171.816 32.831C172.08 32.9929 172.357 33.1271 172.647 33.2337C172.937 33.3359 173.203 33.419 173.446 33.483L174.776 33.8409C175.116 33.9304 175.496 34.054 175.913 34.2116C176.335 34.3693 176.738 34.5845 177.121 34.8572C177.509 35.1257 177.829 35.4709 178.08 35.8928C178.332 36.3146 178.457 36.8324 178.457 37.446C178.457 38.1534 178.272 38.7926 177.901 39.3636C177.535 39.9347 176.998 40.3885 176.29 40.7251C175.587 41.0618 174.733 41.2301 173.727 41.2301C172.79 41.2301 171.978 41.0788 171.292 40.7763C170.61 40.4737 170.073 40.0518 169.681 39.5107C169.293 38.9695 169.074 38.3409 169.023 37.625H170.659C170.702 38.1193 170.868 38.5284 171.158 38.8523C171.452 39.1719 171.822 39.4105 172.27 39.5682C172.722 39.7216 173.207 39.7983 173.727 39.7983C174.332 39.7983 174.876 39.7003 175.357 39.5043C175.839 39.304 176.22 39.027 176.501 38.6733C176.783 38.3153 176.923 37.8977 176.923 37.4205C176.923 36.9858 176.802 36.6321 176.559 36.3594C176.316 36.0866 175.996 35.8651 175.6 35.6946C175.204 35.5241 174.776 35.375 174.315 35.2472L172.705 34.7869C171.682 34.4929 170.872 34.0732 170.276 33.5277C169.679 32.9822 169.381 32.2685 169.381 31.3864C169.381 30.6534 169.579 30.0142 169.975 29.4688C170.376 28.919 170.913 28.4929 171.586 28.1903C172.263 27.8835 173.02 27.7301 173.855 27.7301C174.699 27.7301 175.449 27.8814 176.105 28.1839C176.761 28.4822 177.281 28.8913 177.665 29.4112C178.053 29.9311 178.257 30.5213 178.278 31.1818H176.744ZM180.348 29.3153V27.9091H190.166V29.3153H186.05V41H184.464V29.3153H180.348ZM191.62 41H189.958L194.765 27.9091H196.401L201.208 41H199.546L195.634 29.9801H195.532L191.62 41ZM192.234 35.8864H198.933V37.2926L192.234 37.2926V35.8864ZM211.581 32C211.44 31.5696 211.255 31.1839 211.025 30.843C210.799 30.4979 210.528 30.2038 210.213 29.9609C209.902 29.718 209.548 29.5327 209.152 29.4048C208.756 29.277 208.321 29.2131 207.848 29.2131C207.072 29.2131 206.367 29.4134 205.732 29.8139C205.097 30.2145 204.592 30.8047 204.217 31.5845C203.842 32.3643 203.655 33.321 203.655 34.4545C203.655 35.5881 203.844 36.5447 204.224 37.3246C204.603 38.1044 205.116 38.6946 205.764 39.0952C206.412 39.4957 207.141 39.696 207.95 39.696C208.7 39.696 209.361 39.5362 209.932 39.2166C210.507 38.8928 210.955 38.4368 211.274 37.8487C211.598 37.2564 211.76 36.5597 211.76 35.7585L212.246 35.8608H208.308V34.4545H213.294V35.8608C213.294 36.9389 213.064 37.8764 212.604 38.6733C212.148 39.4702 211.517 40.0881 210.712 40.527C209.911 40.9616 208.99 41.179 207.95 41.179C206.791 41.179 205.773 40.9063 204.895 40.3608C204.021 39.8153 203.339 39.0398 202.849 38.0341C202.364 37.0284 202.121 35.8352 202.121 34.4545C202.121 33.419 202.259 32.4879 202.536 31.6612C202.817 30.8303 203.214 30.1229 203.725 29.5391C204.237 28.9553 204.842 28.5078 205.54 28.1967C206.239 27.8857 207.009 27.7301 207.848 27.7301C208.538 27.7301 209.182 27.8345 209.778 28.0433C210.379 28.2479 210.914 28.5398 211.383 28.919C211.856 29.294 212.25 29.7436 212.565 30.2678C212.881 30.7876 213.098 31.3651 213.217 32H211.581ZM216.009 41V27.9091H223.91V29.3153H217.594V33.7386H223.501V35.1449H217.594V39.5938H224.012V41H216.009Z" fill="black"/>
-            <rect id="seccion-b" x="115" y="193" width="93" height="115" transform="rotate(90 115 193)" fill={getFill("seccion-b")} onMouseEnter={(e) => manejarSeleccion(e.target.id)} onMouseLeave={() => setZonaSeleccionada(null)} onMouseMove={manejarMouseMove}/>
-            <rect id="seccion-d" x="394" y="193" width="93" height="115" transform="rotate(90 394 193)" fill={getFill("seccion-d")} onMouseEnter={(e) => manejarSeleccion(e.target.id)} onMouseLeave={() => setZonaSeleccionada(null)} onMouseMove={manejarMouseMove}/>
-            <rect x="115" y="298" width="61" height="115" transform="rotate(90 115 298)" fill="#D9D9D9"/>
-            <rect x="115" y="101" width="34" height="115" transform="rotate(90 115 101)" fill="#D9D9D9"/>
-            <rect x="115" y="147" width="34" height="115" transform="rotate(90 115 147)" fill="#D9D9D9"/>
-            <rect x="394" y="298" width="61" height="115" transform="rotate(90 394 298)" fill="#D9D9D9"/>
-            <rect x="394" y="101" width="34" height="115" transform="rotate(90 394 101)" fill="#D9D9D9"/>
-            <rect x="394" y="147" width="34" height="115" transform="rotate(90 394 147)" fill="#D9D9D9"/>
-            <path d="M384.5 441L279.5 410L277.552 415.518C274.991 422.775 269.268 428.472 262 431L342.5 502.5L344.827 500.173C361.779 483.221 375.256 463.12 384.5 441Z" fill="#D9D9D9"/>
-            <path d="M12 441L116.5 409.5L119.68 416.048C123.087 423.061 129.135 428.438 136.5 431L64 503.5L56.9111 497.789C37.8798 482.459 22.5323 463.052 12 441Z" fill="#D9D9D9"/>
-            <path d="M394 369H279V402L387 431.5L387.683 428.327C391.883 408.831 394 388.944 394 369Z" fill="#D9D9D9"/>
-            <path d="M0 369H115L116 402.5L7 431.5L6.31668 428.327C2.11743 408.831 0 388.944 0 369Z" fill="#D9D9D9"/>
-            <path d="M252 435H145.5L71 510L86.6341 516.479C113.075 527.437 140.949 534.552 169.407 537.607C190.41 539.863 211.593 539.892 232.602 537.695L234.089 537.54C262.891 534.528 291.138 527.545 318.026 516.79L335 510L252 435Z" fill="#D9D9D9"/>
-            <path d="M115 50.0435V89H0.847826V51.3496C0.847826 37.1458 2.13571 22.9712 4.69565 9L88.7065 38.913L86.7826 46.5652L115 50.0435Z" fill="#D9D9D9"/>
-            <path d="M280 50.0435V89H394.152V51.3496C394.152 37.1458 392.864 22.9712 390.304 9L306.293 38.913L308.217 46.5652L280 50.0435Z" fill="#D9D9D9"/>
-        </svg>
-        
-        {zonaSeleccionada && (
+    <div
+      ref={containerRef}
+      className="relative w-full h-[80vh] flex items-center justify-center"
+      onMouseMove={manejarMouseMove}
+    >
+      <svg viewBox="0 0 400 540" xmlns="http://www.w3.org/2000/svg" className="w-[90%] h-[90%]">
+        {secciones.map((seccion) => {
+          const isSelected = zonaSeleccionada?.id === seccion.id;
+          const agotada = seccion.capacidad === 0;
+
+          const commonProps = {
+            onClick: () => !agotada && manejarSeleccion(seccion),
+            onMouseEnter: () => !agotada && setHoverZona(seccion),
+            onMouseLeave: () => setHoverZona(null),
+            className: `transition-all duration-300 ${
+              isSelected
+                ? "fill-[#C122ED] opacity-90"
+                : agotada
+                ? "fill-gray-300 cursor-not-allowed"
+                : "fill-white hover:fill-[#C122ED]/60 cursor-pointer"
+            }`,
+          };
+
+          if (seccion.tipo_svg === "path") {
+            return <path key={seccion.id} {...commonProps} d={seccion.svg_path} />;
+          } else if (seccion.tipo_svg === "rect") {
+            const rectProps = parseRectAttributes(seccion.svg_path);
+            return <rect key={seccion.id} {...commonProps} {...rectProps} />;
+          } else {
+            return null;
+          }
+        })}
+      </svg>
+
+      {hoverZona && (
         <div
-          className="absolute bg-white p-2 rounded shadow-lg pointer-events-none select-none"
-          style={{
-            top: posMouse.y -40,
-            left: posMouse.x,
-            whiteSpace: "nowrap",
-            zIndex: 10,
-          }}
+          style={{ top: posMouse.y, left: posMouse.x }}
+          className="absolute bg-white text-gray-800 px-4 py-2 rounded shadow-lg pointer-events-none z-50 w-[150px]"
         >
-          Precio: {zonaSeleccionada.precio}€
+          <p className="font-semibold truncate">{hoverZona.nombre}</p>
+          {hoverZona.precio !== undefined && (
+            <p className="text-sm text-gray-600">Precio: {hoverZona.precio}€</p>
+          )}
         </div>
       )}
     </div>
-
-    
   );
 }
+

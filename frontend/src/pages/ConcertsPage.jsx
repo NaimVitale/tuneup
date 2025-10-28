@@ -4,6 +4,7 @@ import UpcomingConcertsCard from "../components/UpcomingConcertsCard"
 import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 import InputSelect from "../components/InputSelect";
 import InputDate from "../components/InputDate";
+import HeroConcerts from '../assets/hero-concerts.avif';
 import { useState } from "react";
 
 export default function ConcertsPage() {
@@ -13,17 +14,10 @@ export default function ConcertsPage() {
  
     return (
         <div className="mb-20">
-            <HeroEvents></HeroEvents>
+            <HeroEvents bg_image={HeroConcerts}></HeroEvents>
             <div className="w-[90%] m-auto">
                 <div className="pb-6 pt-12">
                     <div className="w-[50%] grid grid-cols-3 gap-6">
-                        <InputSelect placeholder="Ciudad" id="ciudad" valueonChange
-                            options={[
-                            { label: "Barcelona", value: "barcelona" },
-                            { label: "Madrid", value: "madrid" },
-                            { label: "Valencia", value: "valencia" },
-                            { label: "Sevilla", value: "sevilla" },
-                        ]}/>
                         <InputSelect placeholder="Genero" id="genero"
                             options={[
                             { label: "Rock", value: "rock" },

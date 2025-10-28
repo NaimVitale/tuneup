@@ -10,9 +10,9 @@ import { Link } from 'react-router-dom';
 function Homepage() {
     const { user, token} = useAuth();
     return (
-        <div id="container" className='flex flex-col gap-8'>
+        <div id="container">
             <HeroHome></HeroHome>
-            <div className='m-auto flex flex-col gap-30 pt-12'>
+            <div className='m-auto flex flex-col gap-30 pt-20'>
                 <div id="destacados" className='w-[90%] m-auto'>
                     <div className='flex justify-between items-end mb-10'>
                         <h2>Conciertos destacados</h2>

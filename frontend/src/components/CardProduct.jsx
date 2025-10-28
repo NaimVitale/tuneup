@@ -3,9 +3,10 @@ import { Link } from "react-router-dom"
 import { dateFormatWithTime } from "../utils/dateFormat.jsx"
 
 function Cardproduct ({information}) {
+    console.log(information)
     return (
         <div className="rounded-2xl shadow-md overflow-hidden bg-white">
-            <img src={information?.artista?.img_card || 'https://brandemia.org/contenido/subidas/2012/07/the-rolling-stones-logo.webp'} alt="" loading="lazy" />
+            <img src={information?.artista?.img_card || 'https://brandemia.org/contenido/subidas/2012/07/the-rolling-stones-logo.webp'} alt="" loading="lazy" className="h-[20vh] object-cover w-full" />
             <div className="p-4">
                 <h3 className="text-xl font-medium mb-3 hover:text-[#C122ED]"><Link to={`/artistas/${information?.artista?.slug}`}>{information?.artista?.nombre || 'The Rolling Stones'}</Link></h3>
                 <div className="flex items-center gap-2 mb-1">
@@ -18,7 +19,7 @@ function Cardproduct ({information}) {
                 </div>
                 <div className="flex items-center justify-between mt-4">
                     <p className="text-md text-[#C122ED]">Desde 79€</p>
-                    <Link to={"/conciertos/the-rolling-stones/1"}><button className='py-1.5 px-4 btn-primary w-max'>Comprar</button></Link>
+                    <Link to={`/conciertos/${information?.artista?.slug}/${information?.id}`}><button className='py-1.5 px-4 btn-primary w-max'>Comprar</button></Link>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@ import TuneUpHeader from "../assets/TuneUp.webp"
 import PerfilHeader from "../assets/perfil_header.webp"
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-import { Bell, LayoutDashboardIcon, LogOut, User, Menu, X } from "lucide-react"
+import { Bell, LayoutDashboardIcon, LogOut, User, Menu, X, UserCircle, UserCircle2 } from "lucide-react"
 import SearchBar from "./SearchBarHome";
 
 function Header() {
@@ -63,7 +63,7 @@ function Header() {
           {!token ? (
             <Link to="/login" className="flex items-center gap-2">
               <p className="text-lg">Acceder/Registrarse</p>
-              <img src={PerfilHeader} alt="Perfil" className="w-8 h-8 cursor-pointer" loading="lazy"/>
+              <UserCircle2 className="text-[#C122ED]" size={24}/>
             </Link>
           ) : (
             <>

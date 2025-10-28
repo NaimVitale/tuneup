@@ -14,13 +14,13 @@ export default function NavCategories() {
       ],
     },
     {
-      name: "Festivales",
+      name: "Artistas",
       path: "/festivales",
       subcategories: [
-        { name: "Primavera Sound", path: "/festivales/primavera-sound" },
-        { name: "Mad Cool", path: "/festivales/mad-cool" },
-        { name: "BBK Live", path: "/festivales/bbk-live" },
-        { name: "Viña Rock", path: "/festivales/vina-rock" },
+        { name: "The Rolling Stones", path: "/artistas/the-rolling-stones" },
+        { name: "Dua Lipa", path: "/artistas/dua-lipa" },
+        { name: "Ed Sheeran", path: "/artistas/ed-sheeran" },
+        { name: "Guns 'N Roses", path: "#" },
       ],
     },
     {
