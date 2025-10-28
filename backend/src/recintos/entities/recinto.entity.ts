@@ -1,4 +1,5 @@
 import { Concierto } from "src/conciertos/entities/concierto.entity";
+import { Seccion } from "src/secciones/entities/seccion.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("recintos")
@@ -18,4 +19,7 @@ export class Recinto {
 
     @OneToMany(() => Concierto, (concierto) => concierto.recinto)
     conciertos: Concierto[];
+
+    @OneToMany(() => Seccion, (seccion) => seccion.recinto)
+    secciones: Seccion[];
 }

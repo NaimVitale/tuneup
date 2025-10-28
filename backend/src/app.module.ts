@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SearchModule } from './search/search.module';
+import { PreciosSeccionConciertoModule } from './precios-seccion-concierto/precios-seccion-concierto.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { SearchModule } from './search/search.module';
     AuthModule,
     UploadModule,
     CloudinaryModule,
-    SearchModule
+    SearchModule,
+    PreciosSeccionConciertoModule
   ],
 })
 export class AppModule {}

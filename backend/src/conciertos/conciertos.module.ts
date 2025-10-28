@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Concierto } from './entities/concierto.entity';
 import { Recinto } from 'src/recintos/entities/recinto.entity';
 import { Artista } from 'src/artistas/entities/artista.entity';
+import { PreciosSeccionConciertoModule } from 'src/precios-seccion-concierto/precios-seccion-concierto.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Concierto, Artista, Recinto]),],
+  imports: [TypeOrmModule.forFeature([Concierto, Artista, Recinto]), PreciosSeccionConciertoModule],
   controllers: [ConciertosController],
   providers: [ConciertosService],
 })

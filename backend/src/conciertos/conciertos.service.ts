@@ -3,13 +3,17 @@ import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Concierto } from './entities/concierto.entity';
-import { ILike, Repository } from 'typeorm';
+import { ILike, Repository, DataSource} from 'typeorm';
+import { PreciosSeccionConciertoService } from 'src/precios-seccion-concierto/precios-seccion-concierto.service';
+
 
 @Injectable()
 export class ConciertosService {
   constructor(
     @InjectRepository(Concierto)
     private readonly conciertoRepository: Repository<Concierto>,
+
+    private readonly preciosService: PreciosSeccionConciertoService,
   ) {}
 
   create(createConciertoDto: CreateConciertoDto) {
@@ -37,9 +41,9 @@ export class ConciertosService {
   }
 
   async findOne(id: number) {
-    return this.conciertoRepository.findOne({
+    const concierto = await this.conciertoRepository.findOne({
       where: { id },
-      relations: ['recinto', 'artista'],
+      relations: ['recinto', 'recinto.secciones', 'artista'],
       select: {
         artista: {
           nombre: true,
@@ -48,6 +52,17 @@ export class ConciertosService {
         },
       },
     });
+
+    if (!concierto) return null;
+
+    const precios = await this.preciosService.findByConcierto(id);
+
+    concierto.recinto.secciones = concierto.recinto.secciones.map(seccion => {
+      const precio = precios.find(p => p.seccion.id === seccion.id);
+      return { ...seccion, precio: precio?.precio || null };
+    });
+
+    return concierto;
   }
 
   update(id: number, updateConciertoDto: UpdateConciertoDto) {

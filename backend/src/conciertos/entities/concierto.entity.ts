@@ -1,6 +1,7 @@
 import { Artista } from "src/artistas/entities/artista.entity";
+import { PreciosSeccionConcierto } from "src/precios-seccion-concierto/entities/precios-seccion-concierto.entity";
 import { Recinto } from "src/recintos/entities/recinto.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('conciertos')
     export class Concierto {
@@ -24,4 +25,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
         @ManyToOne(() => Recinto, (recinto) => recinto.conciertos)
         @JoinColumn({ name: 'id_recinto' })
         recinto: Recinto;
+
+        @OneToMany(() => PreciosSeccionConcierto, csp => csp.concierto)
+        preciosPorSeccion: PreciosSeccionConcierto[];
     }
