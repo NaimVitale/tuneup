@@ -15,7 +15,7 @@ export default function NavCategories() {
     },
     {
       name: "Artistas",
-      path: "/festivales",
+      path: "/artistas",
       subcategories: [
         { name: "The Rolling Stones", path: "/artistas/the-rolling-stones" },
         { name: "Dua Lipa", path: "/artistas/dua-lipa" },

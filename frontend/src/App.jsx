@@ -13,10 +13,10 @@ import ProfileInfoPage from './pages/ProfilePageInfo';
 import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
 import AdminConcertsPage from './pages/AdminPages/AdminConcertsPage';
-import FestivalsPage from './pages/FestivalsPage';
 import ArtistPage from './pages/ArtistPage';
 import AdminArtistPage from './pages/AdminPages/AdminArtistPage';
 import AdminEditPage from './pages/AdminPages/AdminEditPage';
+import SingleArtistPage from './pages/SingleArtistPage';
 
 const queryClient = new QueryClient();
 
@@ -30,8 +30,8 @@ function App() {
                 <Route path='/'element={<HomePage/>}/>
                 <Route path=':evento/:slug/:id' element={<SingleEventPage/>}/>
                 <Route path='/conciertos' element={<EventsPage/>}/>
-                <Route path='/festivales' element={<FestivalsPage/>}></Route>
-                <Route path='/artistas/:slug' element={<ArtistPage/>}></Route>
+                <Route path='/artistas' element={<ArtistPage/>}></Route>
+                <Route path='/artistas/:slug' element={<SingleArtistPage/>}></Route>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/perfil' element={<ProfileLayout/>}>

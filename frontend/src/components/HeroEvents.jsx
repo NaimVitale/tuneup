@@ -1,5 +1,3 @@
-import HeroRCHP from '../assets/hero_redhot.webp';
-
 export default function HeroEvents ({bg_image}) {
     return (
         <div className="relative bg-cover bg-no-repeat bg-position-[center_top_20%]" style={{ backgroundImage: `url(${bg_image})` }}>

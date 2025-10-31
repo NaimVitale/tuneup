@@ -13,7 +13,7 @@ export const getArtist = async(slug) => {
   }
 }
 
-//Consulta sobre todos los artistas
+//Consulta sobre todos los artistas panel admin
 export const getAllArtist = async(token) => {
   try{
     const response = await axios.get(`${API_URL}`,{
@@ -21,6 +21,16 @@ export const getAllArtist = async(token) => {
         Authorization: `Bearer ${token}`
       }
     })
+    return response.data;
+  }catch{
+    throw error.response?.data || error;
+  }
+}
+
+//Consulta sobre todos los artistas
+export const getAllArtistPublic = async() => {
+  try{
+    const response = await axios.get(`${API_URL}/public`)
     return response.data;
   }catch{
     throw error.response?.data || error;
