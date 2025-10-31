@@ -16,6 +16,11 @@ export class ArtistaController {
   create(@Body() createArtistaDto: CreateArtistaDto) {
     return this.artistaService.create(createArtistaDto);
   }
+  
+  @Get('public')
+  findAllPublic() {
+    return this.artistaService.getAllPublic();
+  }
 
   @UseGuards(JwtRolesGuard)
   @Get()

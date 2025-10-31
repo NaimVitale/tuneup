@@ -46,6 +46,10 @@ export class ArtistaService {
     return await this.artistaRepo.find();
   }
 
+   async getAllPublic() {
+    return await this.artistaRepo.find();
+  }
+
   async findBySlug(slug: string) {
     const artista = await this.artistaRepo
       .createQueryBuilder('artista')
