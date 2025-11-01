@@ -6,16 +6,15 @@ import { useAuth } from "../context/AuthContext";
 
 export default function HeaderAdmin(){
     const { user, token, logout } = useAuth();
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true);
     const location = useLocation();
 
     const menuItems = [
         { to: "", icon: LayoutDashboard, label: "Dashboard" },
         { to: "conciertos", icon: Music, label: "Conciertos" },
-        { to: "", icon: Music2, label: "Festivales" },
         { to: "artistas", icon: Paintbrush, label: "Artistas" },
-        { to: "", icon: Castle, label: "Recintos" },
-        { to: "", icon: User, label: "Usuarios" },
+        { to: "recintos", icon: Castle, label: "Recintos" },
+        { to: "usuarios", icon: User, label: "Usuarios" },
     ];
 
     return(

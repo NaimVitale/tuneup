@@ -8,7 +8,7 @@ export default function ArtistPage(){
 
     const { slug: artistSlug } = useParams();
     const { data: artist, isLoading, isError } = useGetArtist(artistSlug);
-
+    
     return(
         <div>
             <HeroArtist nombre={artist?.nombre} imagen={artist?.img_hero}></HeroArtist>
@@ -22,7 +22,7 @@ export default function ArtistPage(){
                         ) : artist?.conciertos?.length > 0 ? (
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:row-span-1 gap-8'>
                             {artist.conciertos.map((c) => (
-                            <Cardproduct information={c} key={c.id} />
+                                <Cardproduct information={c} key={c.id}/>
                             ))}
                         </div>
                         ) : (
