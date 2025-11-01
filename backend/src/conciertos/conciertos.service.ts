@@ -22,22 +22,32 @@ export class ConciertosService {
 
   findAll() {
     return this.conciertoRepository
-    .createQueryBuilder('concierto')
-    .leftJoinAndSelect('concierto.artista', 'artista')
-    .leftJoinAndSelect('concierto.recinto', 'recinto')
-    .select([
-      'concierto.id',
-      'concierto.fecha',
-      'artista.id',
-      'artista.nombre',
-      'artista.img_card',
-      'artista.slug',
-      'recinto.id',
-      'recinto.nombre',
-      'recinto.ubicacion',
-    ])
-    .orderBy('concierto.fecha', 'ASC')
-    .getMany();
+      .createQueryBuilder('concierto')
+      .leftJoinAndSelect('concierto.artista', 'artista')
+      .leftJoinAndSelect('concierto.recinto', 'recinto')
+      .leftJoinAndSelect('recinto.ciudad', 'ciudad')
+      .leftJoin('concierto.preciosPorSeccion', 'psc')
+      .select([
+        'concierto.id',
+        'concierto.fecha',
+        'artista.id',
+        'artista.nombre',
+        'artista.img_card',
+        'artista.slug',
+        'recinto.id',
+        'recinto.nombre',
+        'recinto.ubicacion',
+        'ciudad.id',
+        'ciudad.nombre',
+      ])
+      .addSelect('MIN(psc.precio)', 'precio_minimo')
+      .groupBy('concierto.id')
+      .addGroupBy('artista.id')
+      .addGroupBy('recinto.id')
+      .addGroupBy('ciudad.id')
+      .orderBy('concierto.fecha', 'ASC')
+      .cache(true)
+      .getRawMany();
   }
 
   async findOne(id: number) {

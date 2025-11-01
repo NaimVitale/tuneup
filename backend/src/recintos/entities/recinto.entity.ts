@@ -1,6 +1,7 @@
+import { Ciudad } from "src/ciudades/entities/ciudad.entity";
 import { Concierto } from "src/conciertos/entities/concierto.entity";
 import { Seccion } from "src/secciones/entities/seccion.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("recintos")
 export class Recinto {
@@ -16,6 +17,14 @@ export class Recinto {
 
     @Column({type: 'json'})
     svg_map: any;
+
+    @ManyToOne(() => Ciudad, ciudad => ciudad.recintos, {
+        onDelete: 'SET NULL',
+        eager: true,
+        nullable: false,
+    })
+    @JoinColumn({ name: 'id_ciudad' })
+    ciudad: Ciudad;
 
     @OneToMany(() => Concierto, (concierto) => concierto.recinto)
     conciertos: Concierto[];

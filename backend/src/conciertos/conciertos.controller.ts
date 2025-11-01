@@ -12,7 +12,7 @@ export class ConciertosController {
     return this.conciertosService.create(createConciertoDto);
   }*/
 
-  @Get()
+  @Get('public')
   findAll() {
     return this.conciertosService.findAll();
   }

@@ -10,6 +10,7 @@ import { UploadModule } from './upload/upload.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SearchModule } from './search/search.module';
 import { PreciosSeccionConciertoModule } from './precios-seccion-concierto/precios-seccion-concierto.module';
+import { CiudadesModule } from './ciudades/ciudad.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { PreciosSeccionConciertoModule } from './precios-seccion-concierto/preci
     UploadModule,
     CloudinaryModule,
     SearchModule,
-    PreciosSeccionConciertoModule
+    PreciosSeccionConciertoModule,
+    CiudadesModule
   ],
 })
 export class AppModule {}
