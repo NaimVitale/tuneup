@@ -51,22 +51,28 @@ export class ArtistaService {
   }
 
   async findBySlug(slug: string) {
-    const artista = await this.artistaRepo
-      .createQueryBuilder('artista')
-      .leftJoinAndSelect('artista.conciertos', 'concierto')
-      .leftJoinAndSelect('concierto.recinto', 'recinto')
-      .where('artista.slug = :slug', { slug })
-      .select([
-        'artista',
-        'concierto.id',
-        'concierto.fecha',
-        'recinto.id',
-        'recinto.nombre',
-      ])
-      .getOne();
+  const artista = await this.artistaRepo
+    .createQueryBuilder('artista')
+    .leftJoinAndSelect('artista.conciertos', 'concierto')
+    .leftJoinAndSelect('concierto.recinto', 'recinto')
+    .leftJoinAndSelect('concierto.artista', 'artista_concierto')
+    .where('artista.slug = :slug', { slug })
+    .select([
+      'artista',
+      'concierto.id',
+      'concierto.fecha',
+      'recinto.id',
+      'recinto.ubicacion',
 
-    return artista;
-  }
+      'artista_concierto.id',
+      'artista_concierto.nombre',
+      'artista_concierto.slug',
+      'artista_concierto.img_card',
+    ])
+    .getOne();
+
+  return artista;
+}
 
   async update(slug: string, dto: UpdateArtistaDto, files: Record<string, Express.Multer.File[]>) {
     const cleanSlug = slug.trim();
