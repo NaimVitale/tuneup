@@ -125,7 +125,7 @@ export default function SingleEventPage() {
         </div>
 
         {/* Columna derecha - Mapa */}
-        <div className="hidden w-full lg:w-[60%] bg-gradient-to-r from-[#C122ED]/60 via-[#6B21A8]/40 to-[#9333EA]/30 min-h-[400px] lg:min-h-0">
+        <div className="hidden lg:flex w-full lg:w-[60%] justify-center bg-gradient-to-r from-[#C122ED]/60 via-[#6B21A8]/40 to-[#9333EA]/30 min-h-[400px] lg:min-h-0">
           {tieneSVG && !isMobile ? (
             <SeatMap
               secciones={data.recinto.secciones}

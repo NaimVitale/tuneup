@@ -8,22 +8,24 @@ import { useNavigate } from "react-router-dom";
 export default function AdminConcertsPage() {
   const navigate = useNavigate()
   const columns = [
-    { key: "index", label: "#", render: (c, i) => i + 1 },
-    { key: "artista", label: "Artista", render: (c) => c.artista.nombre },
-    { key: "fecha", label: "Fecha", render: (c) => dateFormatWithTime(c.fecha) },
-    { key: "recinto", label: "Recinto", render: (c) => c.recinto.nombre },
+    { key: "index", label: "#", render: (c) => c.concierto_id },
+    { key: "artista", label: "Artista", render: (c) => c.artista_nombre },
+    { key: "fecha", label: "Fecha", render: (c) => dateFormatWithTime(c.concierto_fecha) },
+    { key: "precio_min", label: "Precio Minimo", render: (c) => `${c.precio_minimo}€`},
+    { key: "ciudad", label: "Ciudad", render: (c) => c.ciudad_nombre },
+    { key: "recinto", label: "Recinto", render: (c) => c.recinto_nombre },
   ];
 
   const actions = [
     {
       icon: <Pencil size={18} />,
       onClick: (c) => navigate(`${c.id}/editar`),
-      className: "bg-blue-500 text-white hover:bg-blue-600",
+      className: "bg-blue-500 text-white hover:bg-blue-600 hover:cursor-pointer",
     },
     {
       icon: <Trash size={18} />,
       onClick: (c) => console.log("Eliminar", c.id),
-      className: "bg-red-500 text-white hover:bg-red-600",
+      className: "bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer",
     },
   ];
 

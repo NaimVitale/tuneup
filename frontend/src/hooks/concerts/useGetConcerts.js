@@ -7,7 +7,7 @@ export const useGetConciertos = () => {
   return useQuery({
     queryKey: ['conciertos'],
     queryFn: async () => {
-      const { data } = await axios.get(`${API_URL}/conciertos`);
+      const { data } = await axios.get(`${API_URL}/conciertos/public`);
       return data;
     },
     staleTime: 1000 * 60 * 5,

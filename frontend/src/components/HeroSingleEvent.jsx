@@ -17,7 +17,15 @@ export default function HeroSingleEvent({eventData}){
                         </div>
                         <div className="flex gap-2 items-center">
                             <MapPin className="text-[#C122ED]" size={20}/>
-                            <p>{eventData?.recinto?.ubicacion}</p>
+                            <p className="flex gap-1">
+                                <Link to={`/ciudad/${eventData?.recinto?.ciudad?.id}`} className="hover:underline">
+                                    {eventData?.recinto?.ciudad?.nombre}
+                                </Link>
+                                <span>·</span>
+                                <Link to={`/recinto/${eventData?.id_recinto}`} className="hover:underline">
+                                    {eventData?.recinto?.nombre}
+                                </Link>
+                            </p>
                         </div>
                     </div>
                 </div>
