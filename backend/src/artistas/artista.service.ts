@@ -51,28 +51,71 @@ export class ArtistaService {
   }
 
   async findBySlug(slug: string) {
-  const artista = await this.artistaRepo
-    .createQueryBuilder('artista')
-    .leftJoinAndSelect('artista.conciertos', 'concierto')
-    .leftJoinAndSelect('concierto.recinto', 'recinto')
-    .leftJoinAndSelect('concierto.artista', 'artista_concierto')
-    .where('artista.slug = :slug', { slug })
-    .select([
-      'artista',
-      'concierto.id',
-      'concierto.fecha',
-      'recinto.id',
-      'recinto.ubicacion',
+    const results = await this.artistaRepo
+      .createQueryBuilder('artista')
+      .leftJoin('artista.conciertos', 'concierto')
+      .leftJoin('concierto.recinto', 'recinto')
+      .leftJoin('recinto.ciudad', 'ciudad')
+      .leftJoin('concierto.artista', 'artista_concierto')
+      .leftJoin('concierto.preciosPorSeccion', 'psc')
+      .where('artista.slug = :slug', { slug })
+      .select([
+        'artista.id',
+        'artista.nombre',
+        'artista.slug',
+        'artista.img_card',
+        'artista.img_hero',
+        'artista.images',
+        'artista.descripcion',
+        'concierto.id',
+        'concierto.fecha',
+        'MIN(psc.precio) AS precio_minimo',
+        'recinto.id',
+        'recinto.nombre',
+        'recinto.ubicacion',
+        'ciudad.id',
+        'ciudad.nombre',
+        'artista_concierto.id',
+        'artista_concierto.nombre',
+        'artista_concierto.slug',
+        'artista_concierto.img_card',
+      ])
+      .groupBy('artista.id, concierto.id, recinto.id, ciudad.id, artista_concierto.id')
+      .getRawMany();
 
-      'artista_concierto.id',
-      'artista_concierto.nombre',
-      'artista_concierto.slug',
-      'artista_concierto.img_card',
-    ])
-    .getOne();
+    if (!results.length) return null;
 
-  return artista;
-}
+    const first = results[0];
+    return {
+      id: first.artista_id,
+      nombre: first.artista_nombre,
+      slug: first.artista_slug,
+      img_card: first.artista_img_card,
+      img_hero: first.artista_img_hero,
+      images: first.artista_images,
+      descripcion: first.artista_descripcion,
+      conciertos: results.map(row => ({
+        id: row.concierto_id,
+        fecha: row.concierto_fecha,
+        precio_minimo: row.precio_minimo,
+        recinto: {
+          id: row.recinto_id,
+          nombre: row.recinto_nombre,
+          ubicacion: row.recinto_ubicacion,
+          ciudad: {
+            id: row.ciudad_id,
+            nombre: row.ciudad_nombre,
+          },
+        },
+        artista: {
+          id: row.artista_concierto_id,
+          nombre: row.artista_concierto_nombre,
+          slug: row.artista_concierto_slug,
+          img_card: row.artista_concierto_img_card,
+        },
+      })),
+    };
+  }
 
   async update(slug: string, dto: UpdateArtistaDto, files: Record<string, Express.Multer.File[]>) {
     const cleanSlug = slug.trim();
