@@ -27,9 +27,20 @@ export default function SearchBar() {
   };
 
   const handleResultClick = (result) => {
-    const path = result.tipo === "Artista" 
-      ? `/artistas/${result.slug}` 
-      : `/festivales/${result.slug}`;
+    let path;
+    switch (result.tipo) {
+      case "Artista":
+        path = `/artistas/${result.slug}`;
+        break;
+      case "Recinto":
+        path = `/recintos/${result.slug}`;
+        break;
+      case "Festival":
+        path = `/festivales/${result.slug}`;
+        break;
+      default:
+        path = `/`;
+    }
     window.location.href = path;
     setQuery("");
     setIsOpen(false);
@@ -37,18 +48,26 @@ export default function SearchBar() {
 
   const getIcon = (tipo) => {
     if (tipo === "Artista") return <Music size={16} className="text-[#C122ED]" />;
+    if (tipo === "Recinto") return <MapPin size={16} className="text-[#C122ED]" />;
     if (tipo === "Festival") return <Calendar size={16} className="text-[#C122ED]" />;
     return <Music size={16} className="text-[#C122ED]" />;
   };
 
-  const highlightText = (text, highlight) => {
+  const highlightText = (text = "", highlight = "") => {
+    if (!text) return "";
     if (!highlight.trim()) return text;
-    const regex = new RegExp(`(${highlight})`, 'gi');
+
+    const regex = new RegExp(`(${highlight})`, "gi");
     const parts = text.split(regex);
-    return parts.map((part, i) => 
-      regex.test(part) ? <span key={i} className="font-bold">{part}</span> : part
+
+    return parts.map((part, i) =>
+      regex.test(part)
+        ? <span key={i} className="font-bold">{part}</span>
+        : part
     );
   };
+
+  console.log(results);
 
   return (
     <div className="relative w-full max-w-2xl mx-auto" ref={searchRef}>
@@ -107,6 +126,7 @@ export default function SearchBar() {
                         src={result.imagen} 
                         alt={result.nombre}
                         className="w-14 h-14 rounded-xl object-cover shadow-md group-hover:shadow-lg transition-shadow"
+                        loading="lazy"
                       />
                       <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md">
                         {getIcon(result.tipo)}
@@ -116,7 +136,7 @@ export default function SearchBar() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-semibold text-gray-900 group-hover:text-[#C122ED] transition-colors truncate">
-                          {highlightText(result.nombre, query)}
+                          {highlightText(result?.nombre ?? "", query)}
                         </h4>
                         <span className="flex-shrink-0 text-xs bg-[#C122ED] text-white px-2.5 py-1 rounded-full font-medium">
                           {result.tipo}
@@ -124,23 +144,43 @@ export default function SearchBar() {
                       </div>
                       
                       <div className="flex items-center gap-3 text-sm text-gray-500">
-                        {result.numConciertos > 0 && result.tipo === "Artista" && (
+                        {result.tipo === "Artista" && result.numConciertos > 0 && (
                           <span className="flex items-center gap-1">
                             <Calendar size={14} />
-                            {result.numConciertos} {result.numConciertos == 1 ? 'evento' : 'eventos'}
+                            {result.numConciertos} {result.numConciertos === 1 ? 'evento' : 'eventos'}
                           </span>
                         )}
-                        {result.fecha && (
-                          <span className="flex items-center gap-1">
-                            <Calendar size={14} />
-                            {new Date(result.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                          </span>
+                        {result.tipo === "Recinto" && (
+                          <>
+                            {result.ciudad && (
+                              <span className="flex items-center gap-1">
+                                <MapPin size={14} />
+                                {result.ciudad}
+                              </span>
+                            )}
+                            {result.numConciertos > 0 && (
+                              <span className="flex items-center gap-1">
+                                <Calendar size={14} />
+                                {result.numConciertos} {result.numConciertos === 1 ? 'concierto' : 'conciertos'}
+                              </span>
+                            )}
+                          </>
                         )}
-                        {result.ubicacion && (
-                          <span className="flex items-center gap-1">
-                            <MapPin size={14} />
-                            {result.ubicacion}
-                          </span>
+                        {result.tipo === "Festival" && (
+                          <>
+                            {result.fecha && (
+                              <span className="flex items-center gap-1">
+                                <Calendar size={14} />
+                                {new Date(result.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              </span>
+                            )}
+                            {result.ubicacion && (
+                              <span className="flex items-center gap-1">
+                                <MapPin size={14} />
+                                {result.ubicacion}
+                              </span>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>

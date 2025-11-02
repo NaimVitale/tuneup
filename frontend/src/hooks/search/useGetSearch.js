@@ -30,6 +30,20 @@ export const useGetSearch = (query) => {
           );
         }
 
+        if (res.recintos?.length) {
+          formattedResults.push(
+            ...res.recintos.map((r) => ({
+              id: r.id,
+              nombre: r.nombre,
+              slug: r.nombre.toLowerCase().replace(/ /g, "-"),
+              imagen: r.ciudad?.img_card ?? "https://res.cloudinary.com/dppp5mhk1/image/upload/v1762105506/1573_zbsvcs.avif",
+              tipo: "Recinto",
+              ciudad: r.ciudad?.nombre ?? "No especificada",
+              numConciertos: r.conciertos?.length ?? 0,
+            }))
+          );
+        }
+
         if (res.festivales?.length) {
           formattedResults.push(
             ...res.festivales.map((f) => ({

@@ -28,7 +28,7 @@ export default function ArtistPage() {
             <HeroEvents bg_image={HeroArtists} title={"Artistas"}/>
             <div className="w-[90%] m-auto">
                 <div className="pb-6 pt-12">
-                    <div className="w-[50%] grid grid-cols-3 gap-6">
+                    <div className="lg:w-[50%] grid lg:grid-cols-3 gap-6">
                         <InputSelect
                             placeholder="Género"
                             value={genero || ""}
