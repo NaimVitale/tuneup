@@ -28,9 +28,9 @@ export const getAllArtist = async(token) => {
 }
 
 //Consulta sobre todos los artistas
-export const getAllArtistPublic = async() => {
+export const getAllArtistPublic = async(genero) => {
   try{
-    const response = await axios.get(`${API_URL}/public`)
+    const response = await axios.get(`${API_URL}/public?genero=${genero}`)
     return response.data;
   }catch{
     throw error.response?.data || error;

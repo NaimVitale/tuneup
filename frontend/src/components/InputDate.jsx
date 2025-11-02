@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { Calendar } from "lucide-react";
+import { Calendar, X } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
-export default function InputDate({ value, onChange, placeholder = "Selecciona una fecha", disabledDates }) {
+export default function InputDate({ value, onChange, placeholder = "Selecciona una fecha" }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -16,10 +16,15 @@ export default function InputDate({ value, onChange, placeholder = "Selecciona u
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const formatDateForFilter = (date) => {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    return d.toISOString().split("T")[0];
+  };
+
+  const handleClear = () => onChange(null);
 
   return (
     <div className="relative w-full" ref={containerRef}>
@@ -28,12 +33,18 @@ export default function InputDate({ value, onChange, placeholder = "Selecciona u
         onClick={() => setOpen((o) => !o)}
         className={`w-full border rounded-full px-5 py-3 flex items-center justify-between
           bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#C122ED]
-          hover:border-[#C122ED] transition`}
+          hover:border-[#C122ED] transition hover:cursor-pointer`}
       >
         <span className={!formattedValue ? "text-gray-600" : ""}>
           {formattedValue || placeholder}
         </span>
-        <Calendar size={20} className="text-gray-400" />
+
+        <div className="flex items-center gap-2">
+          {formattedValue && (
+            <X size={16} className="text-gray-400 cursor-pointer" onClick={handleClear} />
+          )}
+          <Calendar size={20} className="text-gray-400" />
+        </div>
       </button>
 
       {/* Calendario popover */}
@@ -43,10 +54,11 @@ export default function InputDate({ value, onChange, placeholder = "Selecciona u
             mode="single"
             selected={value ? new Date(value) : undefined}
             onSelect={(date) => {
-              onChange(date);
+              if (date) onChange(formatDateForFilter(date));
+              else onChange(null);
               setOpen(false);
             }}
-            disabled={disabledDates}
+            disabled={{ before: new Date() }}
             className="bg-white rounded-2xl shadow-lg p-3 border border-gray-200"
           />
         </div>

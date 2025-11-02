@@ -24,3 +24,15 @@ export function dateFormatDateOnly(fechaISO) {
     day: 'numeric',
   });
 }
+
+export function toDatabaseTimestamp(dateStr) {
+  if (!dateStr) return null;
+  const date = new Date(`${dateStr}T00:00:00.000Z`);
+  return date.toISOString();
+}
+
+export function toFechaURL(dateISO) {
+  if (!dateISO) return '';
+  const date = new Date(dateISO);
+  return date.toLocaleDateString('es-ES');
+}

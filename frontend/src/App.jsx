@@ -20,7 +20,6 @@ import SingleArtistPage from './pages/SingleArtistPage';
 
 const queryClient = new QueryClient();
 
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -29,8 +28,8 @@ function App() {
               <Route element={<PublicLayout/>}>
                 <Route path='/'element={<HomePage/>}/>
                 <Route path=':evento/:slug/:id' element={<SingleEventPage/>}/>
-                <Route path='/conciertos' element={<EventsPage/>}/>
-                <Route path='/artistas' element={<ArtistPage/>}></Route>
+                <Route path='/conciertos/:genero?' element={<EventsPage/>}/>
+                <Route path='/artistas/:genero?' element={<ArtistPage/>}></Route>
                 <Route path='/artistas/:slug' element={<SingleArtistPage/>}></Route>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>

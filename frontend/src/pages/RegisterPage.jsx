@@ -10,9 +10,9 @@ export default function RegisterPage(){
     const { formData, handleChange, handleSubmit, loading, error } = useRegisterForm(navigate);
 
     return(
-        <div className="h-[90vh] flex justify-center items-center text-black bg-gradient-to-l from-[#D946EF]/70 via-[#9333EA]/50 to-[#6D28D9]/40">
-                <div className="p-[4em] w-[50%] rounded-2xl bg-white shadow-lg flex gap-12">
-                    <div className="md:w-1/2 flex flex-col justify-start gap-6 mb-8 md:mb-0 pr-6">
+        <div className="sm:h-[90vh] flex justify-center items-center text-black bg-gradient-to-l from-[#D946EF]/70 via-[#9333EA]/50 to-[#6D28D9]/40">
+                <div className="h-[80vh] sm:h-[55vh] w-full px-[1em] py-[3em] sm:p-[4em] sm:w-[50%] sm:rounded-2xl bg-white shadow-lg flex gap-12">
+                    <div className="md:w-1/2 flex flex-col justify-start gap-6 mb-8 md:mb-0 pr-6 hidden sm:flex">
                         <h1 className="text-6xl font-semibold mb-2">Registrate</h1>
                         <h3 className="text-2xl font-semibold">Disfruta de ventajas exclusivas</h3>
                         <ul className="flex flex-col gap-6 text-gray-700">
@@ -34,7 +34,8 @@ export default function RegisterPage(){
                             </li>
                         </ul>
                     </div>
-                    <div className="md:w-1/2 flex flex-col items-center justify-center gap-12">
+                    <div className="md:w-1/2 w-full flex flex-col items-center justify-center gap-12">
+                        <h2 className="text-6xl font-semibold mb-2 w-full sm:hidden">Registrate</h2>
                         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
                             <div className="flex flex-col gap-1">
                                 <InputForm label={"Nombre*"} type="text" id={"nombre"} value={formData.nombre} onChange={handleChange}></InputForm>
@@ -52,7 +53,7 @@ export default function RegisterPage(){
                                 <InputForm label={"Contraseña*"} type="password" id={"password"} value={formData.password} onChange={handleChange}></InputForm>
                                 {error?.password && <p className="text-red-500 text-sm pl-4">{error?.password}</p>}
                             </div>
-                            <button className="btn-primary py-2 px-4 text-md w-max" type="submit">Registrate</button>
+                            <button className="btn-primary py-2 px-4 text-md w-max mt-4 sm:mt-0" type="submit">Registrate</button>
                         </form>
                     </div>
             </div>

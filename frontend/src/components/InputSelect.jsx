@@ -31,7 +31,7 @@ export default function InputSelect({
         onClick={() => setOpen((o) => !o)}
         className={`w-full border rounded-full px-5 py-3 flex items-center justify-between
           bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#C122ED]
-          hover:border-[#C122ED] transition-colors ${
+          hover:border-[#C122ED] transition-colors  hover:cursor-pointer ${
             isLoading ? "opacity-70 cursor-not-allowed" : ""
           }`}
       >
