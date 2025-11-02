@@ -11,6 +11,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SearchModule } from './search/search.module';
 import { PreciosSeccionConciertoModule } from './precios-seccion-concierto/precios-seccion-concierto.module';
 import { CiudadesModule } from './ciudades/ciudad.module';
+import { GeneroModule } from './generos/genero.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { CiudadesModule } from './ciudades/ciudad.module';
     CloudinaryModule,
     SearchModule,
     PreciosSeccionConciertoModule,
-    CiudadesModule
+    CiudadesModule,
+    GeneroModule
   ],
 })
 export class AppModule {}

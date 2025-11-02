@@ -46,8 +46,17 @@ export class ArtistaService {
     return await this.artistaRepo.find();
   }
 
-   async getAllPublic() {
-    return await this.artistaRepo.find();
+  async getAllPublic(filtroGenero?: string) {
+    const where: any = {};
+
+    if (filtroGenero) {
+      where.genero = { nombre: filtroGenero };
+    }
+
+    return this.artistaRepo.find({ 
+      where, 
+      relations: ['genero']
+    });
   }
 
   async findBySlug(slug: string) {

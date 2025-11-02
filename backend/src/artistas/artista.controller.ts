@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards, UseInterceptors, UploadedFiles, Query } from '@nestjs/common';
 import { ArtistaService } from './artista.service';
 import { CreateArtistaDto } from './dto/create-artista.dto';
 import { ALLOWED_FILE_FIELDS, UpdateArtistaDto } from './dto/update-artista.dto';
@@ -18,8 +18,8 @@ export class ArtistaController {
   }
   
   @Get('public')
-  findAllPublic() {
-    return this.artistaService.getAllPublic();
+  findAllPublic(@Query('genero') genero?: string,) {
+    return this.artistaService.getAllPublic(genero);
   }
 
   @UseGuards(JwtRolesGuard)

@@ -20,10 +20,11 @@ export class ConciertosService {
     return 'This action adds a new concierto';
   }
 
-  findAll() {
-    return this.conciertoRepository
+  findAll(filtroGenero?: string, fechaInicio?: string) {
+    const query = this.conciertoRepository
       .createQueryBuilder('concierto')
       .leftJoinAndSelect('concierto.artista', 'artista')
+      .leftJoinAndSelect('artista.genero', 'genero')
       .leftJoinAndSelect('concierto.recinto', 'recinto')
       .leftJoinAndSelect('recinto.ciudad', 'ciudad')
       .leftJoin('concierto.preciosPorSeccion', 'psc')
@@ -39,15 +40,30 @@ export class ConciertosService {
         'recinto.ubicacion',
         'ciudad.id',
         'ciudad.nombre',
+        'genero.id',
+        'genero.nombre',
       ])
       .addSelect('MIN(psc.precio)', 'precio_minimo')
       .groupBy('concierto.id')
       .addGroupBy('artista.id')
       .addGroupBy('recinto.id')
       .addGroupBy('ciudad.id')
+      .addGroupBy('genero.id')
       .orderBy('concierto.fecha', 'ASC')
-      .cache(true)
-      .getRawMany();
+      .cache(true);
+
+    // Filtro por género
+    if (filtroGenero) {
+      query.andWhere('LOWER(genero.nombre) = LOWER(:nombre)', { nombre: filtroGenero });
+    }
+
+    // Filtro a partir de fecha
+    if (fechaInicio) {
+      const inicio = new Date(fechaInicio);
+      query.andWhere('concierto.fecha >= :inicio', { inicio: fechaInicio });
+    }
+
+    return query.getRawMany();
   }
 
   async findOne(id: number) {

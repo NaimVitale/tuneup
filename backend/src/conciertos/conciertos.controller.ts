@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ConciertosService } from './conciertos.service';
 import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
@@ -13,8 +13,11 @@ export class ConciertosController {
   }*/
 
   @Get('public')
-  findAll() {
-    return this.conciertosService.findAll();
+  findAll(
+  @Query('genero') genero?: string,
+  @Query('fechaInicio') fechaInicio?: string,
+  ) {
+    return this.conciertosService.findAll(genero, fechaInicio);
   }
 
   @Get(':id')

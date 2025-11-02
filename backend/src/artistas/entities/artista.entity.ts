@@ -1,5 +1,6 @@
 import { Concierto } from "src/conciertos/entities/concierto.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Genero } from "src/generos/entities/genero.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity ('artistas')
     export class Artista {
@@ -27,4 +28,9 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
         @OneToMany(() => Concierto, (concierto) => concierto.artista)
         conciertos: Concierto[];
+
+        @ManyToOne(() => Genero)
+        @JoinColumn({ name: 'id_genero' })
+        genero: Genero;
+        
     }
