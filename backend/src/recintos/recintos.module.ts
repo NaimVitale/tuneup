@@ -6,9 +6,10 @@ import { Recinto } from './entities/recinto.entity';
 import { Seccion } from 'src/secciones/entities/seccion.entity';
 import { ArtistaService } from 'src/artistas/artista.service';
 import { SearchService } from 'src/search/search.service';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recinto, Seccion])],
+  imports: [TypeOrmModule.forFeature([Recinto, Seccion]), AuthModule],
   controllers: [RecintosController],
   providers: [RecintosService],
   exports: [RecintosService],

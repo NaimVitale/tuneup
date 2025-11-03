@@ -14,7 +14,11 @@ export class RecintosService {
   }
 
   findAll() {
-    return `This action returns all recintos`;
+    return this.repo
+      .createQueryBuilder('recinto')
+      .leftJoinAndSelect('recinto.ciudad', 'ciudad')
+      .loadRelationCountAndMap('recinto.seccionesCount', 'recinto.secciones')
+      .getMany();
   }
 
   findOne(id: number) {

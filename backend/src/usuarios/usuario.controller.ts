@@ -15,10 +15,12 @@ export class UsuarioController {
     return this.usuarioService.create(createUsuarioDto);
   }
 
-  /*@Get()
+  @UseGuards(JwtRolesGuard)
+  @Get()
+  @Roles('admin')
   findAll() {
     return this.usuarioService.findAll();
-  }*/
+  }
 
   @UseGuards(JwtRolesGuard)
   @Get(':id')

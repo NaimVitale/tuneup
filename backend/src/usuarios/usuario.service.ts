@@ -29,6 +29,18 @@ export class UsuarioService {
     return this.usuarioRepo.save(usuario);
   }
 
+  async findAll() {
+    return this.usuarioRepo.find({
+      select: {
+        id: true,
+        nombre: true,
+        apellido: true,
+        email: true,
+        rol: true,
+      }
+    });
+  }
+
   async findByEmail(email: string) {
     return this.usuarioRepo.findOne({ where: { email } });
   }
