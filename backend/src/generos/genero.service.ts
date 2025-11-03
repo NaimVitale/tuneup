@@ -10,10 +10,14 @@ export class GeneroService {
     private readonly generoRepository: Repository<Genero>,
   ) {}
 
-  findAll() {
+  findAllPublic() {
     return this.generoRepository.find({
       select: ['id', 'nombre'],
     });
+  }
+
+  findAll() {
+    return this.generoRepository.find()
   }
   
   findOne(id: number) {

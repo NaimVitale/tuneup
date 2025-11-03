@@ -14,6 +14,11 @@ import { GeneroService } from './genero.service';
 export class GeneroController {
   constructor(private readonly generoService: GeneroService) {}
 
+  @Get('public')
+  findAllPublic() {
+    return this.generoService.findAllPublic();
+  }
+
   @Get()
   findAll() {
     return this.generoService.findAll();
