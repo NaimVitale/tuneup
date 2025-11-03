@@ -3,10 +3,10 @@ import { getConcert } from "../../services/concertServices";
 
 export const useGetConcert = (id) => {
   return useQuery({
-    queryKey: ["concierto", id],      // key única del query
-    queryFn: () => getConcert(id),  // función que hace la petición
-    enabled: !!id,                  // solo ejecuta si hay un id válido
-    retry: 1,                       // opcional
-    staleTime: 1000 * 60 * 5        // opcional: cache de 5 minutos
+    queryKey: ["concierto", id],
+    queryFn: () => getConcert(id),
+    enabled: !!id,          
+    retry: 1,         
+    staleTime: 1000 * 60 * 5
   });
 };

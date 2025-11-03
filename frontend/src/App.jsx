@@ -17,6 +17,8 @@ import ArtistPage from './pages/ArtistPage';
 import AdminArtistPage from './pages/AdminPages/AdminArtistPage';
 import AdminEditPage from './pages/AdminPages/AdminEditPage';
 import SingleArtistPage from './pages/SingleArtistPage';
+import AdminPremisesPage from './pages/AdminPages/AdminPremisesPage';
+import AdminUsersPage from './pages/AdminPages/AdminUsersPage';
 
 const queryClient = new QueryClient();
 
@@ -29,8 +31,8 @@ function App() {
                 <Route path='/'element={<HomePage/>}/>
                 <Route path=':evento/:slug/:id' element={<SingleEventPage/>}/>
                 <Route path='/conciertos/:genero?' element={<EventsPage/>}/>
+                <Route path='/artistas/detalle/:slug' element={<SingleArtistPage/>}></Route>
                 <Route path='/artistas/:genero?' element={<ArtistPage/>}></Route>
-                <Route path='/artistas/:slug' element={<SingleArtistPage/>}></Route>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/perfil' element={<ProfileLayout/>}>
@@ -41,6 +43,9 @@ function App() {
               <Route path='/admin/dashboard' element={<AdminLayout/>}>
                 <Route path='conciertos' element={<AdminConcertsPage/>}/>
                 <Route path='artistas' element={<AdminArtistPage/>}/>
+                <Route path='recintos' element={<AdminPremisesPage/>}/>
+                <Route path='generos' element={<AdminPremisesPage/>}/>
+                <Route path='usuarios' element={<AdminUsersPage/>}/>
                 <Route path=':resource/:slug/editar' element={<AdminEditPage/>}/>
               </Route>
             </Routes>

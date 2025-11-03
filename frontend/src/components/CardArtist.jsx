@@ -11,7 +11,7 @@ export default function CardArtist({ information }) {
           className="h-[35vh] object-cover w-full group-hover:scale-102 transition duration-300"
         />
         <Link
-          to={`/artistas/${information?.slug}`}
+          to={`/artistas/detalle/${information?.slug}`}
           className="absolute bottom-0 w-full px-4 py-3
                      text-lg font-semibold text-white
                      backdrop-blur-md bg-black/20

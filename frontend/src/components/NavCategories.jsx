@@ -17,15 +17,14 @@ export default function NavCategories() {
       name: "Artistas",
       path: "/artistas",
       subcategories: [
-        { name: "The Rolling Stones", path: "/artistas/the-rolling-stones" },
-        { name: "Dua Lipa", path: "/artistas/dua-lipa" },
-        { name: "Ed Sheeran", path: "/artistas/ed-sheeran" },
+        { name: "The Rolling Stones", path: "/artistas/detalle/the-rolling-stones" },
+        { name: "Dua Lipa", path: "/artistas/detalle/dua-lipa" },
+        { name: "Ed Sheeran", path: "/artistas/detalle/ed-sheeran" },
         { name: "Guns 'N Roses", path: "#" },
       ],
     },
     {
       name: "Ciudades",
-      path: "/ciudades",
       subcategories: [
         { name: "Madrid", path: "/ciudades/madrid" },
         { name: "Barcelona", path: "/ciudades/barcelona" },
