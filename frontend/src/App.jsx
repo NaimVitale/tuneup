@@ -19,6 +19,7 @@ import AdminEditPage from './pages/AdminPages/AdminEditPage';
 import SingleArtistPage from './pages/SingleArtistPage';
 import AdminPremisesPage from './pages/AdminPages/AdminPremisesPage';
 import AdminUsersPage from './pages/AdminPages/AdminUsersPage';
+import AdminGeneroPage from './pages/AdminPages/AdminGeneroPage';
 
 const queryClient = new QueryClient();
 
@@ -44,7 +45,7 @@ function App() {
                 <Route path='conciertos' element={<AdminConcertsPage/>}/>
                 <Route path='artistas' element={<AdminArtistPage/>}/>
                 <Route path='recintos' element={<AdminPremisesPage/>}/>
-                <Route path='generos' element={<AdminPremisesPage/>}/>
+                <Route path='generos' element={<AdminGeneroPage/>}/>
                 <Route path='usuarios' element={<AdminUsersPage/>}/>
                 <Route path=':resource/:slug/editar' element={<AdminEditPage/>}/>
               </Route>

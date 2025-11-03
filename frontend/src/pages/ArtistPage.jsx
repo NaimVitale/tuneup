@@ -4,14 +4,14 @@ import InputSelect from "../components/InputSelect";
 import Spinner from "../components/Spinner";
 import HeroArtists from '../assets/hero-artists.avif';
 import { useGetArtistsPublic } from "../hooks/artist/useGetArtistsPublic";
-import { useGetGeneros } from "../hooks/genero/useGetGeneros";
 import { useFilters } from "../hooks/useFilters";
+import { useGetGenerosPublic } from "../hooks/genero/useGetGenerosPublic";
 
 export default function ArtistPage() {
 
-    const { data: generos, isLoading: isLoadingGeneros } = useGetGeneros();
+    const { data: generos, isLoading: isLoadingGeneros } = useGetGenerosPublic();
 
-    const { genero, handleGeneroChange} = useFilters(generos);
+    const {genero, handleGeneroChange} = useFilters(generos);
 
     const { data: artistas, isLoading, isError } = useGetArtistsPublic(genero);
     

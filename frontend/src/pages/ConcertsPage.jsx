@@ -5,11 +5,11 @@ import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 import InputSelect from "../components/InputSelect";
 import InputDate from "../components/InputDate";
 import HeroConcerts from '../assets/hero-concerts.avif';
-import { useGetGeneros } from "../hooks/genero/useGetGeneros";
+import { useGetGenerosPublic } from "../hooks/genero/useGetGenerosPublic";
 import { useFilters } from "../hooks/useFilters";
 
   export default function ConcertsPage() {
-    const { data: generos, isLoading: isLoadingGeneros } = useGetGeneros();
+    const { data: generos, isLoading: isLoadingGeneros } = useGetGenerosPublic();
     const { genero, fecha, handleGeneroChange, handleFechaChange } = useFilters(generos);
 
     const { data: conciertos, isLoading } = useGetConciertos({
