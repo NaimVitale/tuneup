@@ -7,8 +7,11 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { GeneroService } from './genero.service';
+import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('generos')
 export class GeneroController {
@@ -19,7 +22,9 @@ export class GeneroController {
     return this.generoService.findAllPublic();
   }
 
+  @UseGuards(JwtRolesGuard)
   @Get()
+  @Roles('admin')
   findAll() {
     return this.generoService.findAll();
   }
