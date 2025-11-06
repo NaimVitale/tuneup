@@ -6,24 +6,54 @@ import { Artista } from './entities/artista.entity';
 import { ILike, Repository } from 'typeorm';
 import slugify from 'slugify';
 import { UploadService } from 'src/upload/upload.service';
+import { Genero } from 'src/generos/entities/genero.entity';
 
 @Injectable()
 export class ArtistaService {
   constructor(
       @InjectRepository(Artista)
       private readonly artistaRepo: Repository<Artista>,
+      @InjectRepository(Genero)
+      private readonly generoRepo: Repository<Genero>,
       private readonly uploadService: UploadService,
     ) {}
   
-    async create(dto: CreateArtistaDto): Promise<Artista> {
+  async create(dto: CreateArtistaDto, files?: Record<string, Express.Multer.File[]>): Promise<Artista> {
+    console.log("DTO recibido:", dto);
+    console.log("Archivos recibidos:", files);
+
+    if (!files?.img_card || files.img_card.length === 0) {
+      throw new BadRequestException('La imagen de tarjeta (img_card) es obligatoria');
+    }
+
     const slug = slugify(dto.nombre, { lower: true, strict: true });
 
+    const exists = await this.artistaRepo.findOne({ where: { slug } });
+    if (exists) throw new BadRequestException('Ya existe un artista con ese nombre');
+
     const artista = this.artistaRepo.create({
-      ...dto,
+      nombre: dto.nombre,
+      descripcion: dto.descripcion,
       slug,
     });
 
-    return this.artistaRepo.save(artista);
+    if (dto.genero) {
+      const genero = await this.generoRepo.findOne({ where: { id: dto.genero } });
+      if (!genero) throw new BadRequestException('El género seleccionado no existe');
+      artista.genero = genero;
+    }
+
+    if (files) {
+      for (const [key, fileArray] of Object.entries(files)) {
+        if (ALLOWED_FILE_FIELDS.includes(key) && fileArray[0]) {
+          const file = fileArray[0];
+          const uploaded = await this.uploadService.handleUploads({ [key]: [file] }, 'tuneup/artistas', ALLOWED_FILE_FIELDS);
+          artista[key] = uploaded[key];
+        }
+      }
+    }
+
+    return await this.artistaRepo.save(artista);
   }
 
   async searchByName(query: string) {
@@ -59,7 +89,7 @@ export class ArtistaService {
     });
   }
 
-  async findBySlug(slug: string) {
+  async findBySlugWithConciertos(slug: string) {
     const results = await this.artistaRepo
       .createQueryBuilder('artista')
       .leftJoin('artista.conciertos', 'concierto')
@@ -103,7 +133,7 @@ export class ArtistaService {
       img_hero: first.artista_img_hero,
       images: first.artista_images,
       descripcion: first.artista_descripcion,
-      conciertos: results.map(row => ({
+      conciertos: results.filter(row => row.concierto_id !== null).map(row => ({
         id: row.concierto_id,
         fecha: row.concierto_fecha,
         precio_minimo: row.precio_minimo,
@@ -126,9 +156,28 @@ export class ArtistaService {
     };
   }
 
+  async findBySlug(slug: string){
+    return this.artistaRepo.findOne({
+      where: { slug },
+      relations: ['genero'],
+      select: {
+        id: true,
+        nombre: true,
+        slug: true,
+        descripcion: true,
+        img_card: true,
+        img_hero: true,
+        images: true,
+        genero: {
+          id: true,
+        },
+      },
+    });
+  }
+
   async update(slug: string, dto: UpdateArtistaDto, files: Record<string, Express.Multer.File[]>) {
     const cleanSlug = slug.trim();
-    const artista = await this.artistaRepo.findOne({ where: { slug: cleanSlug }, select: ['id', 'nombre', 'descripcion', 'slug', 'img_card', 'img_hero', 'images'],});
+    const artista = await this.artistaRepo.findOne({ where: { slug: cleanSlug }, select: ['id', 'nombre', 'descripcion', 'slug', 'img_card', 'img_hero', 'images'], relations: ['genero'],});
 
     if (!artista) throw new NotFoundException('Artista no encontrado 1');
 
@@ -142,6 +191,18 @@ export class ArtistaService {
     Object.entries(dto).forEach(([key, value]) => {
       if (value !== undefined) artista[key] = value;
     });
+
+    if (dto.genero) {
+      const newGenero = await this.generoRepo.findOne({
+        where: { id: dto.genero },
+      });
+
+      if (!newGenero) {
+        throw new BadRequestException('El género seleccionado no existe');
+      }
+
+      artista.genero = newGenero;
+    }
 
     if (files) {
       for (const [key, fileArray] of Object.entries(files)) {

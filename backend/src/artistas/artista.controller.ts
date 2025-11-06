@@ -13,8 +13,11 @@ export class ArtistaController {
   @UseGuards(JwtRolesGuard)
   @Post()
   @Roles('admin')
-  create(@Body() createArtistaDto: CreateArtistaDto) {
-    return this.artistaService.create(createArtistaDto);
+  @UseInterceptors(
+  FileFieldsInterceptor(ALLOWED_FILE_FIELDS.map((name) => ({ name, maxCount: 1 })))
+  ) 
+  create(@Body() createArtistaDto: CreateArtistaDto, @UploadedFiles() files: Record<string, Express.Multer.File[]>) {
+    return this.artistaService.create(createArtistaDto, files);
   }
   
   @Get('public')
@@ -29,9 +32,16 @@ export class ArtistaController {
     return this.artistaService.getAll();
   }
 
+  @UseGuards(JwtRolesGuard)
   @Get(':slug')
+  @Roles('admin')
+  getArtistAdmin(@Param('slug') slug: string) {
+    return this.artistaService.findBySlug(slug);
+  }
+
+  @Get('public/:slug')
   async getArtist(@Param('slug') slug: string) {
-    const artista = await this.artistaService.findBySlug(slug);
+    const artista = await this.artistaService.findBySlugWithConciertos(slug);
     return artista;
   }
 

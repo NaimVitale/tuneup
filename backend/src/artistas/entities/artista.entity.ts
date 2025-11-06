@@ -23,10 +23,11 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
         @Column({ type: 'longtext' })
         img_hero: any;
 
-        @Column({ type: 'json' })
+        @Column({ type: 'longtext' })
         images: any;
 
         @OneToMany(() => Concierto, (concierto) => concierto.artista)
+        @JoinColumn({ name: 'id_artista' })
         conciertos: Concierto[];
 
         @ManyToOne(() => Genero)

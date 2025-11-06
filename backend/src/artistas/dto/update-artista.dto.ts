@@ -21,6 +21,9 @@ export class UpdateArtistaDto {
     
           @IsOptional()
           images : string;
+
+          @IsOptional()
+          genero : number;
 }
 
 export const ALLOWED_FILE_FIELDS = ['img_card', 'img_hero', 'images'];

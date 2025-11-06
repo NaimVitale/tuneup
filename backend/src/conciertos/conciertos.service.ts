@@ -3,7 +3,7 @@ import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Concierto } from './entities/concierto.entity';
-import { ILike, Repository, DataSource} from 'typeorm';
+import { Repository } from 'typeorm';
 import { PreciosSeccionConciertoService } from 'src/precios-seccion-concierto/precios-seccion-concierto.service';
 
 

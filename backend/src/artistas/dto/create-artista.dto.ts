@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 export class CreateArtistaDto {
       @IsNotEmpty()
@@ -6,13 +7,9 @@ export class CreateArtistaDto {
     
       @IsNotEmpty()
       descripcion: string;
-    
+
       @IsNotEmpty()
-      img_card : string;
-
-      @IsOptional()
-      img_hero : string;
-
-      @IsOptional()
-      images : string;
+      @IsNumber()
+      @Type(() => Number)
+      genero: number;
 }
