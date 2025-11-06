@@ -67,8 +67,6 @@ export default function SearchBar() {
     );
   };
 
-  console.log(results);
-
   return (
     <div className="relative w-full max-w-2xl mx-auto" ref={searchRef}>
       <div className="relative">

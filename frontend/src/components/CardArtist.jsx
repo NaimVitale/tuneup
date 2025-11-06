@@ -2,19 +2,19 @@ import { Link } from "react-router-dom"
 
 export default function CardArtist({ information }) {
   return (
-    <div className="rounded-2xl shadow-md overflow-hidden group transition-all">
+    <div className="rounded-2xl shadow-card overflow-hidden group transition-all">
       <div className="relative">
         <img
-          src={information?.img_card}
+          src={information?.images}
           alt={information?.slug}
           loading="lazy"
-          className="h-[35vh] object-cover w-full group-hover:scale-102 transition duration-300"
+          className="h-[35vh] object-contain w-full group-hover:scale-102 transition duration-300"
         />
         <Link
           to={`/artistas/detalle/${information?.slug}`}
           className="absolute bottom-0 w-full px-4 py-3
                      text-lg font-semibold text-white
-                     backdrop-blur-md bg-black/20
+                     backdrop-blur-md bg-purple-opacity
                      flex items-center justify-between"
         >
           <span>{information?.nombre}</span>

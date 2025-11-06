@@ -2,10 +2,40 @@ import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/artistas`;
 
+
+//Crear artista
+export const CreateArtist = async(token, artistData) => {
+   try{
+    const response = await axios.post(`${API_URL}`, artistData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      }
+    })
+    return response.data;
+  }catch(error){
+    throw error.response?.data || error;
+  }
+}
+
 //Consulta sobre un artista
 export const getArtist = async(slug) => {
   try{
+    const response = await axios.get(`${API_URL}/public/${slug}`, {
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
+
+//Consulta sobre un artista
+export const getArtistAdmin = async(slug, token) => {
+  try{
     const response = await axios.get(`${API_URL}/${slug}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     return response.data;
   } catch (error) {

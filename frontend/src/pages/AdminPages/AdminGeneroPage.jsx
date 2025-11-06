@@ -14,7 +14,7 @@ export default function AdminGeneroPage() {
   const actions = [
     {
       icon: <Pencil size={18} />,
-      onClick: (c) => navigate(`${c.slug}/editar`),
+      onClick: (c) => navigate(`${c.id}/editar`),
       className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {

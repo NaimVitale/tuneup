@@ -3,11 +3,14 @@ import InputFile from "../../InputFile";
 import InputForm from "../../InputForm";
 import { usePatchArtist } from "../../../hooks/artist/usePatchArtist";
 import { useEffect } from "react";
+import InputSelect from "../../InputSelect";
+import { useGetGenerosPublic } from "../../../hooks/genero/useGetGenerosPublic";
 
 export default function ArtistEditForm(artist) {
     const { slug } = useParams();
     const navigate = useNavigate();
-    const { form, handleChange, handleFileChange, handleSubmit, newSlug, success, errors} = usePatchArtist(slug, artist.data)
+    const { form, handleChange, handleFileChange, handleSubmit, handleSelectChange, newSlug, success, errors} = usePatchArtist(slug, artist.data)
+    const { data: generos, isLoading: isLoadingGeneros } = useGetGenerosPublic();
 
     useEffect(() => {
         if (newSlug && newSlug !== slug) {
@@ -23,10 +26,20 @@ export default function ArtistEditForm(artist) {
     return(
         <div className="min-h-[60vh] w-full flex justify-center text-black">
                 <form onSubmit={onSubmit} className="w-[95%] gap-10">
-                    <div className="grid grid-cols-1 gap-8">
+                    <div className="grid grid-cols-2 gap-8">
                         <InputForm label={"Nombre"} id={"nombre"} type="text" value={form?.nombre} onChange={handleChange}></InputForm>
-                        {/* {<InputForm label={"Genero"} type="select"></InputForm>} */}
-                        <div /*className="col-span-2"*/>
+                        <InputSelect
+                            placeholder="Género"
+                            value={form?.genero}
+                            onChange={(value) => handleSelectChange("genero", value)}
+                            options={[
+                                ...(generos?.map((g) => ({
+                                label: g.nombre,
+                                value: g.id,
+                                })) || []),
+                            ]}
+                        />
+                        <div className="col-span-2">
                             <InputForm label={"Descripcion"} id={"descripcion"} type="textarea" value={form?.descripcion}  onChange={handleChange}></InputForm>
                         </div>
                     </div>

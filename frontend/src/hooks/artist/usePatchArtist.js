@@ -10,6 +10,7 @@ export const usePatchArtist = (slug, artistData) => {
     img_card: "",
     img_hero: "",
     images: "",
+    genero: "",
   });
 
   const [files, setFiles] = useState({});
@@ -31,6 +32,7 @@ export const usePatchArtist = (slug, artistData) => {
         img_card: data.img_card || "",
         img_hero: data.img_hero || "",
         images: data.images || "",
+        genero:data.genero.id || "",
       });
     }
   }, [artistData, updatedArtist]);
@@ -44,6 +46,10 @@ export const usePatchArtist = (slug, artistData) => {
     setFiles((prev) => ({ ...prev, [field]: file || null }));
   };
 
+  const handleSelectChange = (field, value) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
   
   const validateForm = () => {
     const newErrors = {};
@@ -92,6 +98,15 @@ export const usePatchArtist = (slug, artistData) => {
         if (file) formData.append(key, file);
       });
 
+      // Ver qué hay dentro del FormData
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}: File { name: ${value.name}, size: ${value.size} }`);
+        } else {
+          console.log(`${key}:`, value);
+        }
+      }
+
       const updated = await PatchArtist(token, slug, formData);
       setUpdatedArtist(updated);
       toast.success("Artista actualizado correctamente")
@@ -110,6 +125,7 @@ export const usePatchArtist = (slug, artistData) => {
     handleChange,
     handleFileChange,
     handleSubmit,
+    handleSelectChange,
     newSlug,
     loading,
     errorUpdate,

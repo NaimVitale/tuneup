@@ -9,6 +9,8 @@ export default function ArtistPage(){
     const { slug: artistSlug } = useParams();
     const { data: artist, isLoading, isError } = useGetArtist(artistSlug);
 
+    console.log(artist)
+
     return(
         <div>
             <HeroArtist nombre={artist?.nombre} imagen={artist?.img_hero}></HeroArtist>
