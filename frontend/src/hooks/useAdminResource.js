@@ -1,7 +1,9 @@
 import { useGetArtistAdmin } from "./artist/useGetArtistAdmin";
+import { useGetRecintoAdmin } from "./recintos/useGetRecintoAdmin";
 
 export function useAdminResource(resource, slug) {
   const artistQuery = useGetArtistAdmin(slug, { enabled: resource === "artistas" });
+  const recintoQuery = useGetRecintoAdmin(slug, { enabled: resource === "recintos" });
 
   let data, isLoading, isError;
 
@@ -15,12 +17,12 @@ export function useAdminResource(resource, slug) {
       data = concertQuery.data;
       isLoading = concertQuery.isLoading;
       isError = concertQuery.isError;
-      break;
+      break;*/
     case "recintos":
       data = recintoQuery.data;
       isLoading = recintoQuery.isLoading;
       isError = recintoQuery.isError;
-      break;*/
+      break;
     default:
       data = null;
       isLoading = false;

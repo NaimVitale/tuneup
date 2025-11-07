@@ -3,7 +3,7 @@ export default function DataTable({ columns, data, actions }) {
     if (typeof value !== "string") return false;
     try {
       const url = new URL(value);
-      return /\.(jpeg|jpg|png|gif|webp|svg)$/i.test(url.pathname);
+      return /\.(jpeg|jpg|png|gif|webp|svg|avif)$/i.test(url.pathname);
     } catch {
       return false;
     }
