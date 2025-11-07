@@ -11,6 +11,11 @@ export class CiudadesController {
     return this.ciudadesService.findAll();
   }
 
+  @Get('public')
+  findAllPublic() {
+    return this.ciudadesService.findAllPublic();
+  }
+
   @Post()
   create(@Body('nombre') nombre: string) {
     return this.ciudadesService.create(nombre);

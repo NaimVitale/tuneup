@@ -11,6 +11,15 @@ export class CiudadesService {
     private readonly ciudadRepository: Repository<Ciudad>,
   ) {}
 
+  findAllPublic() {
+    return this.ciudadRepository.find({
+      select:{
+        id:true,
+        nombre:true
+      }
+    });
+  }
+
   findAll() {
     return this.ciudadRepository.find({
       relations: ['recintos']

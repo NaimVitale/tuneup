@@ -29,6 +29,6 @@ export class Recinto {
     @OneToMany(() => Concierto, (concierto) => concierto.recinto)
     conciertos: Concierto[];
 
-    @OneToMany(() => Seccion, (seccion) => seccion.recinto)
+    @OneToMany(() => Seccion, (seccion) => seccion.recinto, { cascade: true, eager: true })
     secciones: Seccion[];
 }

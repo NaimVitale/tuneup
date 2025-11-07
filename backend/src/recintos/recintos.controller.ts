@@ -21,12 +21,16 @@ export class RecintosController {
     return this.recintosService.findAll();
   }
 
+  @UseGuards(JwtRolesGuard)
   @Get(':id')
+  @Roles('admin')
   findOne(@Param('id') id: string) {
     return this.recintosService.findOne(+id);
   }
 
+  @UseGuards(JwtRolesGuard)
   @Patch(':id')
+  @Roles('admin')
   update(@Param('id') id: string, @Body() updateRecintoDto: UpdateRecintoDto) {
     return this.recintosService.update(+id, updateRecintoDto);
   }
