@@ -3,7 +3,6 @@ import Cardproduct from '../components/CardProduct';
 import CardProfileHome from '../components/CardProfileHome';
 import CTAinformacion from '../components/CTAInformacion';
 import HeroHome from '../components/HeroHome';
-import SelectFilter from '../components/SelectFilter';
 import UpcomingConcertsCard from '../components/UpcomingConcertsCard';
 import { useAuth } from "../context/AuthContext";
 import { Link } from 'react-router-dom';

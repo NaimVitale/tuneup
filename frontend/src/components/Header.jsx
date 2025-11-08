@@ -1,6 +1,5 @@
 import { useState } from "react";
 import TuneUpHeader from "../assets/TuneUp.webp"
-import PerfilHeader from "../assets/perfil_header.webp"
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
 import { Bell, LayoutDashboardIcon, LogOut, User, Menu, X, UserCircle, UserCircle2 } from "lucide-react"

@@ -21,6 +21,7 @@ import AdminPremisesPage from './pages/AdminPages/AdminPremisesPage';
 import AdminUsersPage from './pages/AdminPages/AdminUsersPage';
 import AdminGeneroPage from './pages/AdminPages/AdminGeneroPage';
 import AdminCreatePage from './pages/AdminPages/AdminCreatePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,8 @@ function App() {
                 <Route path=':resource/crear' element={<AdminCreatePage/>}/>
                 <Route path=':resource/:slug/editar' element={<AdminEditPage/>}/>
               </Route>
+
+              <Route path='*' element={<NotFoundPage/>}/>
             </Routes>
 
             <Toaster

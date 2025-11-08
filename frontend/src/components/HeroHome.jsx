@@ -3,6 +3,7 @@ import HeroMetallica from '../assets/hero_metallica.webp';
 import HeroRCHP from '../assets/hero_redhot.webp';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
+import {Link} from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -11,16 +12,19 @@ const slides = [
     title: '¡Vive la música en vivo como nunca antes!',
     text: 'Desde los festivales más grandes hasta shows íntimos, tenemos tus entradas listas. Descubrí nuevos artistas, reviví tus clásicos favoritos y sentí la energía del escenario en vivo.',
     image: `${HeroImage}`,
+    path: '/conciertos'
   },
   {
     title: '¡Metallica llega con todo a España!',
     text: 'Viví la potencia del metal en un show inolvidable Entradas anticipadas ya disponibles. ¡No te quedes afuera!',
     image: `${HeroMetallica}`,
+    path: '/conciertos'
   },
   {
     title: 'La banda más incendiaria del funk rock vuelve a los escenarios.',
     text: 'Una noche cargada de clásicos, energía y pura adrenalina. ¡Conseguí tus entradas antes de que se agoten!',
     image: `${HeroRCHP}`,
+    path: '/conciertos'
   },
 ];
 
@@ -47,9 +51,9 @@ const HeroHome = () => {
                 <div className="flex flex-col gap-6 lg:w-[60%]">
                   <h2 className="h2-slider text-white whitespace-pre-line ">{slide.title}</h2>
                   <p className="text-2xl text-white mb-6">{slide.text}</p>
-                  <button className="btn-hero py-3 px-5 text-lg w-max">
+                  <Link to={slide.path} className="btn-hero py-3 px-5 text-lg w-max">
                     Consigue tu entrada
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
