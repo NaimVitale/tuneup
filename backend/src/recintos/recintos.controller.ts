@@ -9,7 +9,9 @@ import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
 export class RecintosController {
   constructor(private readonly recintosService: RecintosService) {}
 
+  @UseGuards(JwtRolesGuard)
   @Post()
+  @Roles('admin')
   create(@Body() createRecintoDto: CreateRecintoDto) {
     return this.recintosService.create(createRecintoDto);
   }

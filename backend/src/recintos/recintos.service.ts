@@ -13,8 +13,42 @@ export class RecintosService {
     @InjectRepository(Recinto) private repo: Repository<Recinto>,
   ) {}
 
-  create(createRecintoDto: CreateRecintoDto) {
-    return 'This action adds a new recinto';
+  async create(dto: CreateRecintoDto) {
+    const { nombre, ciudad, secciones, svg_map } = dto;
+
+    const sec = secciones ?? [];
+
+    if (sec.length > 1) {
+      const nombres = sec
+        .map(s => s.nombre?.trim().toLowerCase())
+        .filter(Boolean);
+
+      if (new Set(nombres).size !== nombres.length) {
+        throw new BadRequestException('No puede haber secciones con nombres repetidos');
+      }
+    }
+
+    const recinto = this.repo.create({
+      nombre,
+      svg_map: svg_map || null,
+      ciudad: { id: ciudad } as Ciudad,
+      secciones: secciones?.map(s => ({
+        nombre: s.nombre.trim(),
+        capacidad: s.capacidad,
+        tipo_svg: s.tipo_svg,
+        svg_path: s.svg_path,
+      })) || []
+    });
+
+    const saved = await this.repo.save(recinto);
+
+    return {
+      id: saved.id,
+      nombre: saved.nombre,
+      ciudad: saved.ciudad,
+      svg_map: saved.svg_map,
+      secciones: saved.secciones,
+    };
   }
 
   findAll() {
