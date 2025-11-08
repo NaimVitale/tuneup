@@ -29,8 +29,9 @@ export default function DataTable({ columns, data, actions }) {
                 key={item.id || index}
                 className="border-b hover:bg-gray-50 transition-colors"
               >
+               
                 {columns.map((col) => {
-                  const value = col.render ? col.render(item, index) : item[col.key];
+                  const value = col.render ? col.render(item, item.id) : item[col.key];
 
                   return (
                     <td

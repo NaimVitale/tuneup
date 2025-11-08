@@ -2,31 +2,27 @@ import { useGetArtistAdmin } from "./artist/useGetArtistAdmin";
 import { useGetRecintoAdmin } from "./recintos/useGetRecintoAdmin";
 
 export function useAdminResource(resource, slug) {
-  const artistQuery = useGetArtistAdmin(slug, { enabled: resource === "artistas" });
-  const recintoQuery = useGetRecintoAdmin(slug, { enabled: resource === "recintos" });
-
-  let data, isLoading, isError;
+  let data = null;
+  let isLoading = false;
+  let isError = false;
 
   switch(resource) {
     case "artistas":
+      const artistQuery = useGetArtistAdmin(slug, { enabled: !!slug });
       data = artistQuery.data;
       isLoading = artistQuery.isLoading;
       isError = artistQuery.isError;
       break;
-    /*case "conciertos":
-      data = concertQuery.data;
-      isLoading = concertQuery.isLoading;
-      isError = concertQuery.isError;
-      break;*/
+
     case "recintos":
+      const recintoQuery = useGetRecintoAdmin(slug, { enabled: !!slug });
       data = recintoQuery.data;
       isLoading = recintoQuery.isLoading;
       isError = recintoQuery.isError;
       break;
+
     default:
-      data = null;
-      isLoading = false;
-      isError = false;
+      break;
   }
 
   return { data, isLoading, isError };
