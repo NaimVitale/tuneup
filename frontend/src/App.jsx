@@ -22,6 +22,8 @@ import AdminUsersPage from './pages/AdminPages/AdminUsersPage';
 import AdminGeneroPage from './pages/AdminPages/AdminGeneroPage';
 import AdminCreatePage from './pages/AdminPages/AdminCreatePage';
 import NotFoundPage from './pages/NotFoundPage';
+import SuccessPage from './pages/SuccessPage';
+import CancelPage from './pages/CancelPage';
 
 const queryClient = new QueryClient();
 
@@ -52,6 +54,9 @@ function App() {
                 <Route path=':resource/crear' element={<AdminCreatePage/>}/>
                 <Route path=':resource/:slug/editar' element={<AdminEditPage/>}/>
               </Route>
+
+              <Route path='success' element={<SuccessPage/>}/>
+              <Route path='cancel' element={<CancelPage/>}/>
 
               <Route path='*' element={<NotFoundPage/>}/>
             </Routes>

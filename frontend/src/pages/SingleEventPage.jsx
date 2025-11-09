@@ -8,6 +8,8 @@ import { Armchair, MapIcon, ShoppingCart} from "lucide-react";
 import ListTickets from "../components/ListTickets";
 import { useTickets } from "../hooks/tickets/useTickets";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useAuth } from "../context/AuthContext";
+import CheckoutButton from "../components/CheckoutButton";
 
 export default function SingleEventPage() {
   const VALID_RESOURCES = ["conciertos"];
@@ -21,6 +23,9 @@ export default function SingleEventPage() {
   }
 
   const { data, isLoading, isError } = useGetConcert(id);
+  const { token, userID } = useAuth();
+
+  console.log(data)
 
   const {
     ticketsSeleccionados,
@@ -114,9 +119,14 @@ export default function SingleEventPage() {
                         {calcularTotal().toFixed(2)}€
                       </span>
                     </div>
-                    <button className="w-full py-2.5 sm:py-3 bg-[#C122ED] text-white rounded-lg text-sm sm:text-base font-semibold hover:bg-[#9333EA] transition-colors active:scale-95">
-                      Proceder al pago
-                    </button>
+                    <CheckoutButton 
+                      token={token}
+                      items={ticketsSeleccionados.map(t => ({
+                        id_precio_stripe: t.seccion.id_precio_stripe, // <-- enviar el ID de Stripe con el mismo nombre
+                        quantity: t.cantidad
+                      }))}
+                      id_usuario={userID}
+                    />
                   </div>
                 </div>
               )}

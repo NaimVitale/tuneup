@@ -51,7 +51,7 @@ export default function ConcertCreateForm() {
                     </div>
                     <div>
                     <TableSections sections={form.secciones} onSectionsChange={updateSections} mode="precio" showActions={true}></TableSections>
-                    <button className="btn-primary py-2 px-4 text-md w-max mt-10">Actualizar datos</button>
+                    <button className="btn-primary py-2 px-4 text-md w-max mt-10">Crear Concierto</button>
                     </div>
                 </form>
         </div>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, use, useContext, useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
   const [rol, setRol] = useState(null);
+  const [userID, setUserID] = useState(null)
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const decoded = jwtDecode(token);
         setRol(decoded.rol);
+        setUserID(decoded.sub)
       } catch (error) {
         console.error("Token inválido", error);
         setRol(null);
@@ -55,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, rol, login, logout, loading, updateUser}}>
+    <AuthContext.Provider value={{ user, token, rol, login, logout, userID, loading, updateUser}}>
       {children}
     </AuthContext.Provider>
   );
