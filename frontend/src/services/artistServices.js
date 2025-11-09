@@ -57,6 +57,17 @@ export const getAllArtist = async(token) => {
   }
 }
 
+//Consulta sobre todos los artistas para select
+export const getAllArtistsSelect = async() => {
+  try{
+    const response = await axios.get(`${API_URL}/select`,{})
+    return response.data;
+  }catch{
+    throw error.response?.data || error;
+  }
+}
+
+
 //Consulta sobre todos los artistas
 export const getAllArtistPublic = async(genero) => {
   try{

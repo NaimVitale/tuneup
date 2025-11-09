@@ -32,6 +32,16 @@ export const getAllRecintos = async(token) => {
   }
 }
 
+//Consulta sobre todos los recintos para select
+export const getAllRecintosSelect = async() => {
+  try{
+    const response = await axios.get(`${API_URL}/select`,{})
+    return response.data;
+  }catch{
+    throw error.response?.data || error;
+  }
+}
+
 //Consulta sobre un recinto panel admin
 export const getRecintoAdmin = async(token, id) => {
   try{

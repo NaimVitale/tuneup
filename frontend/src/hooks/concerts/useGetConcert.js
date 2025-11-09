@@ -3,7 +3,7 @@ import { getConcert } from "../../services/concertServices";
 
 export const useGetConcert = (id) => {
   return useQuery({
-    queryKey: ["concierto", id],
+    queryKey: ["concierto-public", id],
     queryFn: () => getConcert(id),
     enabled: !!id,          
     retry: 1,         

@@ -88,7 +88,7 @@ export default function SectionsTable({
           </thead>
 
           <tbody>
-            {sections.map((s, idx) => (
+            {sections.filter(s => mode === "precio" ? s.capacidad > 0 : true).map((s, idx) => (
               <tr key={s.id} className={`border-t border-gray-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-[#f3e0ff] transition-colors`}>
                 {editingId === s.id ? (
                   <>

@@ -7,6 +7,7 @@ export default function InputSelect({
   options = [],
   placeholder = "Selecciona una opción",
   isLoading = false,
+  type = "default", // <-- añadimos el type
 }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
@@ -22,6 +23,17 @@ export default function InputSelect({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Si es type="hour" generamos automáticamente las horas cada 30 min
+  const hourOptions =
+    type === "hour"
+      ? Array.from({ length: (24 - 12) * 2 }, (_, i) => {
+          const h = Math.floor(i / 2) + 12;
+          const hourStr = h.toString().padStart(2, "0");
+          const m = i % 2 === 0 ? "00" : "30";
+          return { label: `${hourStr}:${m}`, value: `${hourStr}:${m}` };
+        })
+      : options;
 
   return (
     <div className="w-full relative" ref={containerRef}>
@@ -39,7 +51,7 @@ export default function InputSelect({
           {isLoading
             ? "Cargando..."
             : value
-            ? options.find((opt) => opt.value === value)?.label || value
+            ? hourOptions.find((opt) => opt.value === value)?.label || value
             : placeholder}
         </span>
         <ChevronDown
@@ -51,9 +63,9 @@ export default function InputSelect({
       </button>
 
       {open && !isLoading && (
-        <ul className="absolute z-10 mt-2 w-full bg-white border rounded-2xl shadow-lg overflow-hidden">
-          {options.length > 0 ? (
-            options.map((opt) => (
+        <ul className="absolute z-10 mt-2 w-full bg-white border rounded-2xl shadow-lg overflow-y-auto max-h-64">
+          {hourOptions.length > 0 ? (
+            hourOptions.map((opt) => (
               <li
                 key={opt.value}
                 onClick={() => {

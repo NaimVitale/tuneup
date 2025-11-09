@@ -1,4 +1,5 @@
 import { useGetArtistAdmin } from "./artist/useGetArtistAdmin";
+import { useGetConcertPrivate } from "./concerts/useGetConcertPrivate";
 import { useGetRecintoAdmin } from "./recintos/useGetRecintoAdmin";
 
 export function useAdminResource(resource, slug) {
@@ -19,6 +20,13 @@ export function useAdminResource(resource, slug) {
       data = recintoQuery.data;
       isLoading = recintoQuery.isLoading;
       isError = recintoQuery.isError;
+      break;
+
+    case "conciertos":
+      const conciertoQuery = useGetConcertPrivate(slug, { enabled: !!slug });
+      data = conciertoQuery.data;
+      isLoading = conciertoQuery.isLoading;
+      isError = conciertoQuery.isError;
       break;
 
     default:
