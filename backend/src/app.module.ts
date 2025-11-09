@@ -36,7 +36,7 @@ import { CompraModule } from './compras/compra.module';
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
         synchronize:false,
-        logging: true, // <== así ves en consola las consultas y conexión
+        logging: process.env.NODE_ENV !== 'production',
       }),
     }),
     ConciertosModule,
