@@ -72,37 +72,31 @@ import { Link } from "react-router-dom";
                   <UpcomingConcertsCard />
                   <UpcomingConcertsCard />
                 </div>
-                <div className="w-full lg:w-[25%]">
-                  <div className="bg-gradient-to-br from-[#C122ED] to-[#9333EA] rounded-3xl text-white p-6 overflow-hidden sticky top-30">
                   {!token ? (
-                    <>
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-                      <div className="relative z-10 text-center">
-                        <Guitar size={50} className="mx-auto mb-4"/>
-                        <h3 className="text-2xl font-bold mb-3">¡Únete a TuneUp!</h3>
-                        <p className="text-white/90 text-sm mb-6">
-                        Guarda favoritos y recibe notificaciones de tus artistas.
-                        </p>
-                        <div className="flex flex-col">
-                          <Link to={'/register'} className="w-full px-4 bg-white text-[#C122ED] hover:bg-gray-100 font-semibold py-3 rounded-full transition-all mb-3">
-                          Crear cuenta
-                          </Link>
-                          <Link to={'/login'} className="w-full bg-white/20 hover:bg-white/30 text-white font-medium py-3 rounded-full transition-all">
-                          Iniciar sesión
-                          </Link>
-                        </div>
+                    <div className="w-full lg:w-[25%]">
+                      <div className="bg-gradient-to-br from-[#C122ED] to-[#9333EA] rounded-3xl text-white p-6 overflow-hidden sticky top-30">
+                        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                          <div className="relative z-10 text-center">
+                            <Guitar size={50} className="mx-auto mb-4"/>
+                            <h3 className="text-2xl font-bold mb-3">¡Únete a TuneUp!</h3>
+                            <p className="text-white/90 text-sm mb-6">
+                            Guarda favoritos y recibe notificaciones de tus artistas.
+                            </p>
+                            <div className="flex flex-col">
+                              <Link to={'/register'} className="w-full px-4 bg-white text-[#C122ED] hover:bg-gray-100 font-semibold py-3 rounded-full transition-all mb-3">
+                              Crear cuenta
+                              </Link>
+                              <Link to={'/login'} className="w-full bg-white/20 hover:bg-white/30 text-white font-medium py-3 rounded-full transition-all">
+                              Iniciar sesión
+                              </Link>
+                            </div>
+                          </div>
                       </div>
-                    </>
+                    </div>
                     ) : (
                     <>
-                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <span>⭐</span> Mis Favoritos
-                    </h3>
-                    {/* contenido de favoritos */}
                     </>
                   )}
-                    </div>
-                  </div>
               </div>
             </div>
 

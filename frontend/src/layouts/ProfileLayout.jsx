@@ -13,7 +13,7 @@ export default function ProfileLayout() {
                     <div className="w-[20%] border-r border-gray-300 pt-2">
                         <ul className="flex flex-col gap-8 text-gray-700 text-lg">
                             <li>
-                                <Link to={""} className="flex items-center gap-2 ">
+                                <Link to={`entradas/${user.id}`} className="flex items-center gap-2 ">
                                     <Ticket className="text-[#C122ED]" size={25} />
                                     Mis entradas
                                 </Link>

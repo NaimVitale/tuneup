@@ -1,4 +1,4 @@
-import { data, useLocation } from 'react-router-dom';
+import { data, Link, useLocation } from 'react-router-dom';
 import { CheckCircle, Ticket, Calendar, MapPin, Download, Mail, Home } from 'lucide-react';
 import { useGetCompra } from '../hooks/compra/useGetCompra';
 
@@ -78,16 +78,13 @@ export default function SuccessPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <MapPin size={16} lg:size={14} className="text-[#C122ED]" />
-                      <span>{entrada.concierto.recinto.nombre}, {entrada.concierto.ciudad}</span>
+                      <Link to={`/recintos/${entrada.concierto.recinto.id}`} className='hover:underline'>{entrada.concierto.recinto.nombre}</Link>
                     </div>
                   </div>
 
                   <div className="flex justify-between items-center pt-3 border-t border-gray-100">
                     <span className="text-sm font-medium text-gray-700">
-                      {entrada.seccion.nombre} • {entrada.precio.precio}€
-                    </span>
-                    <span className="text-lg font-bold text-[#C122ED]">
-                      {(entrada.cantidad * entrada.precio_unitario).toFixed(2)}€
+                      {entrada.seccion.nombre} • <span className='text-[#C122ED]'>{entrada.precio.precio}€</span>
                     </span>
                   </div>
                 </div>
@@ -106,7 +103,7 @@ export default function SuccessPage() {
                 <div className="flex justify-between">
                   <span className="text-white/80">Entradas:</span>
                   <span className="font-semibold">
-                    {compra.entradas.reduce((acc, e) => acc + e.cantidad, 0)} uds
+                    {compra.entradas.length} uds
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -118,11 +115,11 @@ export default function SuccessPage() {
 
             {/* Botones de acción */}
             <div className="space-y-3 lg:space-y-2">
-              <button className="w-full flex items-center justify-center gap-2 bg-white border-2 border-[#C122ED] text-[#C122ED] hover:bg-[#f3e0ff] font-semibold py-3.5 lg:py-3 rounded-xl transition-all">
+              <button className="w-full flex items-center justify-center gap-2 bg-white border-2 border-[#C122ED] text-[#C122ED] hover:bg-[#f3e0ff] font-semibold py-3.5 lg:py-3 rounded-3xl transition-all">
                 <Download size={20} lg:size={18} />
                 Descargar PDF
               </button>
-              <button className="w-full flex items-center justify-center gap-2 bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3.5 lg:py-3 rounded-xl transition-all">
+              <button className="w-full flex items-center justify-center gap-2 bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3.5 lg:py-3 rounded-3xl transition-all">
                 <Mail size={20} lg:size={18} />
                 Reenviar email
               </button>
@@ -139,13 +136,13 @@ export default function SuccessPage() {
             </div>
 
             {/* Botón volver */}
-            <a 
-              href="/"
-              className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3.5 lg:py-3 rounded-xl transition-all"
+            <Link 
+              to={'/'}
+              className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3.5 lg:py-3 rounded-3xl transition-all"
             >
               <Home size={20} lg:size={18} />
               Volver al inicio
-            </a>
+            </Link>
           </div>
         </div>
       </div>
