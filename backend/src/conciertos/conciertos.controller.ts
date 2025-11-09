@@ -9,10 +9,12 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 export class ConciertosController {
   constructor(private readonly conciertosService: ConciertosService) {}
 
-  /*@Post()
+  @UseGuards(JwtRolesGuard)
+  @Post()
+  @Roles('admin')
   create(@Body() createConciertoDto: CreateConciertoDto) {
     return this.conciertosService.create(createConciertoDto);
-  }*/
+  }
 
   @Get('public')
   findAll(
@@ -34,7 +36,9 @@ export class ConciertosController {
     return this.conciertosService.findOne(+id);
   }
 
+  @UseGuards(JwtRolesGuard)
   @Patch(':id')
+  @Roles('admin')
   update(@Param('id') id: string, @Body() updateConciertoDto: UpdateConciertoDto) {
     return this.conciertosService.update(+id, updateConciertoDto);
   }

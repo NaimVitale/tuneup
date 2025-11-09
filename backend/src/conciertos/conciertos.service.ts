@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { PreciosSeccionConciertoService } from 'src/precios-seccion-concierto/precios-seccion-concierto.service';
 import { PreciosSeccionConcierto } from 'src/precios-seccion-concierto/entities/precios-seccion-concierto.entity';
 import { Seccion } from 'src/secciones/entities/seccion.entity';
+import { Recinto } from 'src/recintos/entities/recinto.entity';
 
 
 @Injectable()
@@ -21,11 +22,52 @@ export class ConciertosService {
     @InjectRepository(Seccion)
     private seccionRepo: Repository<Seccion>,
 
+    @InjectRepository(Recinto)
+    private recintoRepo: Repository<Recinto>,
+
     private readonly preciosService: PreciosSeccionConciertoService,
   ) {}
 
-  create(createConciertoDto: CreateConciertoDto) {
-    return 'This action adds a new concierto';
+  async create(createConciertoDto: CreateConciertoDto) {
+    const { id_recinto, fecha, id_artista, preciosPorSeccion } = createConciertoDto;
+
+    // Buscar el recinto y sus secciones
+    const recinto = await this.recintoRepo.findOne({
+      where: { id: id_recinto },
+      relations: ['secciones']
+    });
+
+    if (!recinto) {
+      throw new NotFoundException(`Recinto ${id_recinto} no encontrado`);
+    }
+
+    if (!recinto.secciones || recinto.secciones.length === 0) {
+      throw new BadRequestException(`No se puede crear un concierto: el recinto no tiene secciones disponibles`);
+    }
+
+    // Opcional: filtrar solo secciones con capacidad > 0
+    const seccionesDisponibles = recinto.secciones.filter(s => s.capacidad > 0);
+    if (seccionesDisponibles.length === 0) {
+      throw new BadRequestException(`No se puede crear un concierto: el recinto no tiene secciones con capacidad disponible`);
+    }
+
+    // Crear concierto
+    const concierto = this.conciertoRepository.create({
+      fecha,
+      id_artista,
+      id_recinto,
+      preciosPorSeccion: preciosPorSeccion?.map(p => {
+        const seccion = seccionesDisponibles.find(s => s.id === p.id_seccion);
+        if (!seccion) return null;
+        return this.preciosRepo.create({
+          seccion,
+          precio: p.precio,
+          capacidad_disponible: seccion.capacidad
+        });
+      }).filter(p => p !== null)
+    });
+
+    return this.conciertoRepository.save(concierto);
   }
 
   findAll(filtroGenero?: string, fechaInicio?: string) {
