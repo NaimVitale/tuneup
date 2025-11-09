@@ -11,6 +11,9 @@ export class PreciosSeccionConcierto {
   @Column('decimal', { precision: 10, scale: 2 })
   precio: number;
 
+  @Column()
+  capacidad_disponible: number;
+
   @ManyToOne(() => Concierto, concierto => concierto.preciosPorSeccion, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'id_concierto' })
   concierto: Concierto;

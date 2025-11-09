@@ -26,6 +26,6 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
         @JoinColumn({ name: 'id_recinto' })
         recinto: Recinto;
 
-        @OneToMany(() => PreciosSeccionConcierto, csp => csp.concierto)
+        @OneToMany(() => PreciosSeccionConcierto, csp => csp.concierto,  { cascade: true })
         preciosPorSeccion: PreciosSeccionConcierto[];
     }

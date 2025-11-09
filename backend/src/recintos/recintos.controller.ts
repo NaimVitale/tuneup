@@ -23,6 +23,11 @@ export class RecintosController {
     return this.recintosService.findAll();
   }
 
+  @Get('select')
+  findAllSelect() {
+    return this.recintosService.findAllSelect();
+  }
+
   @UseGuards(JwtRolesGuard)
   @Get(':id')
   @Roles('admin')

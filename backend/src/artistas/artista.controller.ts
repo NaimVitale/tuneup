@@ -25,6 +25,11 @@ export class ArtistaController {
     return this.artistaService.getAllPublic(genero);
   }
 
+  @Get('select')
+  findAllSelect() {
+    return this.artistaService.getAllSelect();
+  }
+
   @UseGuards(JwtRolesGuard)
   @Get()
   @Roles('admin')

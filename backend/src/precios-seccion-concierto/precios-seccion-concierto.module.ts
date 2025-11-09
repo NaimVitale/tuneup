@@ -7,6 +7,6 @@ import { PreciosSeccionConciertoService } from './precios-seccion-concierto.serv
   imports: [TypeOrmModule.forFeature([PreciosSeccionConcierto])],
   controllers: [/*PreciosSeccionConciertoController*/],
   providers: [PreciosSeccionConciertoService],
-  exports: [PreciosSeccionConciertoService],
+  exports: [PreciosSeccionConciertoService, TypeOrmModule],
 })
 export class PreciosSeccionConciertoModule {}

@@ -59,6 +59,15 @@ export class RecintosService {
       .getMany();
   }
 
+   findAllSelect() {
+    return this.repo.find({
+      select: {
+        id:true,
+        nombre:true
+      }
+    })
+  }
+
   findOne(id: number) {
     return this.repo.findOne({where: {id} , relations:['secciones'] });
   }

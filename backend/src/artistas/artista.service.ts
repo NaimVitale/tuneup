@@ -19,8 +19,6 @@ export class ArtistaService {
     ) {}
   
   async create(dto: CreateArtistaDto, files?: Record<string, Express.Multer.File[]>): Promise<Artista> {
-    console.log("DTO recibido:", dto);
-    console.log("Archivos recibidos:", files);
 
     if (!files?.img_card || files.img_card.length === 0) {
       throw new BadRequestException('La imagen de tarjeta (img_card) es obligatoria');
@@ -70,6 +68,15 @@ export class ArtistaService {
       .addSelect('COUNT(concierto.id)', 'numConciertos')
       .groupBy('artista.id')
       .getRawMany();
+  }
+
+  async getAllSelect() {
+    return await this.artistaRepo.find({
+      select:{
+        id:true,
+        nombre:true,
+      }
+    });
   }
 
   async getAll() {

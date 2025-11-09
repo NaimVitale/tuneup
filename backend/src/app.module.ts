@@ -12,6 +12,7 @@ import { SearchModule } from './search/search.module';
 import { PreciosSeccionConciertoModule } from './precios-seccion-concierto/precios-seccion-concierto.module';
 import { CiudadesModule } from './ciudades/ciudad.module';
 import { GeneroModule } from './generos/genero.module';
+import { SeccionesModule } from './secciones/seccion.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { GeneroModule } from './generos/genero.module';
     SearchModule,
     PreciosSeccionConciertoModule,
     CiudadesModule,
-    GeneroModule
+    GeneroModule,
+    SeccionesModule,
   ],
 })
 export class AppModule {}
