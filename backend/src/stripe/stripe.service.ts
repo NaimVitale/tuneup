@@ -22,7 +22,7 @@ export class StripeService {
       mode: 'payment',
       line_items,
       metadata,
-      success_url: `${this.configService.get<string>('FRONTEND_URL')}/success`,
+      success_url: `${this.configService.get<string>('FRONTEND_URL')}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${this.configService.get<string>('FRONTEND_URL')}/cancel`,
     });
     return session;
@@ -38,6 +38,18 @@ export class StripeService {
 
   async listLineItems(sessionId: string) {
     return this.stripe.checkout.sessions.listLineItems(sessionId);
+  }
+
+  async retrieveCheckoutSession(checkoutSessionId: string): Promise<Stripe.Checkout.Session> {
+    try {
+      const session = await this.stripe.checkout.sessions.retrieve(checkoutSessionId, {
+        expand: ['line_items'],
+      });
+      return session;
+    } catch (err) {
+      console.error('[StripeService] Error al recuperar sesión:', err);
+      throw new Error('No se pudo recuperar la sesión de Stripe');
+    }
   }
 }
 
