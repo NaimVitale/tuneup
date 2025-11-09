@@ -1,9 +1,27 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UpdateConcierto } from "../../services/concertServices";
 import { getSeccionesByRecinto } from "../../services/seccionServices";
 
 export const useConcertUpdate = (slug, initialData) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({ token, slug, data }) => UpdateConcierto(token, slug, data),
+    onSuccess: () => {
+      toast.success("Concierto actualizado correctamente");
+
+      // ✅ Invalidar queries relacionadas con este concierto
+      queryClient.invalidateQueries({ queryKey: ["conciertos"] });
+      queryClient.invalidateQueries({ queryKey: ["concierto", slug] });
+      queryClient.invalidateQueries({ queryKey: ['concierto-public', slug] });
+    },
+    onError: () => {
+      toast.error("Error al actualizar concierto");
+    }
+  });
+
   // ----------------------------
   // Estados principales
   // ----------------------------
@@ -139,34 +157,15 @@ export const useConcertUpdate = (slug, initialData) => {
         }))
       };
 
-      const updated = await UpdateConcierto(token, slug, dataToSend);
-
-      const seccionesActualizadas = updated.recinto?.secciones.map(s => {
-        const precioObj = updated.preciosPorSeccion?.find(p => p.seccion.id === s.id);
-        return {
-          id: s.id,
-          nombre: s.nombre,
-          precio: precioObj?.precio ?? 0,
-          id_precio: precioObj?.id,
-          capacidad: s.capacidad // <--- agregado
-        };
-      }) || [];
-
-      setForm({
-        id_artista: updated.artista?.id,
-        id_recinto: updated.recinto?.id,
-        fecha: updated.fecha,
-        secciones: seccionesActualizadas
-      });
-
-      toast.success("Concierto actualizado correctamente");
+      await mutation.mutateAsync({ token, slug, data: dataToSend });
       setSuccess(true);
       return true;
+
     } catch (err) {
       setErrorUpdate(err);
-      toast.error("Error al actualizar concierto");
       console.error(err);
       return false;
+
     } finally {
       setLoading(false);
     }
@@ -183,7 +182,7 @@ export const useConcertUpdate = (slug, initialData) => {
     hora,
     setHora,
     handleSubmit,
-    loading,
+    loading: mutation.isPending,
     success,
     errorUpdate,
     errors

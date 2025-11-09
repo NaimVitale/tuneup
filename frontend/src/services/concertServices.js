@@ -2,6 +2,23 @@ import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/conciertos`;
 
+
+
+//Crear un concierto en panel admin
+export const CreateConcierto = async(token, conciertoData) => {
+  try{
+    const response = await axios.post(`${API_URL}`, conciertoData,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    return response.data;
+  }catch(error){
+    throw error.response?.data || error;
+  }
+}
+
 //Consulta publica sobre un artista
 export const getConcert = async(id) => {
   try{
