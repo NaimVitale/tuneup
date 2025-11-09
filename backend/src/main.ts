@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
 
@@ -14,6 +15,8 @@ async function bootstrap() {
     allowedHeaders: 'Authorization,Content-Type',
     // credentials: true,
   });
+
+  app.use('/stripe/webhook', bodyParser.raw({ type: 'application/json' }));
 
   app.useGlobalPipes(
     new ValidationPipe({

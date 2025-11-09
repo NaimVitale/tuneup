@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Compra } from 'src/compras/entities/compra.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
 
 export enum RolUsuario {
   USER = 'user',
@@ -31,4 +32,7 @@ export class Usuario {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @OneToMany(() => Compra, compra => compra.usuario)
+  compras: Compra[];
 }

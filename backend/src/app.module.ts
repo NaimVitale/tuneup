@@ -13,10 +13,15 @@ import { PreciosSeccionConciertoModule } from './precios-seccion-concierto/preci
 import { CiudadesModule } from './ciudades/ciudad.module';
 import { GeneroModule } from './generos/genero.module';
 import { SeccionesModule } from './secciones/seccion.module';
+import stripeConfig from './config/stripe.config';
+import { StripeModule } from './stripe/stripe.module';
+import { WebhookModule } from './webhooks/webhook.module';
+import { CompraModule } from './compras/compra.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      load: [stripeConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -46,6 +51,9 @@ import { SeccionesModule } from './secciones/seccion.module';
     CiudadesModule,
     GeneroModule,
     SeccionesModule,
+    StripeModule,
+    WebhookModule,
+    CompraModule,
   ],
 })
 export class AppModule {}

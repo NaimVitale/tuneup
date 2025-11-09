@@ -8,11 +8,17 @@ import { PreciosSeccionConciertoService } from 'src/precios-seccion-concierto/pr
 import { PreciosSeccionConcierto } from 'src/precios-seccion-concierto/entities/precios-seccion-concierto.entity';
 import { Seccion } from 'src/secciones/entities/seccion.entity';
 import { Recinto } from 'src/recintos/entities/recinto.entity';
-
+import Stripe from 'stripe';
+import { ConfigService } from '@nestjs/config';
+import { Artista } from 'src/artistas/entities/artista.entity';
 
 @Injectable()
 export class ConciertosService {
+  private stripe: Stripe;
+
   constructor(
+    private configService: ConfigService,
+
     @InjectRepository(Concierto)
     private readonly conciertoRepository: Repository<Concierto>,
 
@@ -25,50 +31,83 @@ export class ConciertosService {
     @InjectRepository(Recinto)
     private recintoRepo: Repository<Recinto>,
 
+    @InjectRepository(Artista)
+    private artistaRepo: Repository<Artista>,
+
     private readonly preciosService: PreciosSeccionConciertoService,
-  ) {}
+  )  {
+    const secretKey = this.configService.get<string>('stripe.secretKey');
+    if (!secretKey) throw new Error('Stripe secret key not defined');
+
+    this.stripe = new Stripe(secretKey, {
+      apiVersion: '2025-10-29.clover',
+    });
+  }
 
   async create(createConciertoDto: CreateConciertoDto) {
     const { id_recinto, fecha, id_artista, preciosPorSeccion } = createConciertoDto;
 
-    // Buscar el recinto y sus secciones
+    // 1️⃣ Buscar el recinto y sus secciones
     const recinto = await this.recintoRepo.findOne({
       where: { id: id_recinto },
       relations: ['secciones']
     });
 
-    if (!recinto) {
-      throw new NotFoundException(`Recinto ${id_recinto} no encontrado`);
-    }
-
-    if (!recinto.secciones || recinto.secciones.length === 0) {
+    if (!recinto) throw new NotFoundException(`Recinto ${id_recinto} no encontrado`);
+    if (!recinto.secciones || recinto.secciones.length === 0)
       throw new BadRequestException(`No se puede crear un concierto: el recinto no tiene secciones disponibles`);
-    }
 
-    // Opcional: filtrar solo secciones con capacidad > 0
+    // 2️⃣ Filtrar solo secciones con capacidad > 0
     const seccionesDisponibles = recinto.secciones.filter(s => s.capacidad > 0);
-    if (seccionesDisponibles.length === 0) {
+    if (seccionesDisponibles.length === 0)
       throw new BadRequestException(`No se puede crear un concierto: el recinto no tiene secciones con capacidad disponible`);
-    }
 
-    // Crear concierto
+    // 3️⃣ Crear concierto sin precios aún
     const concierto = this.conciertoRepository.create({
-      fecha,
+      fecha: new Date(fecha),
       id_artista,
-      id_recinto,
-      preciosPorSeccion: preciosPorSeccion?.map(p => {
-        const seccion = seccionesDisponibles.find(s => s.id === p.id_seccion);
-        if (!seccion) return null;
-        return this.preciosRepo.create({
-          seccion,
-          precio: p.precio,
-          capacidad_disponible: seccion.capacidad
-        });
-      }).filter(p => p !== null)
+      id_recinto
     });
 
-    return this.conciertoRepository.save(concierto);
+    // Guardar primero para obtener ID
+    await this.conciertoRepository.save(concierto);
+
+    // 3️⃣ Buscar artista para usar en Stripe
+    const artista = await this.artistaRepo.findOne({ where: { id: id_artista } });
+    if (!artista) throw new NotFoundException(`Artista ${id_artista} no encontrado`);
+
+    // 4️⃣ Crear precios por sección y guardarlos en Stripe y en DB
+    for (const p of preciosPorSeccion) {
+      if (!p.precio || p.precio <= 0) continue;
+
+      const seccion = seccionesDisponibles.find(s => s.id === p.id_seccion);
+      if (!seccion) continue;
+
+      // Crear precio en Stripe con nombre más descriptivo
+      const stripePrice = await this.stripe.prices.create({
+        unit_amount: p.precio * 100, // en centavos
+        currency: 'eur',
+        product_data: {
+          name: `Entrada ${seccion.nombre} - Concierto ${artista.nombre} - ${new Date(fecha).toISOString().split('T')[0]}`
+        }
+      });
+
+      // Guardar precio en DB
+      const precioEntity = this.preciosRepo.create({
+        seccion,
+        concierto,
+        precio: p.precio,
+        id_precio_stripe: stripePrice.id,
+        capacidad_disponible: seccion.capacidad,
+      });
+
+      await this.preciosRepo.save(precioEntity);
+    }
+
+    return concierto;
   }
+
+
 
   findAll(filtroGenero?: string, fechaInicio?: string) {
     const query = this.conciertoRepository
@@ -133,8 +172,14 @@ export class ConciertosService {
     const precios = await this.preciosService.findByConcierto(id);
 
     concierto.recinto.secciones = concierto.recinto.secciones.map(seccion => {
-      const precio = precios.find(p => p.seccion.id === seccion.id);
-      return { ...seccion, precio: precio?.precio || null };
+      const precioObj = precios.find(p => p.seccion.id === seccion.id) ;
+      return {
+        ...seccion,
+        precio: precioObj?.precio ?? null,
+        capacidad_disponible: precioObj?.capacidad_disponible ?? 0,
+        id_precio: precioObj?.id ?? null,
+        id_precio_stripe: precioObj?.id_precio_stripe ?? null
+      };
     });
 
     return concierto;
@@ -182,40 +227,57 @@ export class ConciertosService {
       relations: ['preciosPorSeccion', 'preciosPorSeccion.seccion', 'artista', 'recinto']
     });
 
-    if (!concierto)
-      throw new NotFoundException('Concierto no encontrado');
+    if (!concierto) throw new NotFoundException('Concierto no encontrado');
 
-    
-    if (dto.fecha) concierto.fecha = dto.fecha;
+    // Actualizar campos básicos
+    if (dto.fecha) concierto.fecha = new Date(dto.fecha);
     if (dto.id_artista) concierto.id_artista = dto.id_artista;
     if (dto.id_recinto) concierto.id_recinto = dto.id_recinto;
 
-    
     if (dto.preciosPorSeccion) {
       for (const p of dto.preciosPorSeccion) {
-        // Si viene id => Update
+        if (!p.precio || p.precio <= 0) continue; // evita precios 0
+
+        const seccion = await this.seccionRepo.findOne({ where: { id: p.id_seccion } });
+        if (!seccion) throw new NotFoundException(`Sección ${p.id_seccion} no encontrada`);
+        if (seccion.capacidad <= 0) continue;
+
         if (p.id) {
           const precioExistente = concierto.preciosPorSeccion.find(pr => pr.id === p.id);
+
           if (precioExistente) {
-            precioExistente.precio = p.precio;
+            // Crear nuevo Price en Stripe si no existe o si el precio cambió
+            if (!precioExistente.id_precio_stripe || precioExistente.precio !== p.precio) {
+              const fechaObj = concierto.fecha instanceof Date ? concierto.fecha : new Date(concierto.fecha);
+              const stripePrice = await this.stripe.prices.create({
+                unit_amount: p.precio * 100,
+                currency: 'eur',
+                product_data: {
+                  name: `Entrada ${seccion.nombre} - Concierto ${concierto.artista.nombre} - ${fechaObj.toISOString().split('T')[0]}`
+                }
+              });
+
+              precioExistente.precio = p.precio;
+              precioExistente.id_precio_stripe = stripePrice.id;
+            }
           }
         } else {
-          // No crear si el precio es 0
-          if (p.precio <= 0) continue;
-
-          const seccion = await this.seccionRepo.findOne({
-            where: { id: p.id_seccion }
+          // Precio nuevo
+          const fechaObj = concierto.fecha instanceof Date ? concierto.fecha : new Date(concierto.fecha);
+          const stripePrice = await this.stripe.prices.create({
+            unit_amount: p.precio * 100,
+            currency: 'eur',
+            product_data: {
+              name: `Entrada ${seccion.nombre} - Concierto ${fechaObj.toISOString().split('T')[0]}`
+            }
           });
-          if (!seccion)
-            throw new NotFoundException(`Sección ${p.id_seccion} no encontrada`);
-
-          if (seccion.capacidad <= 0) continue;
 
           const nuevoPrecio = this.preciosRepo.create({
             concierto,
             seccion,
             precio: p.precio,
-            capacidad_disponible: seccion.capacidad
+            id_precio_stripe: stripePrice.id,
+            capacidad_disponible: seccion.capacidad,
           });
 
           concierto.preciosPorSeccion.push(nuevoPrecio);
@@ -223,8 +285,7 @@ export class ConciertosService {
       }
     }
 
-    await this.conciertoRepository.save(concierto);
-    return concierto;
+    return await this.conciertoRepository.save(concierto);
   }
 
   remove(id: number) {

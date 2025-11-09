@@ -1,0 +1,43 @@
+// src/stripe/stripe.service.ts
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import Stripe from 'stripe';
+
+@Injectable()
+export class StripeService {
+  private stripe: Stripe;
+
+  constructor(private configService: ConfigService) {
+    this.stripe = new Stripe(this.configService.get<string>('stripe.secretKey')!, {
+      apiVersion: '2025-10-29.clover',
+    });
+  }
+
+  async createCheckoutSession(
+    line_items: Stripe.Checkout.SessionCreateParams.LineItem[],
+    metadata?: Record<string, any>,
+  ) {
+    const session = await this.stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items,
+      metadata,
+      success_url: `${this.configService.get<string>('FRONTEND_URL')}/success`,
+      cancel_url: `${this.configService.get<string>('FRONTEND_URL')}/cancel`,
+    });
+    return session;
+  }
+
+  constructEvent(payload: Buffer, signature: string) {
+    return this.stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      this.configService.get<string>('stripe.webhookSecret')!,
+    );
+  }
+
+  async listLineItems(sessionId: string) {
+    return this.stripe.checkout.sessions.listLineItems(sessionId);
+  }
+}
+
