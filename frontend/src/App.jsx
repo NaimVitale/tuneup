@@ -14,6 +14,7 @@ const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
 const ProfileLayout = React.lazy(() => import('./layouts/ProfileLayout'));
 const ProfileInfoPage = React.lazy(() => import('./pages/ProfilePageInfo'));
+const EntradasProfilePage = React.lazy(() => import('./pages/EntradasPage'));
 const PublicLayout = React.lazy(() => import('./layouts/PublicLayout'));
 const AdminLayout = React.lazy(() => import('./layouts/AdminLayout'));
 const AdminConcertsPage = React.lazy(() => import('./pages/AdminPages/AdminConcertsPage'));
@@ -28,6 +29,7 @@ const AdminCreatePage = React.lazy(() => import('./pages/AdminPages/AdminCreateP
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 const SuccessPage = React.lazy(() => import('./pages/SuccessPage'));
 const CancelPage = React.lazy(() => import('./pages/CancelPage'));
+
 
 const queryClient = new QueryClient();
 
@@ -47,7 +49,7 @@ function App() {
               <Route path='/register' element={<RegisterPage />} />
               <Route path='/perfil' element={<ProfileLayout />}>
                 <Route path="ajustes/:id" element={<ProfileInfoPage />} />
-                <Route path="entradas/:id" element={<ProfileInfoPage />} />
+                <Route path="entradas/:id" element={<EntradasProfilePage />} />
               </Route>
             </Route>
 

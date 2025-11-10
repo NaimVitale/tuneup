@@ -47,7 +47,7 @@ export default function SuccessPage() {
           
           {/* Entradas */}
           <div className="lg:col-span-2 bg-gray-50 rounded-2xl p-6 lg:p-4 lg:overflow-y-auto">
-            <h2 className="text-xl lg:text-lg font-bold text-gray-900 mb-4 lg:mb-3 flex items-center gap-2 lg:sticky lg:top-0 lg:bg-gray-50 lg:pb-2">
+            <h2 className="text-xl lg:text-lg font-bold text-gray-900 mb-4 lg:mb-3 flex items-center gap-2 lg:top-0 lg:bg-gray-50 lg:pb-2">
               <Ticket className="text-[#C122ED]" size={22} />
               Tus entradas
             </h2>

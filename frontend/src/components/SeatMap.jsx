@@ -28,8 +28,6 @@ export default function SeatMap({ secciones, onSelect }) {
   };
 
   const manejarSeleccion = (seccion) => {
-    setZonaSeleccionada(seccion);
-    console.log("Sección seleccionada:", seccion.nombre, "Precio:", seccion.precio);
     if (onSelect) onSelect(seccion);
   };
 
@@ -41,33 +39,34 @@ export default function SeatMap({ secciones, onSelect }) {
     >
       <svg viewBox="0 0 400 540" xmlns="http://www.w3.org/2000/svg" className="w-[90%] h-[90%]">
         {secciones.map((seccion) => {
-          const isSelected = zonaSeleccionada?.id === seccion.id;
-          const agotada = seccion.capacidad === 0;
+            const isSelected = zonaSeleccionada?.id === seccion.id;
+            const agotada = seccion.capacidad === 0;
+            const sinPrecio = !seccion.precio || seccion.precio <= 0; // <-- nueva condición
+            const deshabilitada = agotada || sinPrecio;
 
-          const commonProps = {
-            onClick: () => !agotada && manejarSeleccion(seccion),
-            onMouseEnter: () => !agotada && setHoverZona(seccion),
-            onMouseLeave: () => setHoverZona(null),
-            className: `transition-all duration-300 ${
-              isSelected
-                ? "fill-[#C122ED] opacity-90"
-                : agotada
-                ? "fill-gray-300 cursor-not-allowed"
-                : "fill-white hover:fill-[#C122ED]/60 cursor-pointer"
-            }`,
-          };
+            const commonProps = {
+              onClick: () => !deshabilitada && manejarSeleccion(seccion),
+              onMouseEnter: () => !deshabilitada && setHoverZona(seccion),
+              onMouseLeave: () => setHoverZona(null),
+              className: `transition-all duration-300 ${
+                isSelected
+                  ? "fill-[#C122ED] opacity-90"
+                  : deshabilitada
+                  ? "fill-gray-300 cursor-not-allowed"
+                  : "fill-white hover:fill-[#C122ED]/60 cursor-pointer"
+              }`,
+            };
 
-          if (seccion.tipo_svg === "path") {
-            return <path key={seccion.id} {...commonProps} d={seccion.svg_path} />;
-          } else if (seccion.tipo_svg === "rect") {
-            const rectProps = parseRectAttributes(seccion.svg_path);
-            return <rect key={seccion.id} {...commonProps} {...rectProps} />;
-          } else {
-            return null;
-          }
-        })}
+            if (seccion.tipo_svg === "path") {
+              return <path key={seccion.id} {...commonProps} d={seccion.svg_path} />;
+            } else if (seccion.tipo_svg === "rect") {
+              const rectProps = parseRectAttributes(seccion.svg_path);
+              return <rect key={seccion.id} {...commonProps} {...rectProps} />;
+            } else {
+              return null;
+            }
+          })}
       </svg>
-
       {hoverZona && (
         <div
           style={{ top: posMouse.y, left: posMouse.x }}

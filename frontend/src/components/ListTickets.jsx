@@ -1,5 +1,4 @@
 import { Ticket } from "lucide-react";
-import InputSelect from "./InputSelect";
 
 export default function ListTickets({
   secciones,
@@ -10,16 +9,12 @@ export default function ListTickets({
 }) {
 
   const seccionesDisponibles = secciones?.filter(
-    (seccion) => seccion.capacidad > 0
+    (seccion) => seccion.capacidad > 0 && seccion.precio && seccion.precio > 0
   ) || [];
 
   return (
     <div className="mt-6">
       <div className="mb-6">
-        <h3 className="mb-4 text-xl font-medium">Filtrar por:</h3>
-        <div>
-          <InputSelect placeholder="Precio" />
-        </div>
       </div>
 
       <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -37,8 +32,8 @@ export default function ListTickets({
           return (
             <button
               key={seccion.id}
-              onClick={() => manejarSeleccionSeccion(seccion)}
-              disabled={yaSeleccionada || !puedeAgregar}
+              onClick={() => puedeAgregar && manejarSeleccionSeccion(seccion)}
+              disabled={!puedeAgregar}
               className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
                 yaSeleccionada
                   ? "border-[#C122ED] bg-[#C122ED]/10 cursor-not-allowed"
@@ -56,7 +51,7 @@ export default function ListTickets({
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-gray-500">
-                    {seccion.capacidad} disponibles
+                    {seccion.capacidad_disponible} disponibles
                   </p>
                   {yaSeleccionada && (
                     <span className="text-xs text-[#C122ED] font-semibold">

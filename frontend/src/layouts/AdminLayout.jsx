@@ -10,8 +10,8 @@ export default function AdminLayout(){
 
     if (loading) return <Spinner></Spinner>;
 
-    if (!token) return <Navigate to="/" replace/>;
-    if (rol !== "admin") return <Navigate to="/" replace/>;
+    if (!token) return <Navigate to="/404" replace/>;
+    if (rol !== "admin") return <Navigate to="/404" replace/>;
 
     return(
         <div className={isMobile ? "flex flex-col" : "flex"}>

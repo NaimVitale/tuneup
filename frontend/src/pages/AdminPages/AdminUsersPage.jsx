@@ -53,7 +53,7 @@ export default function AdminUsersPage() {
             </button>
           </div>
         </div>
-        <DataTable columns={columns} data={usuarios} actions={actions} />;
+        <DataTable columns={columns} data={usuarios}/>;
       </div>
     </div>
   );

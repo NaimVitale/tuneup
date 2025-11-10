@@ -8,8 +8,8 @@ export default function ProfileLayout() {
     if (!token) return <Navigate to="/login" replace/>;
 
     return (
-        <div className="h-[90vh] flex justify-center items-center w-full bg-gradient-to-l from-[#6B21A8]/70 via-[#7E22CE]/50 to-[#9333EA]/30">
-                <div className="p-[3em] rounded-2xl bg-white shadow-lg flex gap-12 w-[60%]">
+        <div className="p-12 flex justify-center items-center w-full bg-gradient-to-l from-[#6B21A8]/70 via-[#7E22CE]/50 to-[#9333EA]/30">
+                <div className="p-[3em] rounded-2xl bg-white shadow-lg flex gap-12 w-[80%]">
                     <div className="w-[20%] border-r border-gray-300 pt-2">
                         <ul className="flex flex-col gap-8 text-gray-700 text-lg">
                             <li>

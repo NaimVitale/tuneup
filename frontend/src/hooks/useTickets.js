@@ -8,22 +8,37 @@ export function useTickets(MAX_ENTRADAS_TOTAL = 6) {
     ticketsSeleccionados.reduce((total, ticket) => total + ticket.cantidad, 0);
 
   const manejarSeleccionSeccion = (seccion) => {
+    const capacidadDisponible = seccion.capacidad_disponible ?? 0;
+    const totalActual = calcularTotalEntradas();
+
+    // ✅ Bloquear agregar si no queda disponibilidad o ya se llegó al máximo total
+    if (capacidadDisponible <= 0 || totalActual >= MAX_ENTRADAS_TOTAL) return;
+
     setZonaSeleccionada(seccion);
 
     const existe = ticketsSeleccionados.find(t => t.seccion.id === seccion.id);
-    if (!existe && calcularTotalEntradas() < MAX_ENTRADAS_TOTAL) {
-      setTicketsSeleccionados(prev => [...prev, { seccion, cantidad: 1 }]);
+    if (!existe) {
+      setTicketsSeleccionados(prev => [
+        ...prev,
+        { seccion, cantidad: 1 }
+      ]);
     }
   };
 
   const actualizarCantidad = (seccionId, nuevaCantidad) => {
     const ticketActual = ticketsSeleccionados.find(t => t.seccion.id === seccionId);
-    const otrasEntradas = calcularTotalEntradas() - (ticketActual?.cantidad || 0);
+    if (!ticketActual) return;
 
+    const capacidadDisponible = ticketActual.seccion.capacidad_disponible ?? 0;
+
+    // Entradas seleccionadas en otras secciones
+    const otrasEntradas = calcularTotalEntradas() - ticketActual.cantidad;
+
+    // ✅ Límite: disponibilidad sección + límite general
     const cantidadMax = Math.min(
       nuevaCantidad,
       MAX_ENTRADAS_TOTAL - otrasEntradas,
-      ticketActual?.seccion.capacidad ?? MAX_ENTRADAS_TOTAL
+      capacidadDisponible
     );
 
     setTicketsSeleccionados(prev =>
@@ -44,7 +59,8 @@ export function useTickets(MAX_ENTRADAS_TOTAL = 6) {
 
   const calcularTotal = () =>
     ticketsSeleccionados.reduce(
-      (total, ticket) => total + (ticket.seccion.precio || 0) * ticket.cantidad,
+      (total, ticket) =>
+        total + (ticket.seccion.precio ?? 0) * ticket.cantidad,
       0
     );
 
@@ -54,7 +70,7 @@ export function useTickets(MAX_ENTRADAS_TOTAL = 6) {
     manejarSeleccionSeccion,
     actualizarCantidad,
     eliminarTicket,
+    calcularTotal,
     calcularTotalEntradas,
-    calcularTotal
   };
 }

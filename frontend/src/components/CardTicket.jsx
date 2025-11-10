@@ -2,6 +2,7 @@ import { X, Plus, Minus, Ticket } from "lucide-react";
 
 export default function CardTicket({ seccion, cantidad, onCantidadChange, onRemove, maxTotal, totalActual }) {
   const handleIncrement = () => {
+    if (cantidad >= (seccion.capacidad_disponible ?? maxTotal)) return;
     if (totalActual >= maxTotal) return;
     onCantidadChange(seccion.id, cantidad + 1);
   };
@@ -10,7 +11,7 @@ export default function CardTicket({ seccion, cantidad, onCantidadChange, onRemo
     onCantidadChange(seccion.id, Math.max(cantidad - 1, 1));
   };
 
-  const enLimiteMaximo = totalActual >= maxTotal;
+  const enLimiteMaximo = totalActual >= maxTotal || cantidad >= (seccion.capacidad_disponible ?? maxTotal);
   const total = (seccion.precio || 0) * cantidad;
 
   return (
@@ -86,11 +87,15 @@ export default function CardTicket({ seccion, cantidad, onCantidadChange, onRemo
 
       {/* Alerta de límite */}
       {enLimiteMaximo && (
-        <div className="mt-3 text-xs text-orange-600 bg-orange-50 px-3 py-2 rounded-lg flex items-center gap-2">
-          <span>⚠️</span>
-          <span>Límite máximo de entradas alcanzado</span>
-        </div>
-      )}
+      <div className="mt-3 text-xs text-orange-600 bg-orange-50 px-3 py-2 rounded-lg flex items-center gap-2">
+        <span>⚠️</span>
+        <span>
+          {cantidad >= (seccion.capacidad_disponible ?? maxTotal)
+            ? "No hay más entradas disponibles en esta sección"
+            : "Límite máximo de entradas alcanzado"}
+        </span>
+      </div>
+    )}
     </div>
   );
 }

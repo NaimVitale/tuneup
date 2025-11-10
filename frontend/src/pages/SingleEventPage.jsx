@@ -6,7 +6,7 @@ import { Navigate, useLocation, useParams } from "react-router-dom";
 import { useGetConcert } from "../hooks/concerts/useGetConcert";
 import { Armchair, MapIcon, ShoppingCart} from "lucide-react";
 import ListTickets from "../components/ListTickets";
-import { useTickets } from "../hooks/tickets/useTickets";
+import { useTickets } from "../hooks/useTickets";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { useAuth } from "../context/AuthContext";
 import CheckoutButton from "../components/CheckoutButton";
@@ -47,7 +47,7 @@ export default function SingleEventPage() {
       <div className="flex flex-col lg:flex-row">
         {/* Columna izquierda - Tickets */}
         <div className="w-full lg:w-[40%] relative p-0 lg:border-r lg:border-[#C122ED]" style={{ boxShadow: isMobile ? 'none' : '1px 0px 20px -10px #C122ED' }}>
-          <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto py-4 sm:py-6 lg:py-8 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col"> 
+          <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col"> 
 
             {/* Lista de secciones disponibles */}
             {(!tieneSVG || isMobile) && data?.recinto?.secciones && (
@@ -70,7 +70,7 @@ export default function SingleEventPage() {
                   <span className="text-xs sm:text-sm text-gray-600">
                     {calcularTotalEntradas()}/{MAX_ENTRADAS_TOTAL}
                   </span>
-                  <ShoppingCart className="text-[#C122ED]" size={isMobile ? 20 : 24} />
+                  <ShoppingCart className="text-[#C122ED] mr-4" size={isMobile ? 20 : 24} />
                 </div>
               </div>
 
@@ -104,7 +104,7 @@ export default function SingleEventPage() {
                   </div>
 
                   {/* Resumen total - fijo en la parte inferior */}
-                  <div className="p-3 sm:p-4 bg-gradient-to-r from-[#C122ED]/10 to-[#9333EA]/10 rounded-lg border-2 border-[#C122ED]">
+                  <div className="p-3 sm:p-4 bg-gradient-to-r from-[#C122ED]/10 to-[#9333EA]/10 rounded-xl border-2 border-[#C122ED]">
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-xs sm:text-sm text-gray-600">
                         {calcularTotalEntradas()} {calcularTotalEntradas() === 1 ? 'entrada' : 'entradas'}
@@ -119,14 +119,23 @@ export default function SingleEventPage() {
                         {calcularTotal().toFixed(2)}€
                       </span>
                     </div>
-                    <CheckoutButton 
-                      token={token}
-                      items={ticketsSeleccionados.map(t => ({
-                        id_precio_stripe: t.seccion.id_precio_stripe, // <-- enviar el ID de Stripe con el mismo nombre
-                        quantity: t.cantidad
-                      }))}
-                      id_usuario={userID}
-                    />
+                    {token ? (
+                      <CheckoutButton 
+                        token={token}
+                        items={ticketsSeleccionados.map(t => ({
+                          id_precio_stripe: t.seccion.id_precio_stripe,
+                          quantity: t.cantidad
+                        }))}
+                        id_usuario={userID}
+                      />
+                    ) : (
+                      <button
+                        onClick={() => window.location.href = '/login'}
+                        className="w-full bg-[#C122ED] text-white font-semibold py-3 rounded-lg hover:bg-[#a01bc7] transition-colors"
+                      >
+                        Inicia sesión para pagar
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
