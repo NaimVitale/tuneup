@@ -10,7 +10,7 @@ export default function ConcertCreateForm() {
     const navigate = useNavigate();
     const { data: artist, isLoading: isLoadingArtist } = useGetArtistsSelect();
     const { data: recintos, isLoading: isLoadingRecintos } = useGetRecintosSelect();
-    const { form, fecha, setFecha, hora, setHora, handleSelectChange, handleRecintoChange, updateSections, handleSubmit, loading, errors } = useConcertCreate();
+    const { form, fecha, setFecha, hora, setHora , fechaVenta, setFechaVenta, horaVenta, setHoraVenta, handleSelectChange, handleRecintoChange, updateSections, handleSubmit, loading, errors } = useConcertCreate();
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -48,6 +48,8 @@ export default function ConcertCreateForm() {
                         />
                         <InputDate value={fecha} onChange={setFecha}/>
                         <InputSelect type="hour"  placeholder="Seleccione hora" value={hora} onChange={setHora}/>
+                        <InputDate placeholder="Seleccione fecha de venta de entradas" value={fechaVenta} onChange={setFechaVenta}/>
+                        <InputSelect type="hour" placeholder="Seleccione hora de venta" value={horaVenta} onChange={setHoraVenta}/>
                     </div>
                     <div>
                     <TableSections sections={form.secciones} onSectionsChange={updateSections} mode="precio" showActions={true}></TableSections>

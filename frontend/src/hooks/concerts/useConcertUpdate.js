@@ -29,11 +29,14 @@ export const useConcertUpdate = (slug, initialData) => {
     id_artista: "",
     id_recinto: "",
     fecha: "",
+    fecha_venta: "",
     secciones: []
   });
 
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
+  const [fechaVenta, setFechaVenta] = useState("");
+  const [horaVenta, setHoraVenta] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorUpdate, setErrorUpdate] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -68,6 +71,16 @@ export const useConcertUpdate = (slug, initialData) => {
       setFecha(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
       setHora(`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`);
     }
+
+    if (initialData.fecha_venta) {
+      const dVenta = new Date(initialData.fecha_venta);
+      setFechaVenta(`${dVenta.getFullYear()}-${String(dVenta.getMonth()+1).padStart(2,'0')}-${String(dVenta.getDate()).padStart(2,'0')}`);
+      setHoraVenta(`${String(dVenta.getHours()).padStart(2,'0')}:${String(dVenta.getMinutes()).padStart(2,'0')}`);
+    } else {
+      setFechaVenta("");
+      setHoraVenta("");
+    }
+
   }, [initialData]);
 
   // ----------------------------
@@ -105,6 +118,12 @@ export const useConcertUpdate = (slug, initialData) => {
     if (!fecha || !hora) return null;
     return `${fecha}T${hora}:00`;
   };
+
+  const getISOFechaVenta = () => {
+    if (!fechaVenta || !horaVenta) return null;
+    return `${fechaVenta}T${horaVenta}:00`;
+  };
+
 
   // ----------------------------
   // Cambio de recinto
@@ -150,6 +169,7 @@ export const useConcertUpdate = (slug, initialData) => {
         id_artista: form.id_artista,
         id_recinto: form.id_recinto,
         fecha: getISOFechaHora(),
+        fecha_venta: getISOFechaVenta(),
         preciosPorSeccion: form.secciones.map(s => ({
           id: s.id_precio,
           id_seccion: s.id,
@@ -181,6 +201,10 @@ export const useConcertUpdate = (slug, initialData) => {
     setFecha,
     hora,
     setHora,
+    fechaVenta,
+    setFechaVenta,
+    horaVenta,
+    setHoraVenta,
     handleSubmit,
     loading: mutation.isPending,
     success,

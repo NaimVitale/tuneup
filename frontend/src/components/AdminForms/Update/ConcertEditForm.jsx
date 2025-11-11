@@ -10,9 +10,7 @@ export default function ConcertEditForm({ data }) {
     const { slug } = useParams();
     const { data: artist, isLoading: isLoadingArtist } = useGetArtistsSelect();
     const { data: recintos, isLoading: isLoadingRecintos } = useGetRecintosSelect();
-    const { form, handleRecintoChange, handleSelectChange, updateSections, fecha, setFecha, hora, setHora, handleSubmit, loading, success, errorUpdate, errors} = useConcertUpdate(slug, data)
-
-    console.log(data)
+    const { form, handleRecintoChange, handleSelectChange, updateSections, fecha, setFecha, hora, setHora, fechaVenta, setFechaVenta, horaVenta, setHoraVenta, handleSubmit, loading, success, errorUpdate, errors} = useConcertUpdate(slug, data)
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -45,8 +43,10 @@ export default function ConcertEditForm({ data }) {
                                 })) || []),
                             ]}
                         />
-                        <InputDate value={fecha} onChange={setFecha}/>
-                        <InputSelect type="hour"  placeholder="Seleccione hora" value={hora} onChange={setHora}/>
+                        <InputDate placeholder="Seleccione fecha del concierto" value={fecha} onChange={setFecha}/>
+                        <InputSelect type="hour"  placeholder="Seleccione hora del concierto" value={hora} onChange={setHora}/>
+                        <InputDate placeholder="Seleccione fecha de venta de entradas" value={fechaVenta} onChange={setFechaVenta}/>
+                        <InputSelect type="hour" placeholder="Seleccione hora de venta" value={horaVenta} onChange={setHoraVenta}/>
                     </div>
                     <div>
                     <TableSections sections={form.secciones} onSectionsChange={updateSections} mode="precio" showActions={true}></TableSections>

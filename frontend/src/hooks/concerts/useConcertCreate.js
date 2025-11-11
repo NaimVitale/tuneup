@@ -24,12 +24,17 @@ export const useConcertCreate = () => {
     secciones: []
   });
 
-  const [fecha, setFecha] = useState(""); // YYYY-MM-DD
-  const [hora, setHora] = useState("");   // HH:MM
+  const [fecha, setFecha] = useState("");       // YYYY-MM-DD
+  const [hora, setHora] = useState("");         // HH:MM
+  const [fechaVenta, setFechaVenta] = useState(""); // YYYY-MM-DD para venta
+  const [horaVenta, setHoraVenta] = useState("");   // HH:MM para venta
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // ----------------------------
+  // Validación del formulario
+  // ----------------------------
   const validateForm = () => {
     const e = {};
     if (!form.id_artista) e.id_artista = "Seleccione un artista";
@@ -43,9 +48,14 @@ export const useConcertCreate = () => {
     return Object.keys(e).length === 0;
   };
 
-  const getISOFechaHora = () =>
-    fecha && hora ? `${fecha}T${hora}:00` : null;
+  // ----------------------------
+  // Helper para combinar fecha + hora
+  // ----------------------------
+  const getISOFechaHora = (f, h) => f && h ? `${f}T${h}:00` : null;
 
+  // ----------------------------
+  // Handlers
+  // ----------------------------
   const handleSelectChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
     setErrors(prev => ({ ...prev, [field]: "" }));
@@ -60,28 +70,26 @@ export const useConcertCreate = () => {
 
     try {
       const secciones = await getSeccionesByRecinto(id_recinto);
-
       const mapped = secciones.map(s => ({
         id: s.id,
         nombre: s.nombre,
         capacidad: s.capacidad,
-        precio: 0 // default
+        precio: 0
       }));
-
-      setForm(prev => ({
-        ...prev,
-        secciones: mapped
-      }));
-
+      setForm(prev => ({ ...prev, secciones: mapped }));
     } catch (err) {
       toast.error("Error al cargar secciones");
+      console.error(err);
     }
   };
 
+  // ----------------------------
+  // Envío del formulario
+  // ----------------------------
   const handleSubmit = async () => {
     if (!validateForm()) {
       toast.error("Faltan datos obligatorios");
-      return;
+      return false;
     }
 
     const token = localStorage.getItem("token");
@@ -89,7 +97,8 @@ export const useConcertCreate = () => {
     const dataToSend = {
       id_artista: form.id_artista,
       id_recinto: form.id_recinto,
-      fecha: getISOFechaHora(),
+      fecha: getISOFechaHora(fecha, hora),
+      fecha_venta: getISOFechaHora(fechaVenta, horaVenta),
       preciosPorSeccion: form.secciones
         .filter(s => s.precio > 0)
         .map(s => ({
@@ -106,6 +115,8 @@ export const useConcertCreate = () => {
     form,
     fecha, setFecha,
     hora, setHora,
+    fechaVenta, setFechaVenta,
+    horaVenta, setHoraVenta,
     handleSelectChange,
     handleRecintoChange,
     updateSections,

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import HeroSingleEvent from "../components/HeroSingleEvent";
 import SeatMap from "../components/SeatMap";
 import CardTicket from "../components/CardTicket";
@@ -25,8 +25,6 @@ export default function SingleEventPage() {
   const { data, isLoading, isError } = useGetConcert(id);
   const { token, userID } = useAuth();
 
-  console.log(data)
-
   const {
     ticketsSeleccionados,
     zonaSeleccionada,
@@ -37,9 +35,50 @@ export default function SingleEventPage() {
     calcularTotal
   } = useTickets(MAX_ENTRADAS_TOTAL);
 
-  const tieneSVG = useMemo(() =>
-    data?.recinto?.secciones?.some(s => s.svg_path),
-  [data]);
+  const tieneSVG = useMemo(
+    () => data?.recinto?.secciones?.some(s => s.svg_path),
+    [data]
+  );
+
+  // -----------------------------
+  // NUEVA LÓGICA DE DISPONIBILIDAD
+  const [entradasDisponibles, setEntradasDisponibles] = useState(true);
+  const [contador, setContador] = useState("");
+
+  useEffect(() => {
+    if (!data?.fecha_venta) {
+      setEntradasDisponibles(true);
+      return;
+    }
+
+    const fechaVenta = new Date(data.fecha_venta);
+    const ahora = new Date();
+
+    if (fechaVenta <= ahora) {
+      setEntradasDisponibles(true);
+      return;
+    }
+
+    setEntradasDisponibles(false);
+
+    const intervalo = setInterval(() => {
+      const ahora = new Date();
+      const diff = fechaVenta - ahora;
+      if (diff <= 0) {
+        setEntradasDisponibles(true);
+        clearInterval(intervalo);
+        return;
+      }
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diff / (1000 * 60)) % 60);
+      const segundos = Math.floor((diff / 1000) % 60);
+      setContador(`${dias}d ${horas}h ${minutos}m ${segundos}s`);
+    }, 1000);
+
+    return () => clearInterval(intervalo);
+  }, [data?.fecha_venta]);
+  // -----------------------------
 
   return (
     <div className="min-h-screen">
@@ -47,8 +86,16 @@ export default function SingleEventPage() {
       <div className="flex flex-col lg:flex-row">
         {/* Columna izquierda - Tickets */}
         <div className="w-full lg:w-[40%] relative p-0 lg:border-r lg:border-[#C122ED]" style={{ boxShadow: isMobile ? 'none' : '1px 0px 20px -10px #C122ED' }}>
-          <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col"> 
+          {/* OVERLAY si entradas NO disponibles */}
+          {!entradasDisponibles && (
+            <div className="absolute inset-0 z-50 bg-white/80 flex flex-col items-center justify-center pointer-events-auto">
+              <Armchair className="text-[#C122ED] mb-2" size={48} />
+              <p className="font-semibold text-lg text-gray-700">Entradas no disponibles</p>
+              <p className="text-sm text-gray-500 mt-1">{contador}</p>
+            </div>
+          )}
 
+          <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col"> 
             {/* Lista de secciones disponibles */}
             {(!tieneSVG || isMobile) && data?.recinto?.secciones && (
               <div className="mb-4 sm:mb-6">
@@ -57,13 +104,14 @@ export default function SingleEventPage() {
                   ticketsSeleccionados={ticketsSeleccionados}
                   calcularTotalEntradas={calcularTotalEntradas}
                   MAX_ENTRADAS_TOTAL={MAX_ENTRADAS_TOTAL}
-                  manejarSeleccionSeccion={manejarSeleccionSeccion}
+                  manejarSeleccionSeccion={entradasDisponibles ? manejarSeleccionSeccion : () => {}}
+                  disabled={!entradasDisponibles}
                 />
               </div>
             )}
 
             {/* Lista de tickets seleccionados */}
-            <div className="flex-1 flex flex-col min-h-0">
+            <div className="flex-1 flex flex-col min-h-0 pt-6">
               <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <h3 className="text-lg sm:text-xl font-medium">Tus entradas</h3>
                 <div className="flex items-center gap-2">
@@ -88,22 +136,20 @@ export default function SingleEventPage() {
                 </div>
               ) : (
                 <div className="flex flex-col flex-1 min-h-0">
-                  {/* Área con scroll para los tickets */}
                   <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-2 sm:space-y-3 mb-3 sm:mb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#C122ED #f1f1f1' }}>
                     {ticketsSeleccionados.map((ticket) => (
                       <CardTicket
                         key={ticket.seccion.id}
                         seccion={ticket.seccion}
                         cantidad={ticket.cantidad}
-                        onCantidadChange={actualizarCantidad}
-                        onRemove={() => eliminarTicket(ticket.seccion.id)}
+                        onCantidadChange={entradasDisponibles ? actualizarCantidad : () => {}}
+                        onRemove={entradasDisponibles ? () => eliminarTicket(ticket.seccion.id) : () => {}}
                         maxTotal={MAX_ENTRADAS_TOTAL}
                         totalActual={calcularTotalEntradas()}
                       />
                     ))}
                   </div>
 
-                  {/* Resumen total - fijo en la parte inferior */}
                   <div className="p-3 sm:p-4 bg-gradient-to-r from-[#C122ED]/10 to-[#9333EA]/10 rounded-xl border-2 border-[#C122ED]">
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-xs sm:text-sm text-gray-600">
@@ -127,11 +173,13 @@ export default function SingleEventPage() {
                           quantity: t.cantidad
                         }))}
                         id_usuario={userID}
+                        disabled={!entradasDisponibles}
                       />
                     ) : (
                       <button
                         onClick={() => window.location.href = '/login'}
                         className="w-full bg-[#C122ED] text-white font-semibold py-3 rounded-lg hover:bg-[#a01bc7] transition-colors"
+                        disabled={!entradasDisponibles}
                       >
                         Inicia sesión para pagar
                       </button>
@@ -144,11 +192,13 @@ export default function SingleEventPage() {
         </div>
 
         {/* Columna derecha - Mapa */}
-        <div className="hidden lg:flex w-full lg:w-[60%] justify-center bg-gradient-to-r from-[#C122ED]/60 via-[#6B21A8]/40 to-[#9333EA]/30 min-h-[400px] lg:min-h-0">
+        <div className="hidden lg:flex w-full lg:w-[60%] justify-center bg-gradient-to-r from-[#C122ED]/60 via-[#6B21A8]/40 to-[#9333EA]/30 min-h-[400px] lg:min-h-0 relative">
+          {!entradasDisponibles && <div className="absolute inset-0 z-50 bg-white/60 pointer-events-auto"></div>}
           {tieneSVG && !isMobile ? (
             <SeatMap
               secciones={data.recinto.secciones}
-              onSelect={manejarSeleccionSeccion}
+              onSelect={entradasDisponibles ? manejarSeleccionSeccion : () => {}}
+              disabled={!entradasDisponibles}
             />
           ) : (
             <div className="hidden lg:flex py-20 text-center min-h-[80vh] items-center justify-center">

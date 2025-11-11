@@ -1,7 +1,6 @@
 import Cardproduct from "../components/CardProduct";
 import HeroEvents from "../components/HeroEvents";
 import UpcomingConcertsCard from "../components/UpcomingConcertsCard";
-import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 import InputSelect from "../components/InputSelect";
 import InputDate from "../components/InputDate";
 import HeroConcerts from '../assets/hero-concerts.avif';
@@ -10,13 +9,21 @@ import { useFilters } from "../hooks/useFilters";
 import { useAuth } from "../context/AuthContext";
 import { Guitar } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 
   export default function ConcertsPage() {
     const { data: generos, isLoading: isLoadingGeneros } = useGetGenerosPublic();
     const { genero, fecha, handleGeneroChange, handleFechaChange } = useFilters(generos);
     const { token,} = useAuth();
 
-    const { data: conciertos, isLoading } = useGetConciertos({
+    const { data: conciertos_activos, isLoading } = useGetConciertos({
+      estado: "activo",
+      genero,
+      fechaInicio: fecha,
+    });
+
+    const { data: conciertos_proximos, isLoading: LoadingProximos } = useGetConciertos({
+      estado: "proximamente",
       genero,
       fechaInicio: fecha,
     });
@@ -55,7 +62,7 @@ import { Link } from "react-router-dom";
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-                {conciertos.map((c) => (
+                {conciertos_activos?.map((c) => (
                   <Cardproduct information={c} key={c.concierto_id} />
                 ))}
               </div>
@@ -64,13 +71,12 @@ import { Link } from "react-router-dom";
             <div className="border border-[#C122ED] mt-20 mb-20"></div>
             
             <div id="proximamente">
-              <h3 className="text-xl">300 Próximos Conciertos</h3>
+              <h3 className="text-xl">{conciertos_proximos?.length} Próximos Conciertos</h3>
               <div className="flex flex-col lg:flex-row gap-10 md:gap-8 mt-6">
                 <div className="w-[100%] flex flex-col gap-4">
-                  <UpcomingConcertsCard />
-                  <UpcomingConcertsCard />
-                  <UpcomingConcertsCard />
-                  <UpcomingConcertsCard />
+                {conciertos_proximos?.map((c) => (
+                  <UpcomingConcertsCard concierto={c} key={c.concierto_id} />
+                ))}
                 </div>
                   {!token ? (
                     <div className="w-full lg:w-[25%]">
