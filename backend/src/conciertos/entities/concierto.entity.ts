@@ -3,6 +3,12 @@ import { PreciosSeccionConcierto } from "src/precios-seccion-concierto/entities/
 import { Recinto } from "src/recintos/entities/recinto.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+export enum EstadoConcierto {
+  PROXIMAMENTE = 'proximamente',
+  ACTIVO = 'activo',
+  FINALIZADO = 'finalizado',
+}
+
 @Entity('conciertos')
     export class Concierto {
 
@@ -17,6 +23,12 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 
         @Column()
         id_recinto: number;
+
+        @Column({ type: 'enum', enum: EstadoConcierto, default: EstadoConcierto.PROXIMAMENTE })
+        estado: EstadoConcierto;
+
+        @Column('datetime', { nullable: true })
+        fecha_venta: Date | null;
 
         @ManyToOne(() => Artista, (artista) => artista.conciertos)
         @JoinColumn({ name: 'id_artista' })

@@ -4,6 +4,7 @@ import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { EstadoConcierto } from './entities/concierto.entity';
 
 @Controller('conciertos')
 export class ConciertosController {
@@ -18,10 +19,11 @@ export class ConciertosController {
 
   @Get('public')
   findAll(
+  @Query('estado') estado?: EstadoConcierto,
   @Query('genero') genero?: string,
   @Query('fechaInicio') fechaInicio?: string,
   ) {
-    return this.conciertosService.findAll(genero, fechaInicio);
+    return this.conciertosService.findAll(estado, genero, fechaInicio);
   }
 
   @Get('public/:id')

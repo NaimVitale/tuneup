@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsDateString, IsArray, ValidateNested, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsDateString, IsArray, ValidateNested, Min, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class PrecioSeccionDto {
@@ -14,6 +14,10 @@ class PrecioSeccionDto {
 export class CreateConciertoDto {
   @IsDateString()
   fecha: string;
+
+  @IsDateString()
+  @IsOptional()
+  fecha_venta?: string;
 
   @IsNumber()
   @IsNotEmpty()

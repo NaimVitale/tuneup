@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { CreateConciertoDto } from './dto/create-concierto.dto';
 import { UpdateConciertoDto } from './dto/update-concierto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Concierto } from './entities/concierto.entity';
+import { Concierto, EstadoConcierto } from './entities/concierto.entity';
 import { Repository } from 'typeorm';
 import { PreciosSeccionConciertoService } from 'src/precios-seccion-concierto/precios-seccion-concierto.service';
 import { PreciosSeccionConcierto } from 'src/precios-seccion-concierto/entities/precios-seccion-concierto.entity';
@@ -45,13 +45,23 @@ export class ConciertosService {
   }
 
   async create(createConciertoDto: CreateConciertoDto) {
-    const { id_recinto, fecha, id_artista, preciosPorSeccion } = createConciertoDto;
+    const { id_recinto, fecha, fecha_venta, id_artista, preciosPorSeccion } = createConciertoDto;
+
+    const ahora = new Date();
 
     // 1️⃣ Buscar el recinto y sus secciones
     const recinto = await this.recintoRepo.findOne({
       where: { id: id_recinto },
       relations: ['secciones']
     });
+
+    if (new Date(fecha) < ahora) {
+      throw new BadRequestException("No se puede crear un concierto con fecha anterior a hoy");
+    }
+
+    if (fecha_venta && new Date(fecha_venta) < ahora) {
+      throw new BadRequestException("La fecha de venta no puede ser anterior a hoy");
+    }
 
     if (!recinto) throw new NotFoundException(`Recinto ${id_recinto} no encontrado`);
     if (!recinto.secciones || recinto.secciones.length === 0)
@@ -62,11 +72,21 @@ export class ConciertosService {
     if (seccionesDisponibles.length === 0)
       throw new BadRequestException(`No se puede crear un concierto: el recinto no tiene secciones con capacidad disponible`);
 
+    // 2️⃣ Determinar estado inicial según fecha_venta
+    let estadoInicial: EstadoConcierto;
+    if (!fecha_venta || new Date(fecha_venta) <= ahora) {
+      estadoInicial = EstadoConcierto.ACTIVO;
+    } else {
+      estadoInicial = EstadoConcierto.PROXIMAMENTE;
+    }
+
     // 3️⃣ Crear concierto sin precios aún
     const concierto = this.conciertoRepository.create({
       fecha: new Date(fecha),
+      fecha_venta: fecha_venta ? new Date(fecha_venta) : null,
       id_artista,
-      id_recinto
+      id_recinto,
+      estado: estadoInicial
     });
 
     // Guardar primero para obtener ID
@@ -107,9 +127,28 @@ export class ConciertosService {
     return concierto;
   }
 
+  async findAll(estado?: EstadoConcierto, filtroGenero?: string, fechaInicio?: string) {
+    const ahora = new Date();
 
+    // 1️⃣ Proximamente → Activo
+    await this.conciertoRepository
+      .createQueryBuilder()
+      .update()
+      .set({ estado: EstadoConcierto.ACTIVO })
+      .where('estado = :estado', { estado: EstadoConcierto.PROXIMAMENTE })
+      .andWhere('(fecha_venta <= :ahora OR fecha_venta IS NULL)', { ahora })
+      .execute();
 
-  findAll(filtroGenero?: string, fechaInicio?: string) {
+    // 2️⃣ Activo → Finalizado
+    await this.conciertoRepository
+      .createQueryBuilder()
+      .update()
+      .set({ estado: EstadoConcierto.FINALIZADO })
+      .where('estado = :estado', { estado: EstadoConcierto.ACTIVO })
+      .andWhere('fecha < :ahora', { ahora })
+      .execute();
+
+    // 3️⃣ Consulta principal, excluyendo finalizados
     const query = this.conciertoRepository
       .createQueryBuilder('concierto')
       .leftJoinAndSelect('concierto.artista', 'artista')
@@ -120,6 +159,8 @@ export class ConciertosService {
       .select([
         'concierto.id',
         'concierto.fecha',
+        'concierto.estado',
+        'concierto.fecha_venta',
         'artista.id',
         'artista.nombre',
         'artista.img_card',
@@ -133,6 +174,7 @@ export class ConciertosService {
         'genero.nombre',
       ])
       .addSelect('MIN(psc.precio)', 'precio_minimo')
+      .where('concierto.estado = :estado', { estado })
       .groupBy('concierto.id')
       .addGroupBy('artista.id')
       .addGroupBy('recinto.id')
@@ -147,12 +189,13 @@ export class ConciertosService {
 
     // Filtro a partir de fecha
     if (fechaInicio) {
-      const inicio = new Date(fechaInicio);
       query.andWhere('concierto.fecha >= :inicio', { inicio: fechaInicio });
     }
 
     return query.getRawMany();
   }
+
+
 
   async findOnePublic(id: number) {
     const concierto = await this.conciertoRepository.findOne({
@@ -222,6 +265,7 @@ export class ConciertosService {
   }
 
   async update(id: number, dto: UpdateConciertoDto) {
+    const ahora = new Date();
     const concierto = await this.conciertoRepository.findOne({
       where: { id },
       relations: ['preciosPorSeccion', 'preciosPorSeccion.seccion', 'artista', 'recinto']
@@ -233,6 +277,21 @@ export class ConciertosService {
     if (dto.fecha) concierto.fecha = new Date(dto.fecha);
     if (dto.id_artista) concierto.id_artista = dto.id_artista;
     if (dto.id_recinto) concierto.id_recinto = dto.id_recinto;
+
+    if (dto.fecha_venta !== undefined) {
+      concierto.fecha_venta = dto.fecha_venta ? new Date(dto.fecha_venta) : null;
+
+      const ahora = new Date();
+      if (!concierto.fecha_venta || concierto.fecha_venta <= ahora) {
+        concierto.estado = EstadoConcierto.ACTIVO;
+      } else {
+        concierto.estado = EstadoConcierto.PROXIMAMENTE;
+      }
+    }
+
+    if (concierto.fecha < ahora) {
+      concierto.estado = EstadoConcierto.FINALIZADO;
+    }
 
     if (dto.preciosPorSeccion) {
       for (const p of dto.preciosPorSeccion) {

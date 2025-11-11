@@ -1,4 +1,4 @@
-import { IsOptional, IsNumber, IsDate, ValidateNested } from 'class-validator';
+import { IsOptional, IsNumber, IsDate, ValidateNested, IsDateString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class UpdatePrecioSeccionDto {
@@ -27,6 +27,10 @@ export class UpdateConciertoDto {
   @IsDate()
   @Type(() => Date)
   fecha?: Date;
+
+  @IsDateString()
+  @IsOptional()
+  fecha_venta?: string;
 
   @IsOptional()
   @ValidateNested({ each: true })
