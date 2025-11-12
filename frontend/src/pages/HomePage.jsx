@@ -6,9 +6,15 @@ import HeroHome from '../components/HeroHome';
 import UpcomingConcertsCard from '../components/UpcomingConcertsCard';
 import { useAuth } from "../context/AuthContext";
 import { Link } from 'react-router-dom';
+import { useConcertsHomeActive } from '../hooks/concerts/useConcertsHomeActive';
+import { useGetConcertsHomeProximamente } from '../hooks/concerts/useGetConcertsHomeProximamente';
 
 function Homepage() {
     const { user, token} = useAuth();
+
+    const { data: conciertos_activos, isLoading } = useConcertsHomeActive();
+    const { data: conciertos_proximos, isLoading : isProximosLoading } = useGetConcertsHomeProximamente();
+
     return (
         <div id="container">
             <HeroHome></HeroHome>
@@ -25,11 +31,9 @@ function Homepage() {
                         </Link>
                     </div>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:row-span-1 gap-8'>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
-                        <Cardproduct></Cardproduct>
+                        {conciertos_activos?.map((c) => (
+                            <Cardproduct information={c} key={c.concierto_id} />
+                        ))}
                     </div>
                     <Link to="/conciertos" className='flex md:hidden items-center justify-center gap-1 text-[#C122ED] hover:text-[#a01bc7] font-semibold text-lg bg-[#f3e0ff] hover:bg-[#e6d0ff] pl-6 pr-3 py-2.5 rounded-full transition-all duration-300 group-hover:gap-3 shadow-sm group mt-10 w-[80%] mx-auto'>
                         Ver todos los conciertos
@@ -43,7 +47,7 @@ function Homepage() {
                             <div className='h-1 w-20 mt-3 bg-gradient-to-r from-[#C122ED] to-[#a01bc7] rounded-full'></div>
                         </div>
                         <Link 
-                            to="/conciertos" 
+                            to="/conciertos/#proximamente" 
                             className='hidden md:flex items-center justify-center gap-1 text-[#C122ED] hover:text-[#a01bc7] font-semibold text-lg bg-[#f3e0ff] hover:bg-[#e6d0ff] pl-6 pr-3 py-2.5 rounded-full transition-all duration-300 group-hover:gap-3 shadow-sm group'
                         >
                             Ver más
@@ -51,11 +55,9 @@ function Homepage() {
                         </Link>
                     </div>
                     <div className='flex flex-col gap-3 mt-6'>
-                        <UpcomingConcertsCard></UpcomingConcertsCard>
-                        <UpcomingConcertsCard></UpcomingConcertsCard>
-                        <UpcomingConcertsCard></UpcomingConcertsCard>
-                        <UpcomingConcertsCard></UpcomingConcertsCard>
-                        <UpcomingConcertsCard></UpcomingConcertsCard>
+                        {conciertos_proximos?.map((c) => (
+                            <UpcomingConcertsCard concierto={c} key={c.concierto_id} />
+                        ))}
                     </div>
                     <Link 
                         to="/conciertos" 

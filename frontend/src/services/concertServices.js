@@ -3,6 +3,27 @@ import axios from "axios";
 const API_URL = `${import.meta.env.VITE_API_URL}/conciertos`;
 
 
+//Consulta publica sobre un artista
+export const getHomeConciertosActivos = async() => {
+  try{
+    const response = await axios.get(`${API_URL}/home/activos`, {
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
+
+//Consulta publica sobre un artista
+export const getHomeConciertosProximos = async() => {
+  try{
+    const response = await axios.get(`${API_URL}/home/proximamente`, {
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
 
 //Crear un concierto en panel admin
 export const CreateConcierto = async(token, conciertoData) => {

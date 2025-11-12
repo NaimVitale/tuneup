@@ -24,8 +24,6 @@ import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 
     const { data: conciertos_proximos, isLoading: LoadingProximos } = useGetConciertos({
       estado: "proximamente",
-      genero,
-      fechaInicio: fecha,
     });
 
     return (

@@ -54,7 +54,7 @@ function UpcomingConcertsCard({ concierto }) {
           <img 
             src={concierto?.artista_img_card || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&h=100&fit=crop"} 
             alt={concierto?.artista_nombre} 
-            className="h-20 w-20 md:h-24 md:w-24 object-cover rounded-xl shadow-md" 
+            className="h-20 w-20 md:h-24 md:w-24 object-contain rounded-xl shadow-md" 
           />
         </div>
 

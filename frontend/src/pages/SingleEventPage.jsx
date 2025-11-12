@@ -87,15 +87,14 @@ export default function SingleEventPage() {
         {/* Columna izquierda - Tickets */}
         <div className="w-full lg:w-[40%] relative p-0 lg:border-r lg:border-[#C122ED]" style={{ boxShadow: isMobile ? 'none' : '1px 0px 20px -10px #C122ED' }}>
           {/* OVERLAY si entradas NO disponibles */}
-          {!entradasDisponibles && (
+          {!entradasDisponibles ? (
             <div className="absolute inset-0 z-50 bg-white/80 flex flex-col items-center justify-center pointer-events-auto">
-              <Armchair className="text-[#C122ED] mb-2" size={48} />
-              <p className="font-semibold text-lg text-gray-700">Entradas no disponibles</p>
-              <p className="text-sm text-gray-500 mt-1">{contador}</p>
+              <Armchair className="text-[#C122ED] mb-2" size={60} />
+              <p className="font-semibold text-xl text-gray-700">Entradas disponibles en:</p>
+              <p className="text-lg text-gray-500 mt-1">{contador}</p>
             </div>
-          )}
-
-          <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col"> 
+          ) : (
+            <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col"> 
             {/* Lista de secciones disponibles */}
             {(!tieneSVG || isMobile) && data?.recinto?.secciones && (
               <div className="mb-4 sm:mb-6">
@@ -189,8 +188,9 @@ export default function SingleEventPage() {
               )}
             </div>
           </div>
+        )}
         </div>
-
+          
         {/* Columna derecha - Mapa */}
         <div className="hidden lg:flex w-full lg:w-[60%] justify-center bg-gradient-to-r from-[#C122ED]/60 via-[#6B21A8]/40 to-[#9333EA]/30 min-h-[400px] lg:min-h-0 relative">
           {!entradasDisponibles && <div className="absolute inset-0 z-50 bg-white/60 pointer-events-auto"></div>}

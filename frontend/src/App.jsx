@@ -37,7 +37,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Suspense fallback={<Spinner/>}>
+        <Suspense fallback={<div className='flex justify-center items-center'><Spinner/></div>}>
           <Routes>
             <Route element={<PublicLayout />}>
               <Route path='/' element={<HomePage />} />
