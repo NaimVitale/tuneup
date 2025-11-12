@@ -1,4 +1,5 @@
 import { Artista } from "src/artistas/entities/artista.entity";
+import { Entrada } from "src/entradas/entities/entrada.entity";
 import { PreciosSeccionConcierto } from "src/precios-seccion-concierto/entities/precios-seccion-concierto.entity";
 import { Recinto } from "src/recintos/entities/recinto.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
@@ -40,4 +41,7 @@ export enum EstadoConcierto {
 
         @OneToMany(() => PreciosSeccionConcierto, csp => csp.concierto,  { cascade: true })
         preciosPorSeccion: PreciosSeccionConcierto[];
+
+        @OneToMany(() => Entrada, (entrada) => entrada.concierto)
+        entradas: Entrada[];
     }

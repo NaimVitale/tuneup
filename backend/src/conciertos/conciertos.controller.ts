@@ -26,6 +26,17 @@ export class ConciertosController {
     return this.conciertosService.findAll(estado, genero, fechaInicio);
   }
 
+  @Get('home/activos')
+  getTopActivos() {
+    return this.conciertosService.findTopActivos();
+  }
+
+  @Get('home/proximamente')
+  getTopProximamente() {
+    return this.conciertosService.findTopProximamente();
+  }
+
+
   @Get('public/:id')
   findOnePublic(@Param('id') id: string) {
     return this.conciertosService.findOnePublic(+id);
