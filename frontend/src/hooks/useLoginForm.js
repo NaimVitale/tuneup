@@ -25,26 +25,28 @@ export const useLoginForm = (navigate) => {
   };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const validationErrors = validate();
-        if (Object.keys(validationErrors).length > 0) {
+      e.preventDefault();
+      const validationErrors = validate();
+      if (Object.keys(validationErrors).length > 0) {
         setError(validationErrors);
         return;
-        }
-    
-        setLoading(true);
-        setError({});
-        try {
-            const user = await userLogin(formData);
-            setFormData({ email: "", password: "" });
-            login(user.usuario, user.token);
-            navigate("/");
-        } catch (err) {
-          setError(prev => ({ ...prev, unauthorized: err.message }));
-        } finally {
-          setLoading(false);
-        }
-      };
+      }
+
+      setLoading(true);
+      setError({});
+
+      try {
+        const res = await userLogin(formData);
+        setFormData({ email: "", password: "" });
+        login(res.usuario, res.access_token);       // <-- PASÁ token y usuario
+        navigate("/");
+      } catch (err) {
+        setError(prev => ({ ...prev, unauthorized: err.message }));
+      } finally {
+        setLoading(false);
+      }
+    };
+
 
     return {
         formData,

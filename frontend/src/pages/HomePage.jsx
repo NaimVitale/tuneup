@@ -30,7 +30,7 @@ function Homepage() {
                             <ChevronRight size={25} className='mt-0.5'></ChevronRight>
                         </Link>
                     </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:row-span-1 gap-8'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 lg:row-span-1 gap-8'>
                         {conciertos_activos?.map((c) => (
                             <Cardproduct information={c} key={c.concierto_id} />
                         ))}

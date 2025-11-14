@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../api/api";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/usuarios`;
 const AUTH_URL = `${import.meta.env.VITE_API_URL}/auth/login`;
@@ -12,14 +12,14 @@ export const createUser = async (userData) => {
   }
 };
 
-export const userLogin = async(userData) => {
-  try{
-    const response = await axios.post(AUTH_URL, userData)
-    return response.data;
+export const userLogin = async (userData) => {
+  try {
+    const response = await axios.post(AUTH_URL, userData, { withCredentials: true });
+    return response.data; // debe contener { token, usuario }
   } catch (error) {
     throw error.response?.data || error;
   }
-}
+};
 
 export const getUser = async(id, token) => {
   try{

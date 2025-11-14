@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-export default function InputForm({ label, type = "text", id, value, onChange}) {
+export default function InputForm({ label, type = "text", id, value, onChange, error,}) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
@@ -19,13 +19,13 @@ export default function InputForm({ label, type = "text", id, value, onChange}) 
   }, [value]);
 
   return (
-    <div className="relative w-full flex items-center">
+    <div className="relative w-full flex-1 items-center">
       {isTextarea ? (
         <textarea
           ref={inputRef}
           id={id}
           placeholder={label}
-          className="peer w-full border rounded-2xl px-5 py-3 min-h-[120px] resize-none overflow-hidden placeholder-transparent focus:outline-none focus:ring-2 focus:ring-[#C122ED]"
+          className={`peer w-full border rounded-full px-5 py-3 placeholder-transparent focus:outline-none focus:ring-2 z-2 ${error ? "border-red-500 focus:ring-red-500" : "focus:ring-[#C122ED]"}`}
           value={value}
           onChange={(e) => {
             onChange(e);
@@ -67,6 +67,9 @@ export default function InputForm({ label, type = "text", id, value, onChange}) 
         >
           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
         </button>
+      )}
+      {error && (
+        <p className="text-red-500 text-sm mt-1 ml-2">{error}</p>
       )}
     </div>
   );

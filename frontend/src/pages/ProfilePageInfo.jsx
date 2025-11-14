@@ -21,11 +21,11 @@ export default function ProfileInfoPage(){
                     handleSubmit(userId);
                 }}>
                     <div className="grid grid-cols-2 gap-4 mb-4">
-                    <InputForm label={"Nombre"} type="text" id={"nombre"} value={form.nombre} onChange={handleChange}></InputForm>
+                    <InputForm label={"Nombre"} type="text" id={"nombre"} value={form.nombre} onChange={handleChange} error={errorUpdate?.nombre}></InputForm>
                     <InputForm label={"Apellido"} type="text" id={"apellido"} value={form.apellido} onChange={handleChange}></InputForm>
                     <InputForm label={"Correo electrónico"} type="text" id={"email"} value={form.email} onChange={handleChange}></InputForm>
                     </div>
-                    {errorUpdate && <p className="text-red-500 text-sm mb-4">{errorUpdate.message || errorUpdate}</p>}
+                    {errorUpdate && <p className="text-red-500 text-sm mb-4">{errorUpdate.message || errorUpdate.general}</p>}
                     {success && <p className="text-green-500 text-sm mb-4">Usuario actualizado</p>}
                     <button className="btn-primary py-2 px-4 text-md w-max">Actualizar información</button>
                 </form>
