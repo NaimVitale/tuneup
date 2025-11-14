@@ -125,14 +125,16 @@ export class StripeController {
             }
 
             // Bloqueo pesimista en la fila del precio (evita race conditions)
-            const precioRepo = manager.getRepository(precioEntity.constructor.name === 'Object' ? 'precios_seccion_concierto' : precioEntity.constructor as any);
             // Nota: si tu findByStripeId devolvió entidad real, bloqueamos por id con queryBuilder:
             const precioLocked = await manager
               .getRepository(precioEntity.constructor as any)
               .createQueryBuilder('precio')
               .setLock('pessimistic_write')
+              .leftJoinAndSelect('precio.concierto', 'concierto')
+              .leftJoinAndSelect('precio.seccion', 'seccion')
               .where('precio.id = :id', { id: precioEntity.id })
               .getOne();
+
 
             if (!precioLocked) {
               throw new Error('Precio no disponible al bloquear');

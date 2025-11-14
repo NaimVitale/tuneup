@@ -60,4 +60,12 @@ export class CompraService {
     .where('compra.stripe_payment_id = :stripePaymentId', { stripePaymentId })
     .getOne();
   }
+
+  async getAll(){
+  return this.compraRepo
+    .createQueryBuilder('compra')
+    .leftJoinAndSelect('compra.entradas', 'entrada')
+    .loadRelationCountAndMap('compra.total_entradas', 'compra.entradas') // cuenta las entradas y lo mapea como total_entradas
+    .getMany()
+  }
 }

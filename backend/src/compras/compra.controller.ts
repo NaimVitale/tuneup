@@ -3,6 +3,7 @@ import { Controller, Get, Param, UseGuards, Req, NotFoundException, ForbiddenExc
 import { CompraService } from './compra.service';
 import { Request } from 'express';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('compras')
 export class CompraController {
@@ -23,5 +24,12 @@ export class CompraController {
     }
 
     return compra;
+  }
+
+  @UseGuards(JwtRolesGuard)
+  @Get()
+  @Roles('admin')
+  async getAll(){
+    return await this.compraService.getAll();
   }
 }

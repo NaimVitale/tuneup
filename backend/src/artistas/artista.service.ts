@@ -7,6 +7,7 @@ import { ILike, Repository } from 'typeorm';
 import slugify from 'slugify';
 import { UploadService } from 'src/upload/upload.service';
 import { Genero } from 'src/generos/entities/genero.entity';
+import { EstadoConcierto } from 'src/conciertos/entities/concierto.entity';
 
 @Injectable()
 export class ArtistaService {
@@ -105,6 +106,7 @@ export class ArtistaService {
       .leftJoin('concierto.artista', 'artista_concierto')
       .leftJoin('concierto.preciosPorSeccion', 'psc')
       .where('artista.slug = :slug', { slug })
+      .andWhere('concierto.estado != :finalizado', { finalizado: EstadoConcierto.FINALIZADO })
       .select([
         'artista.id',
         'artista.nombre',

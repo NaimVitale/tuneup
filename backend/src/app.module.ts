@@ -18,6 +18,8 @@ import { StripeModule } from './stripe/stripe.module';
 import { WebhookModule } from './webhooks/webhook.module';
 import { CompraModule } from './compras/compra.module';
 import { EntradaModule } from './entradas/entrada.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -57,5 +59,7 @@ import { EntradaModule } from './entradas/entrada.module';
     CompraModule,
     EntradaModule,
   ],
+  controllers: [AppController], 
+  providers: [AppService], 
 })
 export class AppModule {}
