@@ -32,7 +32,7 @@ import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
 
         <div className="w-[90%] m-auto">
           <div className="pb-6 pt-12">
-            <div className="lg:w-[50%] grid-cols-1 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="lg:w-[50%] grid-cols-1 grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <InputSelect
                 placeholder="Género"
                 value={genero || ""}
@@ -59,7 +59,7 @@ import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
                 Cargando eventos, por favor espera...
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
                 {conciertos_activos?.map((c) => (
                   <Cardproduct information={c} key={c.concierto_id} />
                 ))}

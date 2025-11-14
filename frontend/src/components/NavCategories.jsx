@@ -24,7 +24,7 @@ export default function NavCategories() {
       ],
     },
     {
-      name: "Ciudades",
+      name: "Recintos",
       subcategories: [
         { name: "Madrid", path: "/ciudades/madrid" },
         { name: "Barcelona", path: "/ciudades/barcelona" },

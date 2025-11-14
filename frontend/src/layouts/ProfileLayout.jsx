@@ -18,12 +18,12 @@ export default function ProfileLayout() {
                                     Mis entradas
                                 </Link>
                             </li>
-                            <li>
+                            {/*<li>
                                 <Link to={""} className="flex items-center gap-2">
                                     <Star className="text-[#C122ED]" size={25} />
                                     Mis favoritos
                                 </Link>
-                            </li>
+                            </li>*/}
                             <li>
                                 <Link to={`ajustes/${user.id}`} className="flex items-center gap-2">
                                     <Settings className="text-[#C122ED]" size={25} />
@@ -35,7 +35,7 @@ export default function ProfileLayout() {
                             </li>
                         </ul>
                     </div>
-                    <div className="w-[80%]">
+                    <div className="w-[80%] h-[60vh]">
                         <Outlet/>
                     </div>
                 </div>

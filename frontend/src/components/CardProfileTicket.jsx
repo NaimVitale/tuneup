@@ -1,11 +1,10 @@
-import { Calendar, MapPin, Ticket, Download, QrCode, CheckCircle } from "lucide-react";
+import { Calendar, MapPin, Ticket, CheckCircle } from "lucide-react";
 
 // Componente CardProfileTicket
 export default function CardProfileTicket({ entrada }) {
   console.log(entrada)
   const formatFecha = (fecha) => {
     return new Date(fecha).toLocaleDateString('es-ES', {
-      weekday: 'short',
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -26,13 +25,16 @@ export default function CardProfileTicket({ entrada }) {
   const estadoBadge = getEstadoBadge(entrada?.estado_entrada);
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl border border-gray-200 hover:border-[#C122ED] transition-all duration-300 overflow-hidden group">
+    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-200 transition-all duration-300 overflow-hidden group">
       
       {/* Header con estado */}
       <div className="bg-gradient-to-r from-[#C122ED] to-[#9333EA] p-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <Ticket className="text-white" size={20} />
-          <span className="text-white font-semibold">Entrada #{entrada?.id}</span>
+        <div className="gap-2">
+          <div className="flex gap-2">
+            <Ticket className="text-white mt-1.5" size={20} />
+            <h3 className="text-xl font-bold text-white transition-colors">
+            {entrada?.concierto.artista.nombre}</h3>
+          </div>
         </div>
         <span className={`${estadoBadge.bg} ${estadoBadge.text} text-xs font-semibold px-3 py-1 rounded-full`}>
           {estadoBadge.label}
@@ -41,16 +43,10 @@ export default function CardProfileTicket({ entrada }) {
 
       {/* Contenido */}
       <div className="p-5">
-        
-        {/* Artista */}
-        <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-[#C122ED] transition-colors">
-          {entrada?.concierto.artista.nombre}
-        </h3>
-
         {/* Detalles */}
-        <div className="space-y-3 mb-5">
-          <div className="flex items-start gap-3">
-            <Calendar size={18} className="text-[#C122ED] flex-shrink-0 mt-0.5" />
+        <div className="space-y-3 flex justify-between items-start">
+          <div className="flex items-center gap-2">
+            <Calendar size={20} className="text-[#C122ED] flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Fecha</p>
               <p className="text-sm font-medium text-gray-900 capitalize">
@@ -59,8 +55,8 @@ export default function CardProfileTicket({ entrada }) {
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
-            <MapPin size={18} className="text-[#C122ED] flex-shrink-0 mt-0.5" />
+          <div className="flex items-center gap-2">
+            <MapPin size={20} className="text-[#C122ED] flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Ubicación</p>
               <p className="text-sm font-medium text-gray-900">
@@ -69,7 +65,7 @@ export default function CardProfileTicket({ entrada }) {
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
+          <div className="flex items-center gap-2">
             <CheckCircle size={18} className="text-[#C122ED] flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Sección</p>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Castle, LayoutDashboard, LogOut, Music, Paintbrush, User, ChevronLeft, ChevronRight, Tags, Ticket, Menu, X } from "lucide-react";
+import { Castle, LayoutDashboard, LogOut, Music, Paintbrush, User, ChevronLeft, ChevronRight, Tags, Menu, X, ShoppingCart } from "lucide-react";
 import TuneUpHeader from "../assets/TuneUp.webp"
 import { Link, useLocation } from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +15,7 @@ export default function HeaderAdmin(){
     const menuItems = [
         { to: "", icon: LayoutDashboard, label: "Dashboard" },
         { to: "conciertos", icon: Music, label: "Conciertos" },
-        { to: "entradas", icon: Ticket, label: "Entradas" },
+        { to: "compras", icon: ShoppingCart, label: "Compras" },
         { to: "artistas", icon: Paintbrush, label: "Artistas" },
         { to: "recintos", icon: Castle, label: "Recintos" },
         { to: "usuarios", icon: User, label: "Usuarios" },

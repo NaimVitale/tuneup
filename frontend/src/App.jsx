@@ -5,6 +5,7 @@ import './App.css'
 import React, { Suspense } from "react";
 import { AuthProvider } from './context/AuthContext';
 import Spinner from './components/Spinner';
+import AdminCompraPage from './pages/AdminPages/AdminCompraPage';
 
 // Lazy load de páginas
 const HomePage = React.lazy(() => import('./pages/HomePage'));
@@ -59,6 +60,7 @@ function App() {
               <Route path='recintos' element={<AdminPremisesPage />} />
               <Route path='generos' element={<AdminGeneroPage />} />
               <Route path='usuarios' element={<AdminUsersPage />} />
+              <Route path='compras' element={<AdminCompraPage/>} />
               <Route path=':resource/crear' element={<AdminCreatePage />} />
               <Route path=':resource/:slug/editar' element={<AdminEditPage />} />
             </Route>

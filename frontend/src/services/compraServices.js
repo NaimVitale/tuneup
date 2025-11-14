@@ -15,3 +15,16 @@ export const getCompra = async(stripe_payment_id, token) => {
     throw error.response?.data || error;
   }
 }
+
+export const getComprasAdmin = async(token) => {
+  try{
+    const response = await axios.get(`${API_URL}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}

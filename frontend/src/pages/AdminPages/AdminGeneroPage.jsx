@@ -6,7 +6,7 @@ import { useGetGeneros } from "../../hooks/genero/useGetGeneros"
 export default function AdminGeneroPage() {
   const navigate = useNavigate()
   const columns = [
-    { key: "index", label: "#", render: (c, i) => i + 1 },
+    { key: "index", label: "#", render: (c, i) => i},
     { key: "nombre", label: "Nombre", render: (c) => c.nombre },
     { key: "descripcion", label: "Descripción", render: (c) => c.slug },
   ];

@@ -32,7 +32,7 @@ export default function AdminConcertsPage() {
   const { data: conciertos, isLoading, isError } = useGetConciertos({estado:""});
 
   if (isLoading) return <Spinner size={20} color="border-white"/>;
-  if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los conciertos</p>;
+  if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los conciertos</p>
 
   return (
     <div className="w-[90%] h-[80vh]">
@@ -54,7 +54,7 @@ export default function AdminConcertsPage() {
             </Link >
           </div>
         </div>
-        <DataTable columns={columns} data={conciertos} actions={actions} />;
+        <DataTable columns={columns} data={conciertos} actions={actions} />
       </div>
     </div>
   );
