@@ -17,15 +17,20 @@ export class JwtRolesGuard implements CanActivate {
     if (!authHeader) throw new UnauthorizedException('No se encontró token');
 
     const token = authHeader.split(' ')[1];
-    const payload = this.jwtService.verify(token);
 
-    request.user = payload;
+    try {
+      const payload = this.jwtService.verify(token);
+      request.user = payload;
 
-    if (!roles) return true;
-    if (!roles.includes(payload.rol)) {
-      throw new ForbiddenException('No tienes permisos suficientes');
+      if (!roles) return true;
+      if (!roles.includes(payload.rol)) {
+        throw new ForbiddenException('No tienes permisos suficientes');
+      }
+
+      return true;
+    } catch (err) {
+      // Si el token expiró o es inválido
+      throw new UnauthorizedException('Token inválido o expirado');
     }
-
-    return true;
   }
 }

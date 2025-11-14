@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
 
@@ -13,10 +14,12 @@ async function bootstrap() {
     origin: frontendUrl,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Authorization,Content-Type',
-    // credentials: true,
+    credentials: true,
   });
 
   app.use('/stripe/webhook', bodyParser.raw({ type: 'application/json' }));
+
+  app.use(cookieParser());
 
   app.useGlobalPipes(
     new ValidationPipe({
