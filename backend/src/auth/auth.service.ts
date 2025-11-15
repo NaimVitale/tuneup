@@ -22,15 +22,16 @@ export class AuthService {
 
     const payload = { sub: usuario.id, rol: usuario.rol };
 
-    const access_token = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const access_token = this.jwtService.sign(payload, { expiresIn: '5m' });
     const refresh_token = this.jwtService.sign(payload, { expiresIn: '1d' });
 
     // Guardar refresh token en cookie HttpOnly
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       secure: true, // true en producción HTTPS
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 1 día
+      path: '/',
     });
 
     return {
@@ -52,7 +53,7 @@ export class AuthService {
 
       const newAccessToken = this.jwtService.sign(
         { sub: payload.sub, rol: payload.rol },
-        { expiresIn: '15m' },
+        { expiresIn: '5m' },
       );
 
       return { access_token: newAccessToken };

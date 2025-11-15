@@ -51,5 +51,26 @@ export class StripeService {
       throw new Error('No se pudo recuperar la sesión de Stripe');
     }
   }
+  
+
+  async getGananciasMensuales() {
+    const now = new Date();
+    const startOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth(), 1).getTime() / 1000);
+    const endOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).getTime() / 1000);
+
+    let total = 0;
+
+    await this.stripe.paymentIntents.list({ limit: 100 }).autoPagingEach(async (pi) => {
+      if (
+        pi.status === 'succeeded' &&
+        pi.created >= startOfMonth &&
+        pi.created <= endOfMonth
+      ) {
+        total += pi.amount ?? 0;
+      }
+    });
+
+    return total; // en centavos
+  }
 }
 

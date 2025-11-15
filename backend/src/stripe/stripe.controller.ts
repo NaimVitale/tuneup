@@ -1,5 +1,5 @@
 // src/stripe/stripe.controller.ts
-import { Controller, Post, Req, Res, Body, Headers, Logger } from '@nestjs/common';
+import { Controller, Post, Req, Res, Body, Headers, Logger, Get } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { CompraService } from '../compras/compra.service';
 import { EntradaService } from '../entradas/entrada.service';
@@ -174,5 +174,11 @@ export class StripeController {
 
     // Responder OK para evitar reintentos innecesarios (si el procesamiento fue OK arriba)
     return res.json({ received: true });
+  }
+
+  @Get('ganancias-mensuales')
+  async gananciasMensuales() {
+    const total = await this.stripeService.getGananciasMensuales();
+    return { total: total / 100 };
   }
 }
