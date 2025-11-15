@@ -1,10 +1,14 @@
-import { Pencil, Plus, SearchIcon, Trash } from "lucide-react";
+import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import DataTable from "../../components/DataTable";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetGeneros } from "../../hooks/genero/useGetGeneros"
+import { useRestoreGenero } from "../../hooks/genero/useRestoreGenero";
+import { useSoftDeleteGenero } from "../../hooks/genero/useSoftDeleteGenero";
 
 export default function AdminGeneroPage() {
   const navigate = useNavigate()
+  const { handleSoftDelete } = useSoftDeleteGenero();
+  const { handleRestore } = useRestoreGenero();
   const columns = [
     { key: "index", label: "#", render: (c, i) => i},
     { key: "nombre", label: "Nombre", render: (c) => c.nombre },
@@ -18,9 +22,21 @@ export default function AdminGeneroPage() {
       className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {
-      icon: <Trash size={18} />,
-      onClick: (c) => console.log("Eliminar", c.id),
-      className: "bg-red-500 text-white hover:bg-red-600",
+      icon: (c) =>
+        c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />,
+      onClick: async (c) => {
+        if (c.deleted_at) {
+          const success = await handleRestore(c.id);
+          if (success) console.log("Restaurado", c.id);
+        } else {
+          const success = await handleSoftDelete(c.id);
+          if (success) console.log("Eliminado", c.id);
+        }
+      },
+      className: (c) =>
+        c.deleted_at
+          ? "bg-yellow-500 text-white hover:bg-yellow-600"
+          : "bg-red-500 text-white hover:bg-red-600",
     },
   ];
 

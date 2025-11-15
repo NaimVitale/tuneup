@@ -63,3 +63,17 @@ export const updateGenero = async (id, generoData, token) => {
     throw error.response?.data || error;
   }
 }
+
+export const softDeleteGenero = async (id, token) => {
+  const response = await axios.delete(`${API_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const restoreGenero = async (id, token) => {
+  const response = await axios.post(`${API_URL}/restore/${id}`, {}, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};

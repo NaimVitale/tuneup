@@ -59,9 +59,13 @@ export default function DataTable({ columns, data, actions }) {
                       <button
                         key={i}
                         onClick={() => action.onClick(item)}
-                        className={`ml-2 px-2 py-2 rounded-lg ${action.className}`}
+                        className={`ml-2 px-2 py-2 rounded-lg ${
+                          typeof action.className === "function"
+                            ? action.className(item)
+                            : action.className
+                        }`}
                       >
-                        {action.icon}
+                        {typeof action.icon === "function" ? action.icon(item) : action.icon}
                       </button>
                     ))}
                   </td>
