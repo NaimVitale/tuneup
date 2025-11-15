@@ -2,16 +2,18 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
   Param,
   Body,
   ParseIntPipe,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { GeneroService } from './genero.service';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { CreateGeneroDto } from './dto/create-genero.dto';
+import { UpdateGeneroDto } from './dto/update-genero.dto';
 
 @Controller('generos')
 export class GeneroController {
@@ -29,26 +31,46 @@ export class GeneroController {
     return this.generoService.findAll();
   }
 
+  @UseGuards(JwtRolesGuard)
   @Get(':id')
+  @Roles('admin')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.generoService.findOne(id);
   }
 
+  // Create
+  @UseGuards(JwtRolesGuard)
   @Post()
-  create(@Body() body: { nombre: string; descripcion: string }) {
-    return this.generoService.create(body);
+  @Roles('admin')
+  create(@Body() createGeneroDto: CreateGeneroDto) {
+    return this.generoService.create(createGeneroDto);
   }
 
-  @Put(':id')
+  // Update
+  @UseGuards(JwtRolesGuard)
+  @Patch(':id')
+  @Roles('admin')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: Partial<{ nombre: string; descripcion: string }>,
+    @Body() updateGeneroDto: UpdateGeneroDto,
   ) {
-    return this.generoService.update(id, body);
+    return this.generoService.update(id, updateGeneroDto);
   }
 
+  // Soft Delete
+  @UseGuards(JwtRolesGuard)
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.generoService.remove(id);
+  @Roles('admin')
+  delete(@Param('id') id: number) {
+    return this.generoService.softDelete(id);
   }
+
+  // Restore
+  @UseGuards(JwtRolesGuard)
+  @Post('restore/:id')
+  @Roles('admin')
+  restore(@Param('id') id: number) {
+    return this.generoService.restore(id);
+  }
+
 }

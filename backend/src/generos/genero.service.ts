@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { Genero } from './entities/genero.entity';
+import { CreateGeneroDto } from './dto/create-genero.dto';
+import { UpdateGeneroDto } from './dto/update-genero.dto';
 
 @Injectable()
 export class GeneroService {
@@ -13,6 +15,7 @@ export class GeneroService {
   findAllPublic() {
     return this.generoRepository.find({
       select: ['id', 'nombre'],
+      where: { deleted_at: IsNull() },
     });
   }
 
@@ -24,23 +27,45 @@ export class GeneroService {
     return this.generoRepository.findOne({ where: { id } });
   }
 
-  async create(data: Partial<Genero>) {
-    const genero = this.generoRepository.create(data);
-    return await this.generoRepository.save(genero);
-  }
-
-  async update(id: number, data: Partial<Genero>) {
-    const genero = await this.findOne(id);
-    if (!genero) throw new NotFoundException('Género no encontrado');
-
-    Object.assign(genero, data);
+  // Crear género
+  async create(createGeneroDto: CreateGeneroDto) {
+    const genero = this.generoRepository.create(createGeneroDto);
     return this.generoRepository.save(genero);
   }
 
-  async remove(id: number) {
+  // Actualizar género
+  async update(id: number, updateGeneroDto: UpdateGeneroDto) {
     const genero = await this.findOne(id);
-    if (!genero) throw new NotFoundException('Género no encontrado');
 
-    return this.generoRepository.remove(genero);
+    if (!genero) {
+      throw new NotFoundException('Género no encontrado');
+    }
+
+    Object.assign(genero, updateGeneroDto);
+    return this.generoRepository.save(genero);
+  }
+
+  // Soft delete
+  async softDelete(id: number) {
+    const genero = await this.findOne(id);
+
+    if (!genero) {
+      throw new NotFoundException('Género no encontrado');
+    }
+
+    genero.deleted_at = new Date();
+    return this.generoRepository.save(genero);
+  }
+
+  // Restaurar soft delete (opcional)
+  async restore(id: number) {
+    const genero = await this.findOne(id);
+
+    if (!genero) {
+      throw new NotFoundException('Género no encontrado');
+    }
+
+    genero.deleted_at = null;
+    return this.generoRepository.save(genero);
   }
 }

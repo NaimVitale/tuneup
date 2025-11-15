@@ -12,4 +12,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
         @Column({ type: 'varchar', length: 200 })
         descripcion: string;
 
+        @Column({ type: 'datetime', nullable: true })
+        deleted_at: Date | null;
+
     }
