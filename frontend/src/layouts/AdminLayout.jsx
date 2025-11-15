@@ -18,7 +18,7 @@ export default function AdminLayout(){
             <div className={isMobile ? "w-full" : ""}>
                 <HeaderAdmin></HeaderAdmin>
             </div>
-            <div className="w-full bg-gradient-to-r from-[#D946EF]/70 via-[#A21CAF]/50 to-[#7C3AED]/40 flex justify-center lg:items-center py-10 h-[100dvh] lg:h-auto">
+            <div className="w-full bg-gradient-to-r from-[#D946EF]/70 via-[#A21CAF]/50 to-[#7C3AED]/40 flex justify-center lg:items-center py-10 h-min-[100dvh] lg:h-auto">
                 <Outlet></Outlet>
             </div>
         </div>

@@ -12,6 +12,7 @@ const ProfileInfoPage = React.lazy(() => import('./pages/ProfilePageInfo'));
 const EntradasProfilePage = React.lazy(() => import('./pages/EntradasPage'));
 const PublicLayout = React.lazy(() => import('./layouts/PublicLayout'));
 const AdminLayout = React.lazy(() => import('./layouts/AdminLayout'));
+const AdminDashboardPage = React.lazy(() => import('./pages/AdminPages/AdminDashboardPage'))
 const AdminConcertsPage = React.lazy(() => import('./pages/AdminPages/AdminConcertsPage'));
 const AdminCompraPage = React.lazy(() => import('./pages/AdminPages/AdminCompraPage'))
 const ArtistPage = React.lazy(() => import('./pages/ArtistPage'));
@@ -44,7 +45,8 @@ export default function AppRoutes() {
             </Route>
         </Route>
 
-        <Route path='/admin/dashboard' element={<AdminLayout />}>
+        <Route path='/admin/dashboard' element={<AdminLayout/>}>
+            <Route path='' element={<AdminDashboardPage/>}/>
             <Route path='conciertos' element={<AdminConcertsPage />} />
             <Route path='artistas' element={<AdminArtistPage />} />
             <Route path='recintos' element={<AdminPremisesPage />} />

@@ -42,3 +42,9 @@ export async function irACheckout(token, items, id_usuario) {
   window.location.href = url;
 }
 
+
+export async function getGananciasMensuales(){
+  const res = await axios.get(`${import.meta.env.VITE_API_URL}/stripe/ganancias-mensuales`);
+  return res.data.total;
+};
+

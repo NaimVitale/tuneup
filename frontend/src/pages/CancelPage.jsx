@@ -42,15 +42,7 @@ export default function CancelPage() {
               </div>
 
               {/* Acciones principales */}
-              <div className="space-y-3">
-                <a 
-                  href="/carrito"
-                  className="flex items-center justify-center gap-3 w-full bg-[#C122ED] hover:bg-[#a01bc7] text-white font-bold py-4 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
-                >
-                  <RefreshCw size={20} />
-                  Intentar de nuevo
-                </a>
-                
+              <div className="space-y-3">             
                 <a 
                   href="/conciertos"
                   className="flex items-center justify-center gap-3 w-full bg-white border-2 border-[#C122ED] text-[#C122ED] hover:bg-[#f3e0ff] font-semibold py-4 rounded-full transition-all"
@@ -66,18 +58,6 @@ export default function CancelPage() {
               <h2 className="text-2xl font-bold mb-6">¿Necesitas ayuda?</h2>
               
               <div className="space-y-6 mb-8">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20">
-                  <h3 className="font-semibold mb-2 flex items-center gap-2">
-                    <MessageCircle size={20} />
-                    Chat en vivo
-                  </h3>
-                  <p className="text-sm text-white/90 mb-3">
-                    Nuestro equipo está disponible 24/7 para ayudarte
-                  </p>
-                  <button className="w-full bg-white text-[#C122ED] hover:bg-[#f3e0ff] hover:cursor-pointer hover:text-[#9333EA] font-semibold py-3 rounded-full transition-all">
-                    Iniciar chat
-                  </button>
-                </div>
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
