@@ -1,5 +1,6 @@
 import { useGetArtistAdmin } from "./artist/useGetArtistAdmin";
 import { useGetConcertPrivate } from "./concerts/useGetConcertPrivate";
+import { useGetGenero } from "./genero/useGetGenero";
 import { useGetRecintoAdmin } from "./recintos/useGetRecintoAdmin";
 
 export function useAdminResource(resource, slug) {
@@ -28,6 +29,14 @@ export function useAdminResource(resource, slug) {
       isLoading = conciertoQuery.isLoading;
       isError = conciertoQuery.isError;
       break;
+
+    case "generos":
+      const generoQuery = useGetGenero(slug, { enabled: !!slug });
+      data = generoQuery.data;
+      isLoading = generoQuery.isLoading;
+      isError = generoQuery.isError;
+      break;
+
 
     default:
       break;

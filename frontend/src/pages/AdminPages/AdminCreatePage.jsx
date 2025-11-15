@@ -1,8 +1,8 @@
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useGetArtist } from "../../hooks/artist/useGetArtist";
 import ArtistCreateForm from "../../components/AdminForms/Create/ArtistCreateForm";
 import RecintoCreateForm from "../../components/AdminForms/Create/RecintoCreateForm";
 import ConcertCreateForm from "../../components/AdminForms/Create/ConcertCreateForm";
+import GeneroCreateForm from "../../components/AdminForms/Create/GeneroCreateForm";
 
 export default function AdminCreatePage() {
     const VALID_RESOURCES = ["artistas", "conciertos", "generos", "recintos", "usuarios", "entradas"];
@@ -23,6 +23,7 @@ export default function AdminCreatePage() {
             {resource === "artistas" && <ArtistCreateForm/>}
             {resource === "recintos" && <RecintoCreateForm/>}
             {resource === "conciertos" && <ConcertCreateForm/>}
+            {resource === "generos" && <GeneroCreateForm/>}
           </div>
         </div>
     );

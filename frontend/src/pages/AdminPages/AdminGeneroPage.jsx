@@ -1,6 +1,6 @@
 import { Pencil, Plus, SearchIcon, Trash } from "lucide-react";
 import DataTable from "../../components/DataTable";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetGeneros } from "../../hooks/genero/useGetGeneros"
 
 export default function AdminGeneroPage() {
@@ -40,10 +40,10 @@ export default function AdminGeneroPage() {
               />
               <SearchIcon size={20} className="w-6 h-6 absolute right-3 top-1/2 transform -translate-y-1/2" />
             </div>
-            <button className="flex gap-2 items-center justify-center bg-green-600 hover:bg-green-700 text-white font-semibold px-2 py-2 rounded-3xl shadow-md transition-all duration-200 w-[40%]">
+            <Link to={'crear'} className="flex gap-2 items-center justify-center bg-green-600 hover:bg-green-700 text-white font-semibold px-2 py-2 rounded-3xl shadow-md transition-all duration-200 w-[40%]">
               <Plus size={24} />
               Crear genero
-            </button>
+            </Link>
           </div>
         </div>
         {<DataTable columns={columns} data={artistas} actions={actions} />}

@@ -5,6 +5,7 @@ import ConcertEditForm from "../../components/AdminForms/Update/ConcertEditForm"
 import RecintoEditForm from "../../components/AdminForms/Update/RecintoEditForm";
 import { useGetArtistAdmin } from "../../hooks/artist/useGetArtistAdmin";
 import { useAdminResource } from "../../hooks/useAdminResource";
+import GeneroEditForm from "../../components/AdminForms/Update/GeneroEditForm";
 
 export default function AdminEditPage() {
     const VALID_RESOURCES = ["artistas", "conciertos", "generos", "recintos", "usuarios", "entradas"];
@@ -27,6 +28,7 @@ export default function AdminEditPage() {
             {resource === "artistas" && <ArtistEditForm data={data} />}
             {resource === "conciertos" && <ConcertEditForm data={data} />}
             {resource === "recintos" && <RecintoEditForm data={data} />}
+            {resource === "generos" && <GeneroEditForm data={data} />}
           </div>
         </div>
     );

@@ -1,15 +1,17 @@
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputForm from "../../InputForm";
-import {useUpdateGenero} from "../../../hooks/genero/useUpdateGenero";
+import { useCreateGenero } from "../../../hooks/genero/useCreateGenero";
 
-export default function GeneroEditForm({ data }) {
-    const { slug } = useParams();
-
-    const { formData, updateField, handleSubmit, loading, errors} = useUpdateGenero(data);
+export default function GeneroCreateForm() {
+    const navigate = useNavigate();
+    const { formData, updateField, handleSubmit, loading, errors} = useCreateGenero();
     
     const onSubmit = async (e) => {
         e.preventDefault();
-        await handleSubmit();
+        const response = await handleSubmit();
+        if (response) {
+        navigate("/admin/dashboard/generos"); // redirige después de crear
+        }
     };
 
     return(
@@ -17,14 +19,14 @@ export default function GeneroEditForm({ data }) {
                 <form onSubmit={onSubmit} className="w-[95%] min-h-[40vh] justify-start">
                     <div className="flex flex-col gap-6">
                         <InputForm 
-                            label="Nombre" 
+                            label="Nombre*" 
                             id="nombre" 
                             value={formData.nombre} 
                             onChange={(v) => updateField(v, "nombre")} 
                             error={errors.nombre} 
                         />
                         <InputForm 
-                            label="Descripción" 
+                            label="Descripción*" 
                             id="descripcion" 
                             type="textarea" 
                             value={formData.descripcion} 

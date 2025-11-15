@@ -25,7 +25,7 @@ export default function InputForm({ label, type = "text", id, value, onChange, e
           ref={inputRef}
           id={id}
           placeholder={label}
-          className={`peer w-full border rounded-full px-5 py-3 placeholder-transparent focus:outline-none focus:ring-2 z-2 ${error ? "border-red-500 focus:ring-red-500" : "focus:ring-[#C122ED]"}`}
+          className={`peer w-full border rounded-4xl px-5 py-3 placeholder-transparent focus:outline-none focus:ring-2 z-2 resize-none ${error ? "border-red-500 focus:ring-red-500" : "focus:ring-[#C122ED]"}`}
           value={value}
           onChange={(e) => {
             onChange(e);
