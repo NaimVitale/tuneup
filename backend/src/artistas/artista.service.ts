@@ -99,37 +99,41 @@ export class ArtistaService {
 
   async findBySlugWithConciertos(slug: string) {
     const results = await this.artistaRepo
-      .createQueryBuilder('artista')
-      .leftJoin('artista.conciertos', 'concierto')
-      .leftJoin('concierto.recinto', 'recinto')
-      .leftJoin('recinto.ciudad', 'ciudad')
-      .leftJoin('concierto.artista', 'artista_concierto')
-      .leftJoin('concierto.preciosPorSeccion', 'psc')
-      .where('artista.slug = :slug', { slug })
-      .andWhere('concierto.estado != :finalizado', { finalizado: EstadoConcierto.FINALIZADO })
-      .select([
-        'artista.id',
-        'artista.nombre',
-        'artista.slug',
-        'artista.img_card',
-        'artista.img_hero',
-        'artista.images',
-        'artista.descripcion',
-        'concierto.id',
-        'concierto.fecha',
-        'MIN(psc.precio) AS precio_minimo',
-        'recinto.id',
-        'recinto.nombre',
-        'recinto.ubicacion',
-        'ciudad.id',
-        'ciudad.nombre',
-        'artista_concierto.id',
-        'artista_concierto.nombre',
-        'artista_concierto.slug',
-        'artista_concierto.img_card',
-      ])
-      .groupBy('artista.id, concierto.id, recinto.id, ciudad.id, artista_concierto.id')
-      .getRawMany();
+    .createQueryBuilder('artista')
+    .leftJoin(
+      'artista.conciertos',
+      'concierto',
+      'concierto.estado != :finalizado',
+      { finalizado: EstadoConcierto.FINALIZADO }
+    )
+    .leftJoin('concierto.recinto', 'recinto')
+    .leftJoin('recinto.ciudad', 'ciudad')
+    .leftJoin('concierto.artista', 'artista_concierto')
+    .leftJoin('concierto.preciosPorSeccion', 'psc')
+    .where('artista.slug = :slug', { slug })
+    .select([
+      'artista.id',
+      'artista.nombre',
+      'artista.slug',
+      'artista.img_card',
+      'artista.img_hero',
+      'artista.images',
+      'artista.descripcion',
+      'concierto.id',
+      'concierto.fecha',
+      'MIN(psc.precio) AS precio_minimo',
+      'recinto.id',
+      'recinto.nombre',
+      'recinto.ubicacion',
+      'ciudad.id',
+      'ciudad.nombre',
+      'artista_concierto.id',
+      'artista_concierto.nombre',
+      'artista_concierto.slug',
+      'artista_concierto.img_card',
+    ])
+    .groupBy('artista.id, concierto.id, recinto.id, ciudad.id, artista_concierto.id')
+    .getRawMany();
 
     if (!results.length) return null;
 
