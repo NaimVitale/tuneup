@@ -29,7 +29,7 @@ export class AuthService {
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       secure: true, // true en producción HTTPS
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000, // 1 día
       path: '/',
     });
