@@ -1,12 +1,18 @@
-import { Pencil, Plus, SearchIcon, Trash } from "lucide-react";
-import { dateFormatWithTime } from "../../utils/dateFormat";
+import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import DataTable from "../../components/DataTable";
 import Spinner from "../../components/Spinner";
-import { data, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetRecintos } from "../../hooks/recintos/useGetRecintos";
+import { useConfirmPopup } from "../../hooks/useConfirmPopup";
+import { useSoftDeleteRecinto } from "../../hooks/recintos/useSoftDeleteRecinto";
+import ConfirmPopup from "../../components/ConfirmPopup";
+import { useRestoreRecinto } from "../../hooks/recintos/useRestoreRecinto";
 
 export default function AdminPremisesPage() {
   const navigate = useNavigate()
+  const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
+  const { handleSoftDelete } = useSoftDeleteRecinto();
+  const { handleRestore } = useRestoreRecinto();
   const columns = [
     { key: "index", label: "#", render: (c) => c.id },
     { key: "nombre", label: "Nombre", render: (c) => c.nombre },
@@ -21,9 +27,34 @@ export default function AdminPremisesPage() {
       className: "bg-blue-500 text-white hover:bg-blue-600 hover:cursor-pointer",
     },
     {
-      icon: <Trash size={18} />,
-      onClick: (c) => console.log("Eliminar", c.id),
-      className: "bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer",
+      icon: (c) => (c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />),
+      onClick: (c) => {
+        if (c.deleted_at) {
+          // Abrir popup para restaurar
+          openConfirm(
+            "¿Está seguro que quiere restaurar este recinto? Se restaurarán también los conciertos asociados.",
+            async () => {
+              const success = await handleRestore(c.id);
+              if (success) console.log("Restaurado", c.id);
+              closeConfirm();
+            }
+          );
+        } else {
+          // Abrir popup para eliminar
+          openConfirm(
+            "¿Está seguro que quiere eliminar este recinto? Se eliminarán también los conciertos asociados.",
+            async () => {
+              const success = await handleSoftDelete(c.id);
+              if (success) console.log("Eliminado", c.id);
+              closeConfirm();
+            }
+          );
+        }
+      },
+      className: (c) =>
+        c.deleted_at
+          ? "bg-yellow-500 text-white hover:bg-yellow-600"
+          : "bg-red-500 text-white hover:bg-red-600",
     },
   ];
 
@@ -53,6 +84,12 @@ export default function AdminPremisesPage() {
           </div>
         </div>
         <DataTable columns={columns} data={recintos} actions={actions} />;
+        <ConfirmPopup
+          isOpen={isOpen}
+          onClose={closeConfirm}
+          onConfirm={onConfirm}
+          message={message}
+        />
       </div>
     </div>
   );

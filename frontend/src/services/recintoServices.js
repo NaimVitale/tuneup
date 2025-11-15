@@ -70,3 +70,19 @@ export const UpdateRecinto = async(token, id, recintoData) => {
     throw error.response?.data || error;
   }
 }
+
+//Softdelete
+export const softDeleteRecinto = async (id, token) => {
+  const response = await axios.delete(`${API_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+//Restore delete
+export const restoreRecinto = async (id, token) => {
+  const response = await axios.post(`${API_URL}/restore/${id}`, {}, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};

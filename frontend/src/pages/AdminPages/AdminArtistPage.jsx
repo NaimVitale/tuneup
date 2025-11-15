@@ -4,9 +4,12 @@ import DataTable from "../../components/DataTable";
 import { Link, useNavigate } from "react-router-dom";
 import { useSoftDeleteArtist } from "../../hooks/artist/useSoftDeleteArtist";
 import { useRestoreArtist } from "../../hooks/artist/useRestoreArtist";
+import { useConfirmPopup } from "../../hooks/useConfirmPopup";
+import ConfirmPopup from "../../components/ConfirmPopup";
 
 export default function AdminArtistPage() {
   const navigate = useNavigate()
+  const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
   const { handleSoftDelete } = useSoftDeleteArtist();
   const { handleRestore } = useRestoreArtist();
   const columns = [
@@ -26,15 +29,28 @@ export default function AdminArtistPage() {
       className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {
-      icon: (c) =>
-        c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />,
-      onClick: async (c) => {
+      icon: (c) => (c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />),
+      onClick: (c) => {
         if (c.deleted_at) {
-          const success = await handleRestore(c.id);
-          if (success) console.log("Restaurado", c.id);
+          // Abrir popup para restaurar
+          openConfirm(
+            "¿Está seguro que quiere restaurar este artista? Se restaurarán también los conciertos asociados.",
+            async () => {
+              const success = await handleRestore(c.id);
+              if (success) console.log("Restaurado", c.id);
+              closeConfirm();
+            }
+          );
         } else {
-          const success = await handleSoftDelete(c.id);
-          if (success) console.log("Eliminado", c.id);
+          // Abrir popup para eliminar
+          openConfirm(
+            "¿Está seguro que quiere eliminar este artista? Se eliminarán también los conciertos asociados.",
+            async () => {
+              const success = await handleSoftDelete(c.id);
+              if (success) console.log("Eliminado", c.id);
+              closeConfirm();
+            }
+          );
         }
       },
       className: (c) =>
@@ -67,6 +83,12 @@ export default function AdminArtistPage() {
           </div>
         </div>
         {<DataTable columns={columns} data={artistas} actions={actions} />}
+        <ConfirmPopup
+          isOpen={isOpen}
+          onClose={closeConfirm}
+          onConfirm={onConfirm}
+          message={message}
+        />
       </div>
     </div>
   );

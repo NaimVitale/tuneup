@@ -4,15 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGetGeneros } from "../../hooks/genero/useGetGeneros"
 import { useRestoreGenero } from "../../hooks/genero/useRestoreGenero";
 import { useSoftDeleteGenero } from "../../hooks/genero/useSoftDeleteGenero";
+import { useConfirmPopup } from "../../hooks/useConfirmPopup";
+import ConfirmPopup from "../../components/ConfirmPopup";
 
 export default function AdminGeneroPage() {
   const navigate = useNavigate()
+  const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
   const { handleSoftDelete } = useSoftDeleteGenero();
   const { handleRestore } = useRestoreGenero();
   const columns = [
     { key: "index", label: "#", render: (c, i) => i},
     { key: "nombre", label: "Nombre", render: (c) => c.nombre },
-    { key: "descripcion", label: "Descripción", render: (c) => c.slug },
+    { key: "descripcion", label: "Descripción", render: (c) => c.descripcion },
   ];
 
   const actions = [
@@ -22,15 +25,28 @@ export default function AdminGeneroPage() {
       className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {
-      icon: (c) =>
-        c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />,
-      onClick: async (c) => {
+      icon: (c) => (c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />),
+      onClick: (c) => {
         if (c.deleted_at) {
-          const success = await handleRestore(c.id);
-          if (success) console.log("Restaurado", c.id);
+          // Abrir popup para restaurar
+          openConfirm(
+            "¿Está seguro que quiere restaurar este genero?",
+            async () => {
+              const success = await handleRestore(c.id);
+              if (success) console.log("Restaurado", c.id);
+              closeConfirm();
+            }
+          );
         } else {
-          const success = await handleSoftDelete(c.id);
-          if (success) console.log("Eliminado", c.id);
+          // Abrir popup para eliminar
+          openConfirm(
+            "¿Está seguro que quiere eliminar este genero?",
+            async () => {
+              const success = await handleSoftDelete(c.id);
+              if (success) console.log("Eliminado", c.id);
+              closeConfirm();
+            }
+          );
         }
       },
       className: (c) =>
@@ -63,6 +79,12 @@ export default function AdminGeneroPage() {
           </div>
         </div>
         {<DataTable columns={columns} data={artistas} actions={actions} />}
+        <ConfirmPopup
+          isOpen={isOpen}
+          onClose={closeConfirm}
+          onConfirm={onConfirm}
+          message={message}
+        />
       </div>
     </div>
   );
