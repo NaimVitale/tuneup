@@ -13,15 +13,18 @@ export default function ArtistCreateForm() {
     const { form, handleChange, handleFileChange, handleSelectChange, handleSubmit, newSlug, success, errors} = useCreateArtist()
     const { data: generos, isLoading: isLoadingGeneros } = useGetGenerosPublic();
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (newSlug && newSlug !== slug) {
             navigate(`../artistas/${newSlug}/editar`);
         }
-    }, [newSlug, navigate, slug]);
+    }, [newSlug, navigate, slug]);*/
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        await handleSubmit();
+        const response = await handleSubmit();
+        if(response){
+            navigate(`/admin/dashboard/artistas`)
+        }
     };
 
     return(
