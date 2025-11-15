@@ -147,34 +147,7 @@ export class ConciertosService {
     return concierto;
   }
 
-  async findAll( estado?: EstadoConcierto, filtroGenero?: string, fechaInicio?: string ) {
-    let estadoParam: EstadoConcierto | undefined;
-
-    // Validamos que solo se pase un estado válido
-    if (estado === EstadoConcierto.ACTIVO || estado === EstadoConcierto.PROXIMAMENTE) {
-      estadoParam = estado;
-    }
-    const ahora = new Date();
-
-    // 1️⃣ Proximamente → Activo
-    await this.conciertoRepository
-      .createQueryBuilder()
-      .update()
-      .set({ estado: EstadoConcierto.ACTIVO })
-      .where('estado = :estado', { estado: EstadoConcierto.PROXIMAMENTE })
-      .andWhere('(fecha_venta <= :ahora OR fecha_venta IS NULL)', { ahora })
-      .execute();
-
-    // 2️⃣ Activo → Finalizado
-    await this.conciertoRepository
-      .createQueryBuilder()
-      .update()
-      .set({ estado: EstadoConcierto.FINALIZADO })
-      .where('estado = :estado', { estado: EstadoConcierto.ACTIVO })
-      .andWhere('fecha < :ahora', { ahora })
-      .execute();
-
-    // 3️⃣ Consulta principal
+  async findAllAdmin(estado?: EstadoConcierto) {
     const query = this.conciertoRepository
       .createQueryBuilder('concierto')
       .leftJoinAndSelect('concierto.artista', 'artista')
@@ -203,30 +176,109 @@ export class ConciertosService {
       .groupBy('concierto.id')
       .addGroupBy('artista.id')
       .addGroupBy('recinto.id')
-      .addGroupBy('ciudad.id')
+      .addGroupBy('recinto.ciudad')
       .addGroupBy('genero.id')
-      .cache(true);
+      .orderBy('concierto.fecha', 'ASC');
 
-    // Filtrado por estado
     if (estado) {
       query.andWhere('concierto.estado = :estado', { estado });
-    } else {
-      query.andWhere('concierto.estado IN (:...estados)', { 
-        estados: [EstadoConcierto.ACTIVO, EstadoConcierto.PROXIMAMENTE] 
-      });
     }
 
-    // Filtro por género
+    // Ejecutamos la query
+    const { entities, raw } = await query.getRawAndEntities();
+
+    // Mapear precio_minimo de raw a cada entidad
+    const data = entities.map((concierto, i) => ({
+      ...concierto,
+      precio_minimo: raw[i]['precio_minimo'] ?? null,
+    }));
+
+    return data;
+  }
+
+  async findAll(
+    estado?: EstadoConcierto,
+    filtroGenero?: string,
+    fechaInicio?: string,
+    page = 1,
+    limit = 10,
+  ) {
+    let estadoParam: EstadoConcierto | undefined;
+    if (estado === EstadoConcierto.ACTIVO || estado === EstadoConcierto.PROXIMAMENTE) {
+      estadoParam = estado;
+    }
+
+    const ahora = new Date();
+    await this.actualizarEstados(ahora);
+
+    const query = this.conciertoRepository
+      .createQueryBuilder('concierto')
+      .leftJoinAndSelect('concierto.artista', 'artista')
+      .leftJoinAndSelect('artista.genero', 'genero')
+      .leftJoinAndSelect('concierto.recinto', 'recinto')
+      .leftJoinAndSelect('recinto.ciudad', 'ciudad')
+      .leftJoin('concierto.preciosPorSeccion', 'psc')
+      .select([
+        'concierto.id',
+        'concierto.fecha',
+        'concierto.estado',
+        'concierto.fecha_venta',
+        'artista.id',
+        'artista.nombre',
+        'artista.img_card',
+        'artista.slug',
+        'recinto.id',
+        'recinto.nombre',
+        'recinto.ubicacion',
+        'ciudad.id',
+        'ciudad.nombre',
+        'genero.id',
+        'genero.nombre',
+      ])
+      .addSelect('MIN(psc.precio)', 'precio_minimo')
+      .groupBy('concierto.id')
+      .addGroupBy('artista.id')
+      .addGroupBy('recinto.id')
+      .addGroupBy('recinto.ciudad')
+      .addGroupBy('genero.id')
+      .orderBy('concierto.fecha', 'ASC');
+
+    if (estadoParam) {
+      query.andWhere('concierto.estado = :estado', { estado: estadoParam });
+    }
+
     if (filtroGenero) {
       query.andWhere('LOWER(genero.nombre) = LOWER(:nombre)', { nombre: filtroGenero });
     }
 
-    // Filtro a partir de fecha
     if (fechaInicio) {
       query.andWhere('concierto.fecha >= :inicio', { inicio: fechaInicio });
     }
 
-    return query.getRawMany();
+    // Paginación
+    query.skip((page - 1) * limit).take(limit);
+
+    // Ejecutar query: getRawAndEntities devuelve raw SQL + entidades mapeadas
+    const { entities, raw } = await query.getRawAndEntities();
+
+    // Mapear precio_minimo de raw a cada entidad
+    const data = entities.map((concierto, i) => ({
+      ...concierto,
+      precio_minimo: raw[i]['precio_minimo'] ?? null,
+    }));
+
+    // Contar total sin paginación para meta
+    const total = await query.getCount();
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findTopActivos() {
@@ -259,16 +311,45 @@ export class ConciertosService {
     // Actualizar estados
     await this.actualizarEstados(ahora);
 
-    // Consulta: 5 próximos conciertos por novedad
-    return this.conciertoRepository
+    // Consulta completa con joins y precio mínimo
+    const query = this.conciertoRepository
       .createQueryBuilder('concierto')
       .leftJoinAndSelect('concierto.artista', 'artista')
+      .leftJoinAndSelect('artista.genero', 'genero')
       .leftJoinAndSelect('concierto.recinto', 'recinto')
+      .leftJoinAndSelect('recinto.ciudad', 'ciudad')
+      .leftJoin('concierto.preciosPorSeccion', 'psc')
+      .select([
+        'concierto.id',
+        'concierto.fecha',
+        'concierto.estado',
+        'concierto.fecha_venta',
+        'artista.id',
+        'artista.nombre',
+        'artista.img_card',
+        'artista.slug',
+        'recinto.id',
+        'recinto.nombre',
+        'recinto.ubicacion',
+        'ciudad.id',
+        'ciudad.nombre',
+        'genero.id',
+        'genero.nombre',
+      ])
+      .addSelect('MIN(psc.precio)', 'precio_minimo')
       .where('concierto.estado = :proximamente', { proximamente: EstadoConcierto.PROXIMAMENTE })
-      .orderBy('concierto.fecha', 'DESC') // por novedad
+      .groupBy('concierto.id')
+      .addGroupBy('artista.id')
+      .addGroupBy('recinto.id')
+      .addGroupBy('ciudad.id')
+      .addGroupBy('genero.id')
+      .orderBy('concierto.fecha', 'DESC')
       .limit(5)
-      .getMany();
+      .cache(true);
+
+    return query.getRawMany();
   }
+
 
 
   async findOnePublic(id: number) {

@@ -22,9 +22,21 @@ export class ConciertosController {
   @Query('estado') estado?: EstadoConcierto,
   @Query('genero') genero?: string,
   @Query('fechaInicio') fechaInicio?: string,
+  @Query('page') page?: number,
+  @Query('limit') limit?: number,
   ) {
-    return this.conciertosService.findAll(estado, genero, fechaInicio);
+    return this.conciertosService.findAll(estado, genero, fechaInicio, page, limit,);
   }
+
+  @UseGuards(JwtRolesGuard)
+  @Get('')
+  @Roles('admin')
+  findAllAdmin(
+  @Query('estado') estado?: EstadoConcierto,
+  ) {
+    return this.conciertosService.findAllAdmin();
+  }
+
 
   @Get('home/activos')
   getTopActivos() {
