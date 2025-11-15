@@ -1,10 +1,14 @@
-import { Pencil, Plus, SearchIcon, Trash } from "lucide-react";
+import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import { useGetArtists } from "../../hooks/artist/useGetArtists";
 import DataTable from "../../components/DataTable";
 import { Link, useNavigate } from "react-router-dom";
+import { useSoftDeleteArtist } from "../../hooks/artist/useSoftDeleteArtist";
+import { useRestoreArtist } from "../../hooks/artist/useRestoreArtist";
 
 export default function AdminArtistPage() {
   const navigate = useNavigate()
+  const { handleSoftDelete } = useSoftDeleteArtist();
+  const { handleRestore } = useRestoreArtist();
   const columns = [
     { key: "index", label: "#", render: (c, i) => i},
     { key: "artista", label: "Artista", render: (c) => c.nombre },
@@ -18,13 +22,25 @@ export default function AdminArtistPage() {
   const actions = [
     {
       icon: <Pencil size={18} />,
-      onClick: (c) => navigate(`${c.slug}/editar`),
+      onClick: (c) => navigate(`${c.id}/editar`),
       className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {
-      icon: <Trash size={18} />,
-      onClick: (c) => console.log("Eliminar", c.id),
-      className: "bg-red-500 text-white hover:bg-red-600",
+      icon: (c) =>
+        c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />,
+      onClick: async (c) => {
+        if (c.deleted_at) {
+          const success = await handleRestore(c.id);
+          if (success) console.log("Restaurado", c.id);
+        } else {
+          const success = await handleSoftDelete(c.id);
+          if (success) console.log("Eliminado", c.id);
+        }
+      },
+      className: (c) =>
+        c.deleted_at
+          ? "bg-yellow-500 text-white hover:bg-yellow-600"
+          : "bg-red-500 text-white hover:bg-red-600",
     },
   ];
 

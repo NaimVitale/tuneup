@@ -1,4 +1,4 @@
-import { Pencil, Plus, SearchIcon, Trash } from "lucide-react";
+import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import { useGetConciertos } from "../../hooks/concerts/useGetConcerts";
 import { dateFormatWithTime } from "../../utils/dateFormat";
 import DataTable from "../../components/DataTable";
@@ -10,6 +10,8 @@ import { useGetConcertsAdmin } from "../../hooks/concerts/useGetConcertsAdmin";
 export default function AdminConcertsPage() {
   const navigate = useNavigate()
   const { data: conciertos, isLoading, isError } = useGetConcertsAdmin();
+
+  console.log(conciertos)
 
   const columns = [
     { key: "index", label: "#", render: (c) => c.id },
@@ -23,13 +25,25 @@ export default function AdminConcertsPage() {
   const actions = [
     {
       icon: <Pencil size={18} />,
-      onClick: (c) => navigate(`${c.concierto_id}/editar`),
-      className: "bg-blue-500 text-white hover:bg-blue-600 hover:cursor-pointer",
+      onClick: (c) => navigate(`${c.id}/editar`),
+      className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {
-      icon: <Trash size={18} />,
-      onClick: (c) => console.log("Eliminar", c.id),
-      className: "bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer",
+      icon: (c) =>
+        c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />,
+      onClick: async (c) => {
+        if (c.deleted_at) {
+          const success = await handleRestore(c.id);
+          if (success) console.log("Restaurado", c.id);
+        } else {
+          const success = await handleSoftDelete(c.id);
+          if (success) console.log("Eliminado", c.id);
+        }
+      },
+      className: (c) =>
+        c.deleted_at
+          ? "bg-yellow-500 text-white hover:bg-yellow-600"
+          : "bg-red-500 text-white hover:bg-red-600",
     },
   ];
 

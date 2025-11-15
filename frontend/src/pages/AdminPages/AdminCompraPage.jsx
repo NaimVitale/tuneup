@@ -29,8 +29,6 @@ export default function AdminCompraPage() {
 
   const { data: compras, isLoading, isError } = useGetComprasAdmin();
 
-  console.log(compras)
-
   return (
     <div className="w-[90%] h-[80vh]">
       <div className="h-full bg-white rounded-2xl shadow-md flex flex-col">
