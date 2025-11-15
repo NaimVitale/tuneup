@@ -42,8 +42,17 @@ export class RecintosController {
     return this.recintosService.update(+id, updateRecintoDto);
   }
 
+  @UseGuards(JwtRolesGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recintosService.remove(+id);
+  @Roles('admin')
+  softDelete(@Param('id') id: string) {
+    return this.recintosService.softDelete(+id);
+  }
+
+  @UseGuards(JwtRolesGuard)
+  @Post('restore/:id')
+  @Roles('admin')
+  restore(@Param('id') id: string) {
+    return this.recintosService.restore(+id);
   }
 }

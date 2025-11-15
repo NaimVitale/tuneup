@@ -1,7 +1,7 @@
 import { Ciudad } from "src/ciudades/entities/ciudad.entity";
 import { Concierto } from "src/conciertos/entities/concierto.entity";
 import { Seccion } from "src/secciones/entities/seccion.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("recintos")
 export class Recinto {
@@ -31,4 +31,7 @@ export class Recinto {
 
     @OneToMany(() => Seccion, (seccion) => seccion.recinto, { cascade: true, eager: true })
     secciones: Seccion[];
+
+    @DeleteDateColumn({ type: 'timestamp', nullable: true })
+    deleted_at?: Date;
 }

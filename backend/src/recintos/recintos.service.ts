@@ -6,11 +6,14 @@ import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seccion } from 'src/secciones/entities/seccion.entity';
 import { Ciudad } from 'src/ciudades/entities/ciudad.entity';
+import { Concierto } from 'src/conciertos/entities/concierto.entity';
 
 @Injectable()
 export class RecintosService {
   constructor(
     @InjectRepository(Recinto) private repo: Repository<Recinto>,
+
+    @InjectRepository(Concierto) private conciertoRepo: Repository<Concierto>,
   ) {}
 
   async create(dto: CreateRecintoDto) {
@@ -54,6 +57,7 @@ export class RecintosService {
   findAll() {
     return this.repo
       .createQueryBuilder('recinto')
+      .withDeleted()
       .leftJoinAndSelect('recinto.ciudad', 'ciudad')
       .loadRelationCountAndMap('recinto.seccionesCount', 'recinto.secciones')
       .getMany();
@@ -153,9 +157,39 @@ export class RecintosService {
     };
   }
 
+  async softDelete(id: number) {
+    const recinto = await this.repo.findOne({ where: { id }, relations: ['conciertos'] });
+    if (!recinto) throw new NotFoundException('Recinto no encontrado');
 
+    // Soft delete de conciertos asociados usando el repository
+    if (recinto.conciertos?.length) {
+      await Promise.all(
+        recinto.conciertos.map(c => this.conciertoRepo.softRemove(c))
+      );
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} recinto`;
+    await this.repo.softDelete(id);
+
+    return { message: 'Recinto eliminado correctamente', id, conciertos: recinto.conciertos.map(c => c.id) };
+  }
+
+  async restore(id: number) {
+    const recinto = await this.repo.findOne({
+      where: { id },
+      relations: ['conciertos'],
+      withDeleted: true,
+    });
+    if (!recinto) throw new NotFoundException('Recinto no encontrado');
+
+    await this.repo.restore(id);
+
+    // Restaurar conciertos asociados usando el repository
+    if (recinto.conciertos?.length) {
+      await Promise.all(
+        recinto.conciertos.map(c => this.conciertoRepo.restore(c.id))
+      );
+    }
+
+    return { message: 'Recinto restaurado correctamente', id, conciertos: recinto.conciertos.map(c => c.id) };
   }
 }
