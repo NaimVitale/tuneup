@@ -7,7 +7,7 @@ import { ILike, Repository } from 'typeorm';
 import slugify from 'slugify';
 import { UploadService } from 'src/upload/upload.service';
 import { Genero } from 'src/generos/entities/genero.entity';
-import { EstadoConcierto } from 'src/conciertos/entities/concierto.entity';
+import { Concierto, EstadoConcierto } from 'src/conciertos/entities/concierto.entity';
 
 @Injectable()
 export class ArtistaService {
@@ -16,6 +16,8 @@ export class ArtistaService {
       private readonly artistaRepo: Repository<Artista>,
       @InjectRepository(Genero)
       private readonly generoRepo: Repository<Genero>,
+      @InjectRepository(Concierto)
+      private readonly conciertoRepo: Repository<Concierto>,
       private readonly uploadService: UploadService,
     ) {}
   
@@ -81,7 +83,9 @@ export class ArtistaService {
   }
 
   async getAll() {
-    return await this.artistaRepo.find();
+    return await this.artistaRepo.find({
+      withDeleted: true,
+    }); 
   }
 
   async getAllPublic(filtroGenero?: string) {
@@ -230,7 +234,44 @@ export class ArtistaService {
     return await this.artistaRepo.save(artista);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artista`;
+  async remove(id: number) {
+    const artista = await this.artistaRepo.findOne({
+      where: { id },
+      relations: ['conciertos']
+    });
+
+    if (!artista) throw new NotFoundException('Artista no encontrado');
+
+    // Soft delete de conciertos asociados
+    if (artista.conciertos.length > 0) {
+      await this.conciertoRepo.softRemove(artista.conciertos);
+    }
+
+    // Soft delete del artista
+    await this.artistaRepo.softRemove(artista);
+
+    return { message: 'Artista y sus conciertos eliminados (soft delete)' };
+  }
+
+  async restore(id: number) {
+    const artista = await this.artistaRepo.findOne({
+      where: { id },
+      relations: ['conciertos'],
+      withDeleted: true
+    });
+
+    if (!artista) throw new NotFoundException('Artista no encontrado');
+
+    // Restaurar artista
+    await this.artistaRepo.restore(id);
+
+    // Restaurar conciertos
+    if (artista.conciertos.length > 0) {
+      for (const c of artista.conciertos) {
+        await this.conciertoRepo.restore(c.id);
+      }
+    }
+
+    return { message: 'Artista y conciertos restaurados' };
   }
 }

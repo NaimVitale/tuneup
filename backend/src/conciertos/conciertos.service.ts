@@ -150,6 +150,7 @@ export class ConciertosService {
   async findAllAdmin(estado?: EstadoConcierto) {
     const query = this.conciertoRepository
       .createQueryBuilder('concierto')
+      .withDeleted()
       .leftJoinAndSelect('concierto.artista', 'artista')
       .leftJoinAndSelect('artista.genero', 'genero')
       .leftJoinAndSelect('concierto.recinto', 'recinto')
@@ -160,6 +161,7 @@ export class ConciertosService {
         'concierto.fecha',
         'concierto.estado',
         'concierto.fecha_venta',
+        'concierto.deleted_at',
         'artista.id',
         'artista.nombre',
         'artista.img_card',

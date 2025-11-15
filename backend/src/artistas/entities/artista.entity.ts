@@ -1,6 +1,6 @@
 import { Concierto } from "src/conciertos/entities/concierto.entity";
 import { Genero } from "src/generos/entities/genero.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity ('artistas')
     export class Artista {
@@ -34,4 +34,6 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
         @JoinColumn({ name: 'id_genero' })
         genero: Genero;
         
+        @DeleteDateColumn({ type: 'timestamp', nullable: true })
+        deleted_at?: Date;
     }

@@ -59,8 +59,17 @@ export class ArtistaController {
     return this.artistaService.update(slug, dto, files);
   }
 
+  @UseGuards(JwtRolesGuard)
   @Delete(':id')
+  @Roles('admin')
   remove(@Param('id') id: string) {
     return this.artistaService.remove(+id);
+  }
+
+  @UseGuards(JwtRolesGuard)
+  @Patch('restore/:id')
+  @Roles('admin')
+  restore(@Param('id', ParseIntPipe) id: number) {
+    return this.artistaService.restore(id);
   }
 }

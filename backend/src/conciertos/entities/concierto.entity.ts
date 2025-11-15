@@ -2,7 +2,7 @@ import { Artista } from "src/artistas/entities/artista.entity";
 import { Entrada } from "src/entradas/entities/entrada.entity";
 import { PreciosSeccionConcierto } from "src/precios-seccion-concierto/entities/precios-seccion-concierto.entity";
 import { Recinto } from "src/recintos/entities/recinto.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export enum EstadoConcierto {
   PROXIMAMENTE = 'proximamente',
@@ -44,4 +44,7 @@ export enum EstadoConcierto {
 
         @OneToMany(() => Entrada, (entrada) => entrada.concierto)
         entradas: Entrada[];
+
+        @DeleteDateColumn({ type: 'timestamp', nullable: true })
+        deleted_at?: Date;
     }
