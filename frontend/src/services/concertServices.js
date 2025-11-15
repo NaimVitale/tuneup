@@ -80,7 +80,29 @@ export const UpdateConcierto = async(token, id, conciertoData) => {
   }
 }
 
-// Consulta sobre todos los artistas
-export const getConcerts = async() => {
-
+// Consulta sobre todos los conciertos panel admin
+export const getConcertsAdmin = async(token) => {
+  try{
+    const response = await axios.get(`${API_URL}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
 }
+
+export const getConcertsPublic = async ({ estado, genero = '', fechaInicio = '', page = 1, limit }) => {
+  try {
+    const params = { page: Number(page), limit: Number(limit) };
+    if (genero) params.genero = genero;
+    if (fechaInicio) params.fechaInicio = fechaInicio;
+
+    const { data } = await axios.get(`${API_URL}/public?estado=${estado}`, { params });
+    return data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};

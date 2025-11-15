@@ -12,7 +12,6 @@ import { useAuth } from "../context/AuthContext";
 import CheckoutButton from "../components/CheckoutButton";
 
 export default function SingleEventPage() {
-  const VALID_RESOURCES = ["conciertos"];
   const MAX_ENTRADAS_TOTAL = 6;
   const { evento, id } = useParams();
   const location = useLocation();

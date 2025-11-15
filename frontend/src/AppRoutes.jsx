@@ -33,7 +33,7 @@ export default function AppRoutes() {
     <Routes>
         <Route element={<PublicLayout />}>
             <Route path='/' element={<HomePage />} />
-            <Route path=':evento/:slug/:id' element={<SingleEventPage />} />
+            <Route path='/conciertos/:slug/:id' element={<SingleEventPage />} />
             <Route path='/conciertos/:genero?' element={<EventsPage />} />
             <Route path='/artistas/detalle/:slug' element={<SingleArtistPage />} />
             <Route path='/artistas/:genero?' element={<ArtistPage />} />

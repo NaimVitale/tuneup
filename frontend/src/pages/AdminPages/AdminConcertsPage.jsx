@@ -4,16 +4,20 @@ import { dateFormatWithTime } from "../../utils/dateFormat";
 import DataTable from "../../components/DataTable";
 import Spinner from "../../components/Spinner";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useGetConcertsAdmin } from "../../hooks/concerts/useGetConcertsAdmin";
 
 export default function AdminConcertsPage() {
   const navigate = useNavigate()
+  const { data: conciertos, isLoading, isError } = useGetConcertsAdmin();
+
   const columns = [
-    { key: "index", label: "#", render: (c) => c.concierto_id },
-    { key: "artista", label: "Artista", render: (c) => c.artista_nombre },
-    { key: "fecha", label: "Fecha", render: (c) => dateFormatWithTime(c.concierto_fecha) },
+    { key: "index", label: "#", render: (c) => c.id },
+    { key: "artista", label: "Artista", render: (c) => c.artista?.nombre },
+    { key: "fecha", label: "Fecha", render: (c) => dateFormatWithTime(c?.fecha) },
     { key: "precio_min", label: "Precio Minimo", render: (c) => `${c.precio_minimo}€`},
-    { key: "ciudad", label: "Ciudad", render: (c) => c.ciudad_nombre },
-    { key: "recinto", label: "Recinto", render: (c) => c.recinto_nombre },
+    { key: "ciudad", label: "Ciudad", render: (c) => c.recinto?.ciudad?.nombre },
+    { key: "recinto", label: "Recinto", render: (c) => c.recinto?.nombre },
   ];
 
   const actions = [
@@ -28,8 +32,6 @@ export default function AdminConcertsPage() {
       className: "bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer",
     },
   ];
-
-  const { data: conciertos, isLoading, isError } = useGetConciertos({estado:""});
 
   if (isLoading) return <Spinner size={20} color="border-white"/>;
   if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los conciertos</p>

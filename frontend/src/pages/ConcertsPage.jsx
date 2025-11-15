@@ -10,21 +10,31 @@ import { useAuth } from "../context/AuthContext";
 import { Guitar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
+import { useState } from "react";
+import Pagination from "../components/Pagination";
 
   export default function ConcertsPage() {
+    const [pageActivo, setPageActivo] = useState(1);
+    const [pageProximos, setPageProximos] = useState(1);
     const { data: generos, isLoading: isLoadingGeneros } = useGetGenerosPublic();
     const { genero, fecha, handleGeneroChange, handleFechaChange } = useFilters(generos);
     const { token,} = useAuth();
 
-    const { data: conciertos_activos, isLoading } = useGetConciertos({
+    const { data: conciertos_activos_response, isLoading } = useGetConciertos({
       estado: "activo",
       genero,
       fechaInicio: fecha,
+      page: pageActivo,
     });
+    const conciertos_activos = conciertos_activos_response?.data || [];
+    const meta = conciertos_activos_response?.meta;
 
-    const { data: conciertos_proximos, isLoading: LoadingProximos } = useGetConciertos({
+    const { data: conciertos_proximos_response, isLoading: LoadingProximos } = useGetConciertos({
       estado: "proximamente",
+      page: pageProximos
     });
+    const conciertos_proximos = conciertos_proximos_response?.data || [];
+    const meta_proximos = conciertos_proximos_response?.meta;
 
     return (
       <div className="mb-10 md:mb-20">
@@ -61,11 +71,17 @@ import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
                 {conciertos_activos?.map((c) => (
-                  <Cardproduct information={c} key={c.concierto_id} />
+                  <Cardproduct information={c} key={c?.id} />
                 ))}
               </div>
             )}
-
+            {conciertos_activos_response?.meta?.totalPages > 1 && (
+              <Pagination 
+                page={pageActivo} 
+                setPage={setPageActivo} 
+                totalPages={conciertos_activos_response.meta.totalPages} 
+              />
+            )}
             <div className="border border-[#C122ED] mt-20 mb-20"></div>
             
             <div id="proximamente">
@@ -73,8 +89,15 @@ import { useGetConciertos } from "../hooks/concerts/useGetConcerts";
               <div className="flex flex-col lg:flex-row gap-10 md:gap-8 mt-6">
                 <div className="w-[100%] flex flex-col gap-4">
                 {conciertos_proximos?.map((c) => (
-                  <UpcomingConcertsCard concierto={c} key={c.concierto_id} />
+                  <UpcomingConcertsCard concierto={c} key={c?.id} />
                 ))}
+                {conciertos_proximos_response?.meta?.totalPages > 1 && (
+                <Pagination 
+                  page={pageProximos} 
+                  setPage={setPageProximos} 
+                  totalPages={conciertos_proximos_response.meta.totalPages} 
+                />
+                )}
                 </div>
                   {!token ? (
                     <div className="w-full lg:w-[25%]">
