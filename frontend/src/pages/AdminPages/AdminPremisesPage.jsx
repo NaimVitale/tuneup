@@ -23,8 +23,15 @@ export default function AdminPremisesPage() {
   const actions = [
     {
       icon: <Pencil size={18} />,
-      onClick: (c) => navigate(`${c.id}/editar`),
-      className: "bg-blue-500 text-white hover:bg-blue-600 hover:cursor-pointer",
+      onClick: (c) => {
+        if (!c.deleted_at) {
+          navigate(`${c.id}/editar`);
+        }
+      },
+      className: (c) =>
+        c.deleted_at
+          ? "bg-gray-400 text-white cursor-not-allowed" 
+          : "bg-blue-500 text-white hover:bg-blue-600 hover:cursor-pointer",
     },
     {
       icon: (c) => (c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />),

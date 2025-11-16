@@ -27,10 +27,10 @@ function Header() {
             <p className="text-lg">Hola, {user.nombre}</p>
           </Link>
           
-          <Link to="#" onClick={closeMenu} className={menuItemClass}>
+          {/*<Link to="#" onClick={closeMenu} className={menuItemClass}>
             <Bell className="text-[#C122ED]" size={20}/>
             <p className="text-lg">Notificaciones</p>
-          </Link>
+          </Link>*/}
 
           {rol === "admin" && (
             <Link to="/admin/dashboard" onClick={closeMenu} className={menuItemClass}>
@@ -66,7 +66,7 @@ function Header() {
             </Link>
           ) : (
             <>
-              <Bell className="text-[#C122ED] cursor-pointer" size={20}/>
+              {/*<Bell className="text-[#C122ED] cursor-pointer" size={20}/>*/}
               {rol === "admin" && (
                 <Link to="/admin/dashboard">
                   <LayoutDashboardIcon className="text-[#C122ED]" size={22}/>

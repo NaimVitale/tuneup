@@ -12,6 +12,19 @@ export const createUser = async (userData) => {
   }
 };
 
+export const createUserAdmin = async (token, userData) => {
+  try {
+    const response = await axios.post(`${API_URL}/admin`, userData,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
+
 export const userLogin = async (userData) => {
   try {
     const response = await axios.post(AUTH_URL, userData, { withCredentials: true });

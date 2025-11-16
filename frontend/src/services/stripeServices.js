@@ -1,6 +1,7 @@
 // src/services/stripeServices.js
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
+import api from '../api/api'
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -45,7 +46,7 @@ export async function irACheckout(token, items, id_usuario) {
 
 export async function getGananciasMensuales(token) {
   try {
-    const res = await axios.get(
+    const res = await api.get(
       `${import.meta.env.VITE_API_URL}/stripe/ganancias-mensuales`,
       {
         headers: {
