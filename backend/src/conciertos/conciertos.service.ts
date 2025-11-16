@@ -147,10 +147,10 @@ export class ConciertosService {
     return concierto;
   }
 
-  async findAllAdmin(estado?: EstadoConcierto) {
+  async findAllAdmin(incluirEliminados = false) {
+    console.log(incluirEliminados)
     const query = this.conciertoRepository
       .createQueryBuilder('concierto')
-      .withDeleted()
       .leftJoinAndSelect('concierto.artista', 'artista')
       .leftJoinAndSelect('artista.genero', 'genero')
       .leftJoinAndSelect('concierto.recinto', 'recinto')
@@ -182,8 +182,8 @@ export class ConciertosService {
       .addGroupBy('genero.id')
       .orderBy('concierto.fecha', 'ASC');
 
-    if (estado) {
-      query.andWhere('concierto.estado = :estado', { estado });
+    if (incluirEliminados) {
+      query.withDeleted();
     }
 
     // Ejecutamos la query

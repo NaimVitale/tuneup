@@ -32,11 +32,11 @@ export class ConciertosController {
   @Get('')
   @Roles('admin')
   findAllAdmin(
-  @Query('estado') estado?: EstadoConcierto,
+  @Query('incluirEliminados') incluirEliminados?: string,
   ) {
-    return this.conciertosService.findAllAdmin();
+    const incluir = incluirEliminados === 'true';
+    return this.conciertosService.findAllAdmin(incluir);
   }
-
 
   @Get('home/activos')
   getTopActivos() {
