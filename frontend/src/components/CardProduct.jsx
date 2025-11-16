@@ -17,9 +17,7 @@ function Cardproduct ({information}) {
                 <div className="flex items-center gap-2">
                     <MapPin className="text-black" size={16}/>
                     <p className="flex gap-1">
-                                <Link to={`/ciudad/${information?.ciudad_id || information?.recinto?.ciudad?.id}`}>
-                                    {information?.ciudad_nombre || information?.recinto?.ciudad?.nombre || "Barcelona"}
-                                </Link>
+                                {information?.ciudad_nombre || information?.recinto?.ciudad?.nombre || "Barcelona"}
                                 <span>·</span>
                                 <Link to={`/recintos/detalle/${information?.recinto_id || information?.recinto?.id}`} className="hover:underline">
                                     {information?.recinto_nombre || information?.recinto?.nombre || "Palau Sant Jordi"}
