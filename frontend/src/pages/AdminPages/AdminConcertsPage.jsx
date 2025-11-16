@@ -1,4 +1,4 @@
-import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
+import { Eye, Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import { dateFormatWithTime } from "../../utils/dateFormat";
 import DataTable from "../../components/DataTable";
 import Spinner from "../../components/Spinner";
@@ -9,17 +9,21 @@ import { useSoftDeleteConcert } from "../../hooks/concerts/useSoftDeleteConcert"
 import { useRestoreConcert } from "../../hooks/concerts/useRestoreConcert";
 import ConfirmPopup from "../../components/ConfirmPopup";
 import { getRestoreWarningsConcert } from "../../services/concertServices";
+import { capitalize } from "../../utils/capitalizeString";
+import { useState } from "react";
 
 export default function AdminConcertsPage() {
   const navigate = useNavigate()
+  const [incluirEliminados, setIncluirEliminados] = useState(false);
   const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
   const { handleSoftDelete } = useSoftDeleteConcert();
   const { handleRestore } = useRestoreConcert();
-  const { data: conciertos, isLoading, isError } = useGetConcertsAdmin();
+  const { data: conciertos, isLoading, isError } = useGetConcertsAdmin({incluirEliminados});
 
   const columns = [
     { key: "index", label: "#", render: (c) => c.id },
     { key: "artista", label: "Artista", render: (c) => c.artista?.nombre },
+    { key: "estado", label: "Estado", render: (c) => capitalize(c?.estado)},
     { key: "fecha", label: "Fecha", render: (c) => dateFormatWithTime(c?.fecha) },
     { key: "precio_min", label: "Precio Minimo", render: (c) => `${c.precio_minimo}€`},
     { key: "ciudad", label: "Ciudad", render: (c) => c.recinto?.ciudad?.nombre },
@@ -88,21 +92,21 @@ export default function AdminConcertsPage() {
   if (isLoading) return <Spinner size={20} color="border-white"/>;
   if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los conciertos</p>
 
+  console.log(conciertos);
+
   return (
-    <div className="w-[90%] h-[80vh]">
+    <div className="w-[90%] h-min-[100vh] lg:h-[80vh]">
       <div className="h-full bg-white rounded-2xl shadow-md flex flex-col">
         <div className="pt-5 pl-6 pr-6 pb-5 flex justify-between items-center flex-shrink-0">
-          <h1 className="text-3xl">Lista de Conciertos</h1>
-          <div className="w-[40%] flex items-center gap-6">
-            <div className="relative w-[80%]">
-              <input
-                type="search"
-                className="rounded-2xl w-full py-2 placeholder:p-5 border shadow-sm border-black"
-                placeholder="Buscar..."
-              />
-              <SearchIcon size={20} className="w-6 h-6 absolute right-3 top-1/2 transform -translate-y-1/2" />
-            </div>
-            <Link to={'crear'} className="flex gap-2 items-center justify-center bg-green-600 hover:bg-green-700 text-white font-semibold px-2 py-2 rounded-3xl shadow-md transition-all duration-200 w-[40%]">
+          <h1 className="text-3xl w-8/12">Lista de Conciertos</h1>
+          <div className="flex w-4/12 items-center gap-6">
+              <button
+                onClick={() => setIncluirEliminados(prev => !prev)}
+                className="bg-purple-500 gap-4 justify-center flex items-center hover:bg-purple-600 w-full rounded-3xl text-white px-4 py-2 transition-colors"
+              >
+                <Eye></Eye>{incluirEliminados ? "Ocultar eliminados" : "Mostrar eliminados"}
+              </button>
+            <Link to={'crear'} className="flex w-full gap-2 items-center justify-center bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-2 rounded-3xl shadow-md transition-all duration-200 w-[40%]">
               <Plus size={24} />
               Crear concierto
             </Link >

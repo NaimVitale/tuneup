@@ -70,16 +70,8 @@ export default function AdminGeneroPage() {
       <div className="h-full bg-white rounded-2xl shadow-md flex flex-col">
         <div className="pt-5 pl-6 pr-6 pb-5 flex justify-between items-center flex-shrink-0">
           <h1 className="text-3xl">Lista de Generos</h1>
-          <div className="w-[40%] flex items-center gap-6">
-            <div className="relative w-[80%]">
-              <input
-                type="search"
-                className="rounded-2xl w-full py-2 placeholder:p-5 border shadow-sm border-black"
-                placeholder="Buscar..."
-              />
-              <SearchIcon size={20} className="w-6 h-6 absolute right-3 top-1/2 transform -translate-y-1/2" />
-            </div>
-            <Link to={'crear'} className="flex gap-2 items-center justify-center bg-green-600 hover:bg-green-700 text-white font-semibold px-2 py-2 rounded-3xl shadow-md transition-all duration-200 w-[40%]">
+          <div className="flex items-center gap-6">
+            <Link to={'crear'} className="flex gap-2 w-full items-center justify-center bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-2 rounded-3xl shadow-md transition-all duration-200 w-[40%]">
               <Plus size={24} />
               Crear genero
             </Link>

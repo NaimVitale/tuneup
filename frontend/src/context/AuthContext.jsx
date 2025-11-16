@@ -53,16 +53,41 @@ export const AuthProvider = ({ children }) => {
 
   // Decodificar token
   useEffect(() => {
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setRol(decoded.rol);
-        setUserID(decoded.sub);
-      } catch {
-        logout();
-      }
+    if (!token) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    let refreshTimeout;
+
+    try {
+      const decoded = jwtDecode(token);
+      setRol(decoded.rol);
+      setUserID(decoded.sub);
+
+      const expiresAt = decoded.exp * 1000; // exp viene en segundos → ms
+      const now = Date.now();
+      const timeout = expiresAt - now - 5000; // refrescar 5s antes de exp
+
+      if (timeout > 0) {
+        refreshTimeout = setTimeout(async () => {
+          try {
+            const newToken = await refreshToken();
+            console.log("Token refrescado automáticamente");
+          } catch (err) {
+            console.log("No se pudo refrescar el token automáticamente");
+          }
+        }, timeout);
+      }
+
+    } catch {
+      logout();
+    } finally {
+      setLoading(false);
+    }
+
+    return () => clearTimeout(refreshTimeout);
+
   }, [token]);
 
   useEffect(() => {

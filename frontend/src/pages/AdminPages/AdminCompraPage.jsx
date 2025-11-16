@@ -35,14 +35,6 @@ export default function AdminCompraPage() {
         <div className="pt-5 pl-6 pr-6 pb-5 flex justify-between items-center flex-shrink-0">
           <h1 className="text-3xl">Lista de Compras</h1>
           <div className="w-[40%] flex justify-end items-center gap-6">
-            <div className="relative w-[80%]">
-              <input
-                type="search"
-                className="rounded-2xl w-full py-2 placeholder:p-5 border shadow-sm border-black"
-                placeholder="Buscar..."
-              />
-              <SearchIcon size={20} className="w-6 h-6 absolute right-3 top-1/2 transform -translate-y-1/2" />
-            </div>
           </div>
         </div>
         {<DataTable columns={columns} data={compras} />}

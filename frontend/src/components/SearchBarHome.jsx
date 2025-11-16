@@ -30,13 +30,10 @@ export default function SearchBar() {
     let path;
     switch (result.tipo) {
       case "Artista":
-        path = `/artistas/${result.slug}`;
+        path = `/artistas/detalle/${result.slug}`;
         break;
       case "Recinto":
         path = `/recintos/${result.slug}`;
-        break;
-      case "Festival":
-        path = `/festivales/${result.slug}`;
         break;
       default:
         path = `/`;
