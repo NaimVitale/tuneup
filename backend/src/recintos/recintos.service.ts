@@ -58,13 +58,19 @@ export class RecintosService {
     return saved;
   }
 
-  findAll() {
-    return this.repo
+  findAll(incluirEliminados = false) {
+    const query = this.repo
       .createQueryBuilder('recinto')
-      .withDeleted()
       .leftJoinAndSelect('recinto.ciudad', 'ciudad')
-      .loadRelationCountAndMap('recinto.seccionesCount', 'recinto.secciones')
-      .getMany();
+      .loadRelationCountAndMap('recinto.seccionesCount', 'recinto.secciones');
+
+    if (incluirEliminados) {
+      query.withDeleted(); // incluye eliminados solo si se pasa true
+    } else {
+      query.andWhere('recinto.deleted_at IS NULL'); // oculta eliminados por defecto
+    }
+
+    return query.getMany();
   }
 
    findAllSelect() {

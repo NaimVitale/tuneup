@@ -33,8 +33,9 @@ export class ArtistaController {
   @UseGuards(JwtRolesGuard)
   @Get()
   @Roles('admin')
-  findAll() {
-    return this.artistaService.getAll();
+  findAll(@Query('incluirEliminados') incluirEliminados?: string,) {
+    const incluir = incluirEliminados === 'true';
+    return this.artistaService.getAll(incluir);
   }
 
   @UseGuards(JwtRolesGuard)

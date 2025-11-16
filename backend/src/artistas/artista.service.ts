@@ -82,10 +82,10 @@ export class ArtistaService {
     });
   }
 
-  async getAll() {
-    return await this.artistaRepo.find({
-      withDeleted: true,
-    }); 
+  async getAll(incluirEliminados = false) {
+    return this.artistaRepo.find({
+      withDeleted: incluirEliminados, // true si querés incluir los soft-deleted
+    });
   }
 
   async getAllPublic(filtroGenero?: string) {

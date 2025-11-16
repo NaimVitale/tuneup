@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity ('generos')
     export class Genero {
@@ -12,7 +12,6 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
         @Column({ type: 'varchar', length: 200 })
         descripcion: string;
 
-        @Column({ type: 'datetime', nullable: true })
+        @DeleteDateColumn({ type: 'datetime', nullable: true })
         deleted_at: Date | null;
-
     }

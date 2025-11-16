@@ -43,7 +43,7 @@ export class EntradaService {
         .andWhere('usuario.id = :id_usuario', { id_usuario });
     }
 
-    qb.take(2);
+    //qb.take(2);
 
     return qb.getMany();
   }

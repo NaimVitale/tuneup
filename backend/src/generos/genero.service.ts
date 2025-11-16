@@ -19,8 +19,11 @@ export class GeneroService {
     });
   }
 
-  findAll() {
-    return this.generoRepository.find()
+  findAll(incluirEliminados = false) {
+    console.log(incluirEliminados)
+    return this.generoRepository.find({
+      withDeleted: incluirEliminados,
+    });
   }
   
   findOne(id: number) {
@@ -59,13 +62,12 @@ export class GeneroService {
 
   // Restaurar soft delete (opcional)
   async restore(id: number) {
-    const genero = await this.findOne(id);
+    const result = await this.generoRepository.restore(id);
 
-    if (!genero) {
+    if (result.affected === 0) {
       throw new NotFoundException('Género no encontrado');
     }
 
-    genero.deleted_at = null;
-    return this.generoRepository.save(genero);
+    return this.generoRepository.findOne({ where: { id } });
   }
 }

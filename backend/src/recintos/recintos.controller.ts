@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFiles, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFiles, BadRequestException, Query } from '@nestjs/common';
 import { RecintosService } from './recintos.service';
 import { CreateRecintoDto } from './dto/create-recinto.dto';
 import { UpdateRecintoDto } from './dto/update-recinto.dto';
@@ -44,8 +44,9 @@ export class RecintosController {
   @UseGuards(JwtRolesGuard)
   @Get()
   @Roles('admin')
-  findAll() {
-    return this.recintosService.findAll();
+  findAll(@Query('incluirEliminados') incluirEliminados?: string,) {
+    const incluir = incluirEliminados === 'true';
+    return this.recintosService.findAll(incluir);
   }
 
   @Get('select')

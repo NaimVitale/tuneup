@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   UseGuards,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { GeneroService } from './genero.service';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
@@ -27,8 +28,9 @@ export class GeneroController {
   @UseGuards(JwtRolesGuard)
   @Get()
   @Roles('admin')
-  findAll() {
-    return this.generoService.findAll();
+  findAll(@Query('incluirEliminados') incluirEliminados?: string,) {
+    const incluir = incluirEliminados === 'true';
+    return this.generoService.findAll(incluir);
   }
 
   @UseGuards(JwtRolesGuard)
