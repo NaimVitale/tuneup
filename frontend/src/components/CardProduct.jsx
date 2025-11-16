@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"
 import { dateFormatWithTime } from "../utils/dateFormat.jsx"
 
 function Cardproduct ({information}) {
+
+    console.log(information)
     return (
         <div className="rounded-2xl shadow-md overflow-hidden bg-white">
             <img src={information?.artista_img_card || information?.artista?.img_card || 'https://brandemia.org/contenido/subidas/2012/07/the-rolling-stones-logo.webp'} alt="" loading="lazy" className="h-[20vh] object-cover w-full" />
@@ -15,11 +17,11 @@ function Cardproduct ({information}) {
                 <div className="flex items-center gap-2">
                     <MapPin className="text-black" size={16}/>
                     <p className="flex gap-1">
-                                <Link to={`/ciudad/${information?.ciudad_id || information?.recinto?.ciudad?.id}`} className="hover:underline">
+                                <Link to={`/ciudad/${information?.ciudad_id || information?.recinto?.ciudad?.id}`}>
                                     {information?.ciudad_nombre || information?.recinto?.ciudad?.nombre || "Barcelona"}
                                 </Link>
                                 <span>·</span>
-                                <Link to={`/recinto/${information?.recinto_id || information?.recinto?.id}`} className="hover:underline">
+                                <Link to={`/recintos/detalle/${information?.recinto_id || information?.recinto?.id}`} className="hover:underline">
                                     {information?.recinto_nombre || information?.recinto?.nombre || "Palau Sant Jordi"}
                                 </Link>
                     </p>
