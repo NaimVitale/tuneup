@@ -85,7 +85,7 @@ import Pagination from "../components/Pagination";
             <div className="border border-[#C122ED] mt-20 mb-20"></div>
             
             <div id="proximamente">
-              <h3 className="text-xl">{conciertos_proximos?.length} Próximos Conciertos</h3>
+              <h3 className="text-xl">{conciertos_proximos?.length} Próximos conciertos a la venta</h3>
               <div className="flex flex-col lg:flex-row gap-10 md:gap-8 mt-6">
                 <div className="w-[100%] flex flex-col gap-4">
                 {conciertos_proximos?.map((c) => (
