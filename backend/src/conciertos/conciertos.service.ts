@@ -296,6 +296,7 @@ export class ConciertosService {
       .createQueryBuilder('concierto')
       .leftJoinAndSelect('concierto.artista', 'artista')
       .leftJoinAndSelect('concierto.recinto', 'recinto')
+      .leftJoinAndSelect('recinto.ciudad', 'ciudad')
       .leftJoin('concierto.entradas', 'entrada')
       .leftJoin('concierto.preciosPorSeccion', 'psc')
       .addSelect('COUNT(entrada.id)', 'entradas_totales')
@@ -307,6 +308,7 @@ export class ConciertosService {
       .groupBy('concierto.id')
       .addGroupBy('artista.id')
       .addGroupBy('recinto.id')
+      .addGroupBy('ciudad.id')
       .orderBy('entradas_totales', 'DESC')
       .limit(5)
       .getRawMany();
