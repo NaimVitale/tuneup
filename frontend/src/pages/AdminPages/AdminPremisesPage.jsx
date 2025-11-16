@@ -61,7 +61,7 @@ export default function AdminPremisesPage() {
   const { data: recintos, isLoading, isError } = useGetRecintos();
 
   if (isLoading) return <Spinner size={20} color="border-white"/>;
-  if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los recintos</p>;
+  if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los recintos</p>
 
   return (
     <div className="w-[90%] h-[80vh]">
@@ -83,7 +83,7 @@ export default function AdminPremisesPage() {
             </Link>
           </div>
         </div>
-        <DataTable columns={columns} data={recintos} actions={actions} />;
+        <DataTable columns={columns} data={recintos} actions={actions} />
         <ConfirmPopup
           isOpen={isOpen}
           onClose={closeConfirm}

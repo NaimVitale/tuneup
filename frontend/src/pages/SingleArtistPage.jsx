@@ -5,7 +5,6 @@ import { useGetArtist } from "../hooks/artist/useGetArtist";
 import { formatDescription } from "../utils/descriptionFormat";
 
 export default function ArtistPage(){
-
     const { slug: artistSlug } = useParams();
     const { data: artist, isLoading, isError } = useGetArtist(artistSlug);
 
@@ -33,13 +32,13 @@ export default function ArtistPage(){
                     </div>
                 </div>
             </div>
-            <div className='w-[90%] m-auto flex gap-10 items-center mb-10 bg-[#f8f8f8]'>
-                <div className="w-[50%]">
+            <div className='w-[90%] m-auto flex flex-col lg:flex-row gap-10 items-center mb-10 bg-[#f8f8f8]'>
+                <div className="lg:w-[50%]">
                     <h2 className="text-lg mb-6">Sobre {artist?.nombre}</h2>
                     {formatDescription(artist?.descripcion)}
 
                 </div>
-                <img src={artist?.images} className="w-[50%] mix-blend-multiply h-[60vh] object-contain "/>
+                <img src={artist?.images} className="lg:w-[50%] mix-blend-multiply h-[60vh] object-contain "/>
             </div>
         </div>
     )
