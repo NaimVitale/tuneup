@@ -20,6 +20,7 @@ export default function ConcertEditForm({ data }) {
     return(
         <div className="min-h-[60vh] w-full flex justify-center text-black">
                 <form onSubmit={onSubmit} className="w-[95%] gap-10 flex flex-col justify-evenly">
+                    <fieldset disabled={loading}>
                     <div className="grid lg:grid-cols-2 gap-8">
                         <InputSelect 
                             placeholder="Seleccione artista"
@@ -52,6 +53,7 @@ export default function ConcertEditForm({ data }) {
                     <TableSections sections={form.secciones} onSectionsChange={updateSections} mode="precio" showActions={true}></TableSections>
                     <button className="btn-primary py-2 px-4 text-md w-max mt-10">Actualizar datos</button>
                     </div>
+                    </fieldset>
                 </form>
         </div>
     )
