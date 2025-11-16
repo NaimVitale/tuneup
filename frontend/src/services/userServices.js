@@ -30,6 +30,7 @@ export const userLogin = async (userData) => {
     const response = await axios.post(AUTH_URL, userData, { withCredentials: true });
     return response.data; // debe contener { token, usuario }
   } catch (error) {
+    console.log(error)
     throw error.response?.data || error;
   }
 };

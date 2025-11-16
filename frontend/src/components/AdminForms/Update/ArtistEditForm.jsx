@@ -26,7 +26,7 @@ export default function ArtistEditForm(artist) {
     return(
         <div className="min-h-[60vh] w-full flex justify-center text-black">
                 <form onSubmit={onSubmit} className="w-[95%] gap-10">
-                    <div className="grid grid-cols-2 gap-8">
+                    <div className="grid lg:grid-cols-2 gap-8">
                         <InputForm label={"Nombre"} id={"nombre"} type="text" value={form?.nombre} onChange={handleChange}></InputForm>
                         <InputSelect
                             placeholder="Género"
@@ -39,11 +39,11 @@ export default function ArtistEditForm(artist) {
                                 })) || []),
                             ]}
                         />
-                        <div className="col-span-2">
+                        <div className="lg:col-span-2">
                             <InputForm label={"Descripcion"} id={"descripcion"} type="textarea" value={form?.descripcion}  onChange={handleChange}></InputForm>
                         </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-8 mt-8 mb-10">
+                    <div className="grid lg:grid-cols-3 gap-8 mt-8 mb-10">
                         <InputFile label="Imagen tarjeta" initialUrl={form?.img_card} field="img_card" onChange={handleFileChange}></InputFile>
                         <InputFile label="Imagen banner" initialUrl={form?.img_hero} field="img_hero" onChange={handleFileChange}></InputFile>
                         <InputFile label="Imagen about" initialUrl={form?.images} field="images" onChange={handleFileChange}></InputFile>

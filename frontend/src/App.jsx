@@ -12,7 +12,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Suspense fallback={<div className='flex justify-center items-center'><Spinner/></div>}>
+        <Suspense fallback={<div className='flex justify-center items-center h-[100dvh]'><Spinner/></div>}>
           <AppRoutes/>
           <Toaster
             position="top-right"

@@ -10,7 +10,7 @@ export default function DataTable({ columns, data, actions }) {
   };
 
   return (
-    <div className="flex-1 bg-white rounded-b-xl overflow-x-auto">
+    <div className="flex-1 bg-white overflow-x-auto">
       <table className="min-w-full text-sm text-left table-auto">
         <thead className="bg-gradient-to-r from-[#C122ED] to-[#9333EA] text-white sticky top-0 z-10">
           <tr>

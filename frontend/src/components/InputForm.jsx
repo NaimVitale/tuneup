@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import ErrorMessages from "./ErrorMessages";
 
 export default function InputForm({ label, type = "text", id, value, onChange, error,}) {
   const [showPassword, setShowPassword] = useState(false);
@@ -69,7 +70,7 @@ export default function InputForm({ label, type = "text", id, value, onChange, e
         </button>
       )}
       {error && (
-        <p className="text-red-500 text-sm mt-1 ml-2">{error}</p>
+        <ErrorMessages errors={error}></ErrorMessages>
       )}
     </div>
   );

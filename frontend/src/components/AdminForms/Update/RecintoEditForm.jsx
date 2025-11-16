@@ -21,7 +21,7 @@ export default function RecintoEditForm({data}) {
     <div className="min-h-[60vh] w-full flex justify-center text-black">
       <form onSubmit={onSubmit} className="w-[95%] gap-10">
 
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8">
           <InputForm label={"Nombre"} id={"nombre"} value={formData.nombre} onChange={(e) => updateField('nombre', e.target.value)} type="text" />
           <InputSelect
             placeholder="Ciudad"
@@ -36,7 +36,7 @@ export default function RecintoEditForm({data}) {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-8 mt-8 mb-10">
+        <div className="grid lg:grid-cols-2 gap-8 mt-8 mb-10">
           <InputFile label="Imagen tarjeta" />
           <InputFile label="Imagen banner" />
         </div>

@@ -18,7 +18,7 @@ export default function UserCreateForm() {
       return (
     <div className="w-full flex justify-center text-black">
       <form onSubmit={onSubmit} className="w-[95%] min-h-[40vh] justify-start">
-        <div className="flex grid grid-cols-2 gap-6">
+        <div className="flex grid lg:grid-cols-2 gap-6">
           <InputForm 
             label="Nombre*" 
             id="nombre"

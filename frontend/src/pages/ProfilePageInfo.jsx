@@ -20,7 +20,7 @@ export default function ProfileInfoPage(){
                     e.preventDefault();
                     handleSubmit(userId);
                 }}>
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid xl:grid-cols-2 gap-4 mb-4">
                     <InputForm label={"Nombre"} type="text" id={"nombre"} value={form.nombre} onChange={handleChange} error={errorUpdate?.nombre}></InputForm>
                     <InputForm label={"Apellido"} type="text" id={"apellido"} value={form.apellido} onChange={handleChange} error={errorUpdate?.apellido}></InputForm>
                     <InputForm label={"Correo electrónico"} type="text" id={"email"} value={form.email} onChange={handleChange} error={errorUpdate?.email}></InputForm>
@@ -34,7 +34,7 @@ export default function ProfileInfoPage(){
                     e.preventDefault();
                     handleSubmitPassword(userId);
                 }}>
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid xl:grid-cols-2 gap-4 mb-4">
                     <InputForm label={"Contraseña actual"} type="password" id={"oldPassword"} value={passwordForm.oldPassword} onChange={handleChangePassword}></InputForm>
                     <InputForm label={"Contraseña nueva"} type="password" id={"newPassword"} value={passwordForm.newPassword} onChange={handleChangePassword}></InputForm>
                     </div>

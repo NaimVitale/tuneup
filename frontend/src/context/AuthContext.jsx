@@ -25,9 +25,14 @@ export const AuthProvider = ({ children }) => {
 
   // Logout
   const logout = async () => {
-    try {
-      await api.post("/auth/logout");
-    } catch {}
+  try {
+    await api.post("/auth/logout", {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch {}
+
     setUser(null);
     setToken(null);
     setRol(null);
@@ -91,29 +96,32 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   useEffect(() => {
-  let isRefreshing = false;
-  let failedRequestsQueue = [];
+    let isRefreshing = false;
+    let failedRequestsQueue = [];
 
-  const processQueue = (error, token = null) => {
-    failedRequestsQueue.forEach(prom => {
-      if (error) {
-        prom.reject(error);
-      } else {
-        prom.resolve(token);
-      }
-    });
-    failedRequestsQueue = [];
-  };
+    const processQueue = (error, token = null) => {
+      failedRequestsQueue.forEach(p => {
+        if (error) {
+          p.reject(error);
+        } else {
+          p.resolve(token);
+        }
+      });
+      failedRequestsQueue = [];
+    };
 
-   const interceptor = api.interceptors.response.use(
+    const interceptor = api.interceptors.response.use(
       res => res,
       async error => {
         const originalRequest = error.config;
 
+      if (originalRequest.url.includes("/auth/login") || originalRequest.url.includes("/auth/refresh")) {
+        return Promise.reject(error); // deja que el catch de userLogin lo maneje
+      }
+
         if (error.response?.status !== 401) return Promise.reject(error);
 
         if (originalRequest._retry) {
-          // ya reintentado → logout
           await logout();
           toast.error("Tu sesión ha expirado. Vuelve a iniciar sesión");
           navigate("/login");
@@ -124,8 +132,9 @@ export const AuthProvider = ({ children }) => {
 
         try {
           if (isRefreshing) {
+            // 🔥 FIX AQUI
             return new Promise((resolve, reject) => {
-              failedQueue.push({ resolve, reject });
+              failedRequestsQueue.push({ resolve, reject });
             })
               .then(token => {
                 originalRequest.headers["Authorization"] = `Bearer ${token}`;
@@ -136,17 +145,18 @@ export const AuthProvider = ({ children }) => {
 
           isRefreshing = true;
 
-          // Intentamos refresh token
           const res = await api.post("/auth/refresh");
           const newToken = res.data.access_token;
 
           setToken(newToken);
           localStorage.setItem("token", newToken);
+
           api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
 
           processQueue(null, newToken);
           return api(originalRequest);
+
         } catch (refreshError) {
           processQueue(refreshError, null);
           await logout();
@@ -159,8 +169,8 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-  return () => api.interceptors.response.eject(interceptor);
-}, [navigate]);
+    return () => api.interceptors.response.eject(interceptor);
+  }, [navigate]);
 
   // useEffect que reacciona cuando sessionExpired cambia
   /*useEffect(() => {

@@ -17,13 +17,11 @@ export default function AdminEditPage() {
     } 
     const { data, isLoading, isError } = useAdminResource(resource, slug);
 
-    console.log(data)
     return(
-        <div className="w-[90%]">
-          <div className="h-full bg-white rounded-2xl shadow-md flex flex-col items-center p-10">
-            <h1 className="text-2xl font-semibold mb-12">
-                Editar {resource}:
-                {/*<span className="pl-1 text-blue-600">{data?.nombre || `${data?.artista.nombre} - ${data?.id}`}</span>*/}
+        <div>
+          <div className="h-full bg-white shadow-md flex flex-col items-center min-h-screen pb-6">
+            <h1 className="w-full text-2xl text-center font-semibold mb-12 bg-gradient-to-r from-[#C122ED] to-[#9333EA] p-6 lg:p-10 text-white">
+                Editar {data?.nombre || `${data?.artista.nombre} - ${data?.id}`}
             </h1>
 
             {resource === "artistas" && <ArtistEditForm data={data} />}

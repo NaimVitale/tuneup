@@ -34,7 +34,7 @@ export default function GeneroCreateForm() {
                             error={errors.descripcion} 
                         />
                     </div>
-                    <button className="btn-primary py-2 px-4 text-md w-max mt-6" disabled={loading}>Actualizar datos</button>
+                    <button className="btn-primary py-2 px-4 text-md w-max mt-6" disabled={loading}>Crear genero</button>
                 </form>
         </div>
     )

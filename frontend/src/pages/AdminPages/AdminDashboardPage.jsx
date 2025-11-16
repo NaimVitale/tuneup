@@ -31,9 +31,9 @@ export default function AdminDashboardPage() {
 
 
     return(
-    <div className="w-[90%]">
-      <div className="h-full bg-white rounded-2xl shadow-md flex flex-col">
-        <div className="py-[4em] px-[3em] justify-between items-center flex-shrink-0">
+    <div className="w-full">
+      <div className="h-full bg-white shadow-md flex flex-col">
+        <div className="py-[3em] lg:py-[4em] px-[1em] lg:px-[3em] justify-between items-center flex-shrink-0">
             {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Admin</h1>

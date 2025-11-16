@@ -1,4 +1,4 @@
-import { Pencil, Plus, SearchIcon, Trash } from "lucide-react";
+import { Eye, EyeOff, Pencil, Plus, SearchIcon, Trash } from "lucide-react";
 import DataTable from "../../components/DataTable";
 import { useNavigate } from "react-router-dom";
 import { useGetComprasAdmin } from "../../hooks/compra/useGetComprasAdmin";
@@ -30,14 +30,26 @@ export default function AdminCompraPage() {
   const { data: compras, isLoading, isError } = useGetComprasAdmin();
 
   return (
-    <div className="w-[90%] h-[80vh]">
-      <div className="h-full bg-white rounded-2xl shadow-md flex flex-col">
-        <div className="pt-5 pl-6 pr-6 pb-5 flex justify-between items-center flex-shrink-0">
-          <h1 className="text-3xl">Lista de Compras</h1>
-          <div className="w-[40%] flex justify-end items-center gap-6">
+    <div className="w-full min-h-screen">
+      <div className="max-w-full mx-auto">
+        <div className="bg-white min-h-screen overflow-hidden">
+          
+          {/* Header responsive */}
+          <div className="bg-gradient-to-r from-[#C122ED] to-[#9333EA] p-6 lg:p-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              
+              {/* Título */}
+              <h1 className="text-3xl lg:text-4xl font-bold text-white">
+                Lista de compras
+              </h1>
+            </div>
+          </div>
+
+          {/* Tabla */}
+          <div className="overflow-x-auto">
+            <DataTable columns={columns} data={compras}/>
           </div>
         </div>
-        {<DataTable columns={columns} data={compras} />}
       </div>
     </div>
   );

@@ -107,9 +107,9 @@ export default function HeaderAdmin(){
             {/* Toggle Button */}
             <button 
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className="absolute -right-3 top-8 bg-[#C122ED] text-white rounded-full p-1.5 hover:bg-[#a01bc7] transition-colors shadow-lg z-10"
+                className="absolute -right-3 top-8 bg-white text-[#C122ED] hover:scale-102 rounded-full p-1.5 transition-colors shadow-md z-10"
             >
-                {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+                {isCollapsed ? <ChevronRight cl size={18} /> : <ChevronLeft size={18} />}
             </button>
 
             <div className="flex flex-col py-10 gap-8 h-full">
