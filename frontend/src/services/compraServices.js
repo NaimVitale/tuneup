@@ -28,3 +28,17 @@ export const getComprasAdmin = async(token) => {
     throw error.response?.data || error;
   }
 }
+
+
+export const getComprasDiarias = async(token) => {
+  try{
+    const response = await axios.get(`${API_URL}/admin/compras-diarias`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}

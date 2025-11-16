@@ -63,6 +63,20 @@ export const getUsers = async(token) => {
   }
 }
 
+export const getNewUsers = async(token) => {
+  try{
+    const response = await axios.get(`${API_URL}/new-users`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data;
+
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
+
 
 export const patchUserPassword = async(id, userData, token) => {
   try{

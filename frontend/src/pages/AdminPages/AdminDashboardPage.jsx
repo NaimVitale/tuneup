@@ -1,9 +1,15 @@
 import Spinner from "../../components/Spinner";
+import { useGetGananciasDiarias } from "../../hooks/admin/useGetGanaciasDiarias";
 import { useGetGananciasMensuales } from "../../hooks/useGetGananciasMensuales";
-import { ArrowDownRight, ArrowUpRight, Calendar, ShoppingCart, Ticket, TrendingUp, Users } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import { useGetNewUsers } from "../../hooks/users/useGetNewUsers";
+import { useGetComprasDiarias } from "../../hooks/compra/useGetComprasDiarias";
 
 export default function AdminDashboardPage() {
   const { data: total, isLoading, isError } = useGetGananciasMensuales();
+  const { data: diaria, isLoading: isLoadingDiaria, isError:isErrorDiaria } = useGetGananciasDiarias();
+  const { data: users, isLoading: isLoadingUsers, isError:isErrorUsers} = useGetNewUsers();
+  const { data: compras, isLoading: isLoadingCompra, isError:isErrorCompra} = useGetComprasDiarias();
 
   const stats = {
     ingresosMes: 15750,
@@ -15,24 +21,10 @@ export default function AdminDashboardPage() {
     crecimiento: 12.5
   };
 
-  const ventasRecientes = [
-    { id: 1, evento: "Metallica", cantidad: 4, total: 360, fecha: "Hace 5 min" },
-    { id: 2, evento: "Bad Bunny", cantidad: 2, total: 180, fecha: "Hace 12 min" },
-    { id: 3, evento: "Coldplay", cantidad: 6, total: 540, fecha: "Hace 23 min" },
-    { id: 4, evento: "Arctic Monkeys", cantidad: 3, total: 240, fecha: "Hace 1 hora" }
-  ];
-
-  const topEventos = [
-    { nombre: "Metallica", vendidas: 1250, ingresos: 112500, tendencia: "up" },
-    { nombre: "Bad Bunny", vendidas: 980, ingresos: 88200, tendencia: "up" },
-    { nombre: "Coldplay", vendidas: 850, ingresos: 76500, tendencia: "down" },
-    { nombre: "Arctic Monkeys", vendidas: 720, ingresos: 64800, tendencia: "up" }
-  ];
-
 
     return(
-    <div className="w-full">
-      <div className="h-full bg-white shadow-md flex flex-col">
+    <div className="w-full min-h-screen">
+      <div className="min-h-screen bg-white shadow-md flex flex-col">
         <div className="py-[3em] lg:py-[4em] px-[1em] lg:px-[3em] justify-between items-center flex-shrink-0">
             {/* Header */}
         <div className="mb-8">
@@ -41,10 +33,10 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Grid principal */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="flex-1 gap-6 mb-6">
           
         {/* Card principal - Ingresos del mes */}
-        <div className="lg:col-span-1 bg-gradient-to-br from-[#C122ED] to-[#9333EA] rounded-2xl shadow-lg p-8 text-white">
+        <div className="lg:col-span-4 bg-gradient-to-br from-[#C122ED] to-[#9333EA] rounded-2xl shadow-lg p-8 text-white mb-10">
         {isLoading ? (
             <div className="flex justify-center items-center h-40">
                 <Spinner color="white" />
@@ -79,19 +71,15 @@ export default function AdminDashboardPage() {
         </div>
 
           {/* Stats cards */}
-          <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-4">
             
             <div className="bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:border-[#C122ED] transition-all">
               <div className="flex items-center gap-3 mb-3">
                 <div className="bg-green-100 p-2 rounded-lg">
                   <ShoppingCart size={20} className="text-green-600" />
                 </div>
-                <div className="flex items-center gap-1 text-green-600 text-sm font-semibold">
-                  <ArrowUpRight size={16} />
-                  {stats.crecimiento}%
-                </div>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{stats.ventasHoy.toLocaleString()}€</p>
+              <p className="text-2xl font-bold text-gray-900">{diaria?.toLocaleString()}€</p>
               <p className="text-xs text-gray-500 mt-1">Ventas hoy</p>
             </div>
 
@@ -99,55 +87,16 @@ export default function AdminDashboardPage() {
               <div className="bg-blue-100 p-2 rounded-lg mb-3 w-fit">
                 <Users size={20} className="text-blue-600" />
               </div>
-              <p className="text-2xl font-bold text-gray-900">{stats.usuariosNuevos}</p>
+              <p className="text-2xl font-bold text-gray-900">{users}</p>
               <p className="text-xs text-gray-500 mt-1">Usuarios nuevos</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:border-[#C122ED] transition-all">
               <div className="bg-purple-100 p-2 rounded-lg mb-3 w-fit">
-                <Ticket size={20} className="text-purple-600" />
+                <ShoppingCart size={20} className="text-purple-600" />
               </div>
-              <p className="text-2xl font-bold text-gray-900">{stats.entradasVendidas}</p>
-              <p className="text-xs text-gray-500 mt-1">Entradas vendidas</p>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:border-[#C122ED] transition-all">
-              <div className="bg-orange-100 p-2 rounded-lg mb-3 w-fit">
-                <Calendar size={20} className="text-orange-600" />
-              </div>
-              <p className="text-2xl font-bold text-gray-900">{stats.ticketPromedio}€</p>
-              <p className="text-xs text-gray-500 mt-1">Ticket promedio</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Sección inferior */}
-        <div className="gap-6">
-          {/* Top eventos */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Top eventos del mes</h3>
-            <div className="space-y-4">
-              {topEventos.map((evento, index) => (
-                <div key={index} className="pb-4 border-b border-gray-100 last:border-b-0">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl font-black text-gray-300">#{index + 1}</span>
-                      <p className="font-semibold text-gray-900">{evento.nombre}</p>
-                      {evento.tendencia === "up" ? (
-                        <ArrowUpRight size={16} className="text-green-500" />
-                      ) : (
-                        <ArrowDownRight size={16} className="text-red-500" />
-                      )}
-                    </div>
-                    <p className="font-bold text-[#C122ED]">{evento.ingresos.toLocaleString()}€</p>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span>{evento.vendidas} entradas</span>
-                    <span>•</span>
-                    <span>{(evento.ingresos / evento.vendidas).toFixed(0)}€ promedio</span>
-                  </div>
-                </div>
-              ))}
+              <p className="text-2xl font-bold text-gray-900">{compras}</p>
+              <p className="text-xs text-gray-500 mt-1">Compras realizadas</p>
             </div>
           </div>
         </div>

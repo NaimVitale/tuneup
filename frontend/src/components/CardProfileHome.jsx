@@ -1,9 +1,7 @@
-import { Music, Settings, User2Icon } from "lucide-react";
-import { dateFormatDateOnly } from "../utils/dateFormat"
-import CardSpotifySong from "./CardSpotifySong"
+import { Music, Settings, Ticket, Calendar, MapPin } from "lucide-react";
 
-export default function CardProfileHome({ usuario, canciones = [] }) {
-    const hasSpotify = canciones && canciones.length > 0;
+export default function CardProfileHome({ usuario, entradas = [] }) {
+    const hasEntradas = entradas && entradas.length > 0;
 
     return (
         <div className="bg-white py-6 px-4 md:px-8 rounded-2xl shadow-md">
@@ -18,7 +16,7 @@ export default function CardProfileHome({ usuario, canciones = [] }) {
                             loading="lazy"
                         />
                         <div className="absolute -bottom-1 -right-1 bg-[#C122ED] rounded-full p-1.5">
-                            <Music size={14} className="text-white" />
+                            <Ticket size={14} className="text-white" />
                         </div>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -41,35 +39,82 @@ export default function CardProfileHome({ usuario, canciones = [] }) {
 
             <div className="border-t border-[#f3e0ff] my-6"></div>
 
-            {/* Sección de música */}
+            {/* Sección de entradas */}
             <div>
                 <div className='flex justify-between items-center mb-6'>
-                    <h3 className='text-xl font-semibold text-gray-900'>Mi música</h3>
-                    {!hasSpotify && (
-                        <button className='text-sm text-[#C122ED] hover:text-[#a01bc7] font-medium flex items-center gap-2 bg-[#f3e0ff] hover:bg-[#e6d0ff] px-4 py-2 rounded-full transition-colors'>
-                            Conectar con Spotify 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                <path d="M8 11.973c2.5 -1.473 5.5 -.973 7.5 .527" />
-                                <path d="M9 15c1.5 -1 4 -1 5 .5" />
-                                <path d="M7 9c2 -1 6 -2 10 .5" />
-                            </svg>
-                        </button>
+                    <h3 className='text-xl font-semibold text-gray-900 flex items-center gap-2'>
+                        <Ticket className="text-[#C122ED]" size={24} />
+                        Mis últimas entradas
+                    </h3>
+                    {hasEntradas && (
+                        <a 
+                            href={`/perfil/entradas/${usuario?.id}`}
+                            className='text-sm text-[#C122ED] hover:text-[#a01bc7] font-medium hover:underline transition-colors'
+                        >
+                            Ver todas
+                        </a>
                     )}
                 </div>
 
-                {hasSpotify ? (
-                    <div className="flex gap-3 flex-col">
-                        {canciones.slice(0, 3).map((cancion, idx) => (
-                            <CardSpotifySong key={idx} cancion={cancion} />
+                {hasEntradas ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {entradas.slice(0, 4).map((entrada) => (
+                            <div 
+                                key={entrada.id}
+                                className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-4 hover:border-[#C122ED] hover:shadow-md transition-all group"
+                            >
+                                <div className="flex items-start justify-between mb-3">
+                                    <h4 className="font-bold text-gray-900 group-hover:text-[#C122ED] transition-colors">
+                                        {entrada.concierto?.artista?.nombre || "Artista"}
+                                    </h4>
+                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                                        {entrada.estado_entrada || "Activa"}
+                                    </span>
+                                </div>
+                                
+                                <div className="space-y-2 text-sm text-gray-600">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar size={16} className="text-[#C122ED] flex-shrink-0" />
+                                        <span className="truncate">
+                                            {entrada.concierto?.fecha 
+                                                ? new Date(entrada.concierto.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
+                                                : "Fecha por confirmar"
+                                            }
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <MapPin size={16} className="text-[#C122ED] flex-shrink-0" />
+                                        <span className="truncate">
+                                            {entrada.concierto?.recinto?.nombre || "Recinto"}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
+                                    <span className="text-xs text-gray-500 font-medium">
+                                        {entrada.seccion?.nombre || "Sección"}
+                                    </span>
+                                    <a 
+                                        href={`/perfil/entradas/${usuario?.id}`}
+                                        className="text-xs text-[#C122ED] hover:text-[#a01bc7] font-semibold hover:underline"
+                                    >
+                                        Ver entrada →
+                                    </a>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-12 bg-gray-50 rounded-2xl">
-                        <Music size={48} className="text-gray-300 mx-auto mb-3" />
-                        <p className="text-gray-500 mb-2">No hay canciones conectadas</p>
-                        <p className="text-sm text-gray-400">Conecta tu Spotify para ver tu música favorita</p>
+                    <div className="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                        <Ticket size={48} className="text-gray-300 mx-auto mb-3" />
+                        <p className="text-gray-500 mb-2 font-medium">No tienes entradas todavía</p>
+                        <p className="text-sm text-gray-400 mb-4">Explora conciertos y consigue tus entradas</p>
+                        <a 
+                            href="/conciertos"
+                            className="inline-flex items-center gap-2 bg-[#C122ED] hover:bg-[#a01bc7] text-white font-semibold px-6 py-2.5 rounded-full transition-all"
+                        >
+                            Explorar conciertos
+                        </a>
                     </div>
                 )}
             </div>

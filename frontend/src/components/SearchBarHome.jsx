@@ -33,7 +33,7 @@ export default function SearchBar() {
         path = `/artistas/detalle/${result.slug}`;
         break;
       case "Recinto":
-        path = `/recintos/${result.slug}`;
+        path = `/recintos/detalle/${result.id}`;
         break;
       default:
         path = `/`;

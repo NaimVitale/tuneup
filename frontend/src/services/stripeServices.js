@@ -61,3 +61,20 @@ export async function getGananciasMensuales(token) {
   }
 }
 
+
+export async function getGananciasDiarias(token) {
+  try {
+    const res = await api.get(
+      `${import.meta.env.VITE_API_URL}/stripe/ganancias-diarias`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data.total;
+  } catch (error) {
+    console.error("Error al obtener ganancias diarias:", error);
+    return 0;
+  }
+}
