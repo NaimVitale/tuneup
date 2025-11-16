@@ -28,7 +28,7 @@ export class Usuario {
     enum: RolUsuario,
     default: RolUsuario.USER,
   })
-  readonly rol: RolUsuario;
+  rol: RolUsuario;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

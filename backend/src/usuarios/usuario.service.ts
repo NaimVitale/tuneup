@@ -7,6 +7,7 @@ import { UpdateUsuarioDto } from './dtos/update-usuario.dto';
 import { UpdatePasswordDto } from './dtos/update-password-usuario.dto';
 import * as bcrypt from 'bcrypt';
 import { UsuarioReadDto } from './dtos/read-usuario.dto';
+import { CreateUsuarioAdminDto } from './dtos/create-usuario-admin.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -26,6 +27,29 @@ export class UsuarioService {
       ...dto,
       password: hashedPassword,
     });
+    return this.usuarioRepo.save(usuario);
+  }
+
+  async createAdmin(dto: CreateUsuarioAdminDto) {
+    // Verificar si ya existe un usuario con ese email
+    const usuarioExistente = await this.usuarioRepo.findOne({ where: { email: dto.email } });
+    if (usuarioExistente) {
+      throw new BadRequestException({ field: 'email', message: 'El correo electrónico ya está registrado.' });
+    }
+
+    // Hashear la contraseña
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    // Crear el usuario con rol
+    const usuario = this.usuarioRepo.create({
+      nombre: dto.nombre,
+      apellido: dto.apellido,
+      email: dto.email,
+      password: hashedPassword,
+      rol: dto.rol, // aquí sí se asigna rol
+    });
+
+    // Guardar en la base de datos
     return this.usuarioRepo.save(usuario);
   }
 
