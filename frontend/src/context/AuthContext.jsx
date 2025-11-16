@@ -45,7 +45,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", newToken);
       return newToken;
     } catch {
-      logout();
+      logout(); // 🔹 aquí forzamos logout si refresh falla
+      setSessionExpired(true); // opcional para toast
       return null;
     }
   };
@@ -79,67 +80,65 @@ export const AuthProvider = ({ children }) => {
     failedRequestsQueue = [];
   };
 
-  const interceptor = api.interceptors.response.use(
-    res => res,
-    async error => {
-      const originalRequest = error.config;
+   const interceptor = api.interceptors.response.use(
+      res => res,
+      async error => {
+        const originalRequest = error.config;
 
-      // Si NO es 401 → rechazo normal
-      if (error.response?.status !== 401) {
-        return Promise.reject(error);
-      }
+        if (error.response?.status !== 401) return Promise.reject(error);
 
-      // Evitamos bucles infinitos
-      if (originalRequest._retry) {
-        setSessionExpired(true);
-        return Promise.reject(error);
-      }
-
-      originalRequest._retry = true;
-
-      try {
-        // Si YA se está refrescando → encolamos la petición
-        if (isRefreshing) {
-          return new Promise((resolve, reject) => {
-            failedRequestsQueue.push({ resolve, reject });
-          })
-            .then(token => {
-              originalRequest.headers["Authorization"] = `Bearer ${token}`;
-              return api(originalRequest);
-            })
-            .catch(err => Promise.reject(err));
+        if (originalRequest._retry) {
+          // ya reintentado → logout
+          await logout();
+          toast.error("Tu sesión ha expirado. Vuelve a iniciar sesión");
+          navigate("/login");
+          return Promise.reject(error);
         }
 
-        isRefreshing = true;
+        originalRequest._retry = true;
 
-        // Pedimos refresh token
-        const res = await api.post("/auth/refresh");
-        const newToken = res.data.access_token;
+        try {
+          if (isRefreshing) {
+            return new Promise((resolve, reject) => {
+              failedQueue.push({ resolve, reject });
+            })
+              .then(token => {
+                originalRequest.headers["Authorization"] = `Bearer ${token}`;
+                return api(originalRequest);
+              })
+              .catch(err => Promise.reject(err));
+          }
 
-        // Actualizamos token
-        setToken(newToken);
-        localStorage.setItem("token", newToken);
+          isRefreshing = true;
 
-        api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+          // Intentamos refresh token
+          const res = await api.post("/auth/refresh");
+          const newToken = res.data.access_token;
 
-        processQueue(null, newToken);
-        return api(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError, null);
-        setSessionExpired(true);
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
+          setToken(newToken);
+          localStorage.setItem("token", newToken);
+          api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+
+          processQueue(null, newToken);
+          return api(originalRequest);
+        } catch (refreshError) {
+          processQueue(refreshError, null);
+          await logout();
+          toast.error("Tu sesión ha expirado. Vuelve a iniciar sesión");
+          navigate("/login");
+          return Promise.reject(refreshError);
+        } finally {
+          isRefreshing = false;
+        }
       }
-    }
-  );
+    );
 
   return () => api.interceptors.response.eject(interceptor);
-}, [setToken]);
+}, [navigate]);
 
   // useEffect que reacciona cuando sessionExpired cambia
-  useEffect(() => {
+  /*useEffect(() => {
     if (sessionExpired) {
       
       toast.error("Tu sesión ha expirado. Vuelve a iniciar sesión");
@@ -147,7 +146,7 @@ export const AuthProvider = ({ children }) => {
       navigate("/login");
       setSessionExpired(false);
     }
-  }, [sessionExpired, navigate]);
+  }, [sessionExpired, navigate]);*/
 
   const updateUser = (newData) => { setUser(prev => { const updated = { ...prev, ...newData }; localStorage.setItem("user", JSON.stringify(updated)); return updated; }); };
 

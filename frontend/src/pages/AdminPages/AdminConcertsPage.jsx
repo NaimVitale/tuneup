@@ -1,17 +1,21 @@
 import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
-import { useGetConciertos } from "../../hooks/concerts/useGetConcerts";
 import { dateFormatWithTime } from "../../utils/dateFormat";
 import DataTable from "../../components/DataTable";
 import Spinner from "../../components/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useGetConcertsAdmin } from "../../hooks/concerts/useGetConcertsAdmin";
+import { useConfirmPopup } from "../../hooks/useConfirmPopup";
+import { useSoftDeleteConcert } from "../../hooks/concerts/useSoftDeleteConcert";
+import { useRestoreConcert } from "../../hooks/concerts/useRestoreConcert";
+import ConfirmPopup from "../../components/ConfirmPopup";
+import { getRestoreWarningsConcert } from "../../services/concertServices";
 
 export default function AdminConcertsPage() {
   const navigate = useNavigate()
+  const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
+  const { handleSoftDelete } = useSoftDeleteConcert();
+  const { handleRestore } = useRestoreConcert();
   const { data: conciertos, isLoading, isError } = useGetConcertsAdmin();
-
-  console.log(conciertos)
 
   const columns = [
     { key: "index", label: "#", render: (c) => c.id },
@@ -29,22 +33,49 @@ export default function AdminConcertsPage() {
       className: "bg-blue-500 text-white hover:bg-blue-600",
     },
     {
-      icon: (c) =>
-        c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />,
-      onClick: async (c) => {
-        if (c.deleted_at) {
+    icon: (c) => (c.deleted_at ? <RotateCw size={18} /> : <Trash size={18} />),
+    onClick: async (c) => {
+      if (c.deleted_at) {
+        // 1️⃣ Llamada directa al backend, NO HOOK
+        let warnings = { artistaEliminado: false, recintoEliminado: false };
+        try {
+          warnings = await getRestoreWarningsConcert(c.id); 
+        } catch (err) {
+          console.error("Error al obtener warnings", err);
+        }
+
+        // 2️⃣ Construir mensaje dinámico
+        let message = "¿Está seguro que quiere restaurar este concierto y sus elementos asociados?";
+        if (warnings.artistaEliminado || warnings.recintoEliminado) {
+          message += "\n⚠️ Atención:";
+          if (warnings.artistaEliminado) message += " El artista está eliminado.";
+          if (warnings.recintoEliminado) message += " El recinto está eliminado.";
+        }
+
+        // 3️⃣ Abrir popup
+        openConfirm(message, async () => {
           const success = await handleRestore(c.id);
           if (success) console.log("Restaurado", c.id);
-        } else {
-          const success = await handleSoftDelete(c.id);
-          if (success) console.log("Eliminado", c.id);
-        }
-      },
-      className: (c) =>
-        c.deleted_at
-          ? "bg-yellow-500 text-white hover:bg-yellow-600"
-          : "bg-red-500 text-white hover:bg-red-600",
+          closeConfirm();
+        });
+
+      } else {
+        // Eliminar concierto
+        openConfirm(
+          "¿Está seguro que quiere eliminar este concierto?",
+          async () => {
+            const success = await handleSoftDelete(c.id);
+            if (success) console.log("Eliminado", c.id);
+            closeConfirm();
+          }
+        );
+      }
     },
+    className: (c) =>
+      c.deleted_at
+        ? "bg-yellow-500 text-white hover:bg-yellow-600"
+        : "bg-red-500 text-white hover:bg-red-600",
+  },
   ];
 
   if (isLoading) return <Spinner size={20} color="border-white"/>;
@@ -71,6 +102,12 @@ export default function AdminConcertsPage() {
           </div>
         </div>
         <DataTable columns={columns} data={conciertos} actions={actions} />
+        <ConfirmPopup
+          isOpen={isOpen}
+          onClose={closeConfirm}
+          onConfirm={onConfirm}
+          message={message}
+        />
       </div>
     </div>
   );

@@ -43,8 +43,20 @@ export async function irACheckout(token, items, id_usuario) {
 }
 
 
-export async function getGananciasMensuales(){
-  const res = await axios.get(`${import.meta.env.VITE_API_URL}/stripe/ganancias-mensuales`);
-  return res.data.total;
-};
+export async function getGananciasMensuales(token) {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/stripe/ganancias-mensuales`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data.total;
+  } catch (error) {
+    console.error("Error al obtener ganancias mensuales:", error);
+    return 0;
+  }
+}
 
