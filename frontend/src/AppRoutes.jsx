@@ -16,6 +16,8 @@ const AdminDashboardPage = React.lazy(() => import('./pages/AdminPages/AdminDash
 const AdminConcertsPage = React.lazy(() => import('./pages/AdminPages/AdminConcertsPage'));
 const AdminCompraPage = React.lazy(() => import('./pages/AdminPages/AdminCompraPage'))
 const ArtistPage = React.lazy(() => import('./pages/ArtistPage'));
+const RecintoPage = React.lazy(() => import('./pages/RecintoPage'));
+const SingleRecintoPage = React.lazy(() => import('./pages/SingleRecintoPage'));
 const AdminArtistPage = React.lazy(() => import('./pages/AdminPages/AdminArtistPage'));
 const AdminEditPage = React.lazy(() => import('./pages/AdminPages/AdminEditPage'));
 const SingleArtistPage = React.lazy(() => import('./pages/SingleArtistPage'));
@@ -36,7 +38,9 @@ export default function AppRoutes() {
             <Route path='/conciertos/:slug/:id' element={<SingleEventPage />} />
             <Route path='/conciertos/:genero?' element={<EventsPage />} />
             <Route path='/artistas/detalle/:slug' element={<SingleArtistPage />} />
-            <Route path='/artistas/:genero?' element={<ArtistPage />} />
+            <Route path='/artistas/:genero?' element={<ArtistPage />}/>
+            <Route path='/recintos/detalle/:id' element={<SingleRecintoPage/>}/>
+            <Route path='/recintos/:ciudad?' element={<RecintoPage/>}/>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/perfil' element={<ProfileLayout />}>

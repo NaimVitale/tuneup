@@ -25,8 +25,26 @@ function Cardproduct ({information}) {
                     </p>
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                    <p className="text-md text-[#C122ED]">Desde <span className="font-semibold">{information?.precio_minimo || "79"}€</span></p>
-                    <Link to={`/conciertos/${information?.artista_slug || information?.artista?.slug }/${information?.concierto_id || information?.id}`}><button className='py-1.5 px-4 btn-primary w-max'>Comprar</button></Link>
+                    {information?.estado === 'proximamente' ? (
+                        <div className="flex justify-end w-full">
+                            <Link
+                                to={`/conciertos/${information?.artista_slug || information?.artista?.slug}/${information?.concierto_id || information?.id}`}
+                            >
+                                <button className="py-1.5 px-4 btn-primary w-max">Mas información</button>
+                            </Link>
+                        </div>
+                    ) : (
+                        <>
+                        <p className="text-md text-[#C122ED]">
+                            Desde <span className="font-semibold">{information?.precio_minimo || '79'}€</span>
+                        </p>
+                        <Link
+                            to={`/conciertos/${information?.artista_slug || information?.artista?.slug}/${information?.concierto_id || information?.id}`}
+                        >
+                            <button className="py-1.5 px-4 btn-primary w-max">Comprar</button>
+                        </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

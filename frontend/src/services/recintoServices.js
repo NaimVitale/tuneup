@@ -32,6 +32,17 @@ export const getAllRecintos = async(token, params) => {
   }
 }
 
+export const getAllRecintosPublic = async (params) => {
+   try{
+    const response = await axios.get(`${API_URL}/public`,{
+      params
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
+
 //Consulta sobre todos los recintos para select
 export const getAllRecintosSelect = async() => {
   try{
@@ -50,6 +61,16 @@ export const getRecintoAdmin = async(token, id) => {
         Authorization: `Bearer ${token}`
       }
     })
+    return response.data;
+  }catch{
+    throw error.response?.data || error;
+  }
+}
+
+//Consulta sobre un recinto publico
+export const getRecintoPublic = async(id) => {
+  try{
+    const response = await axios.get(`${API_URL}/public/${id}`)
     return response.data;
   }catch{
     throw error.response?.data || error;

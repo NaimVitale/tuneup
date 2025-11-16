@@ -44,7 +44,7 @@ import Pagination from "../components/Pagination";
           <div className="pb-6 pt-12">
             <div className="lg:w-[50%] grid-cols-1 grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               <InputSelect
-                placeholder="Género"
+                placeholder="Seleccione género"
                 value={genero || ""}
                 onChange={handleGeneroChange}
                 options={[

@@ -30,7 +30,7 @@ export default function ArtistPage() {
                 <div className="pb-6 pt-12">
                     <div className="lg:w-[50%] grid lg:grid-cols-3 gap-6">
                         <InputSelect
-                            placeholder="Género"
+                            placeholder="Seleccione género"
                             value={genero || ""}
                             onChange={handleGeneroChange}
                             options={[

@@ -19,7 +19,7 @@ export default function ArtistPage(){
                             Cargando eventos, por favor espera...
                         </div>
                         ) : artist?.conciertos?.length > 0 ? (
-                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:row-span-1 gap-8'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 lg:row-span-1 gap-8'>
                             {artist.conciertos.map((c) => (
                                 <Cardproduct information={c} key={c.id}/>
                             ))}
