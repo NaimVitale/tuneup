@@ -3,6 +3,8 @@ import { Concierto } from "src/conciertos/entities/concierto.entity";
 import { Seccion } from "src/secciones/entities/seccion.entity";
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+export const ALLOWED_FILE_FIELDS = ['img_card', 'img_hero'];
+
 @Entity("recintos")
 export class Recinto {
 
@@ -17,6 +19,12 @@ export class Recinto {
 
     @Column({type: 'json'})
     svg_map: any;
+
+    @Column({ type: 'longtext', nullable: true })
+    img_card?: string;
+
+    @Column({ type: 'longtext', nullable: true })
+    img_hero?: string;
 
     @ManyToOne(() => Ciudad, ciudad => ciudad.recintos, {
         onDelete: 'SET NULL',

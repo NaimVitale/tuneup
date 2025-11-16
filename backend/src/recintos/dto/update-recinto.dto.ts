@@ -33,4 +33,12 @@ export class UpdateRecintoDto {
   @ValidateNested({ each: true })
   @Type(() => SeccionDto)
   secciones?: SeccionDto[];
+
+  @IsOptional()
+  @IsString()
+  img_card?: string;
+
+  @IsOptional()
+  @IsString()
+  img_hero?: string;
 }

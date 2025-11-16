@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFiles, BadRequestException } from '@nestjs/common';
 import { RecintosService } from './recintos.service';
 import { CreateRecintoDto } from './dto/create-recinto.dto';
 import { UpdateRecintoDto } from './dto/update-recinto.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ALLOWED_FILE_FIELDS } from './entities/recinto.entity';
 
 @Controller('recintos')
 export class RecintosController {
@@ -12,8 +14,31 @@ export class RecintosController {
   @UseGuards(JwtRolesGuard)
   @Post()
   @Roles('admin')
-  create(@Body() createRecintoDto: CreateRecintoDto) {
-    return this.recintosService.create(createRecintoDto);
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'img_card', maxCount: 1 },
+      { name: 'img_hero', maxCount: 1 },
+    ])
+  )
+  create(
+    @Body() body: any,
+    @UploadedFiles() files: Record<string, Express.Multer.File[]>
+  ) {
+
+    // Parsear secciones si vienen como string
+    if (body.secciones && typeof body.secciones === "string") {
+      try {
+        body.secciones = JSON.parse(body.secciones);
+      } catch (err) {
+        console.error("Error parseando secciones:", err);
+        throw new BadRequestException("Secciones inválidas");
+      }
+    }
+
+    // Asegurar ciudad como número
+    body.ciudad = Number(body.ciudad);
+
+    return this.recintosService.create(body, files);
   }
 
   @UseGuards(JwtRolesGuard)
@@ -38,8 +63,33 @@ export class RecintosController {
   @UseGuards(JwtRolesGuard)
   @Patch(':id')
   @Roles('admin')
-  update(@Param('id') id: string, @Body() updateRecintoDto: UpdateRecintoDto) {
-    return this.recintosService.update(+id, updateRecintoDto);
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'img_card', maxCount: 1 },
+      { name: 'img_hero', maxCount: 1 },
+    ])
+  )
+  update(
+    @Param('id') id: string,
+    @Body() body: any,
+    @UploadedFiles() files: Record<string, Express.Multer.File[]>
+  ) {
+    // Parsear secciones si vienen como string
+    if (body.secciones && typeof body.secciones === "string") {
+      try {
+        body.secciones = JSON.parse(body.secciones);
+      } catch (err) {
+        console.error("Error parseando secciones:", err);
+        throw new BadRequestException("Secciones inválidas");
+      }
+    }
+
+    // Asegurar ciudad como número
+    if (body.ciudad !== undefined) {
+      body.ciudad = Number(body.ciudad);
+    }
+
+    return this.recintosService.update(Number(id), body, files);
   }
 
   @UseGuards(JwtRolesGuard)

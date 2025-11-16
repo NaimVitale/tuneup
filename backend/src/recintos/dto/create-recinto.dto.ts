@@ -27,6 +27,14 @@ export class CreateRecintoDto {
   svg_map?: string;
 
   @IsOptional()
+  @IsString()
+  img_card?: string;
+
+  @IsOptional()
+  @IsString()
+  img_hero?: string;
+
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => SeccionCreateDto)

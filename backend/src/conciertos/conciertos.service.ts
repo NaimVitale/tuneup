@@ -148,7 +148,6 @@ export class ConciertosService {
   }
 
   async findAllAdmin(incluirEliminados = false) {
-    console.log(incluirEliminados)
     const query = this.conciertoRepository
       .createQueryBuilder('concierto')
       .leftJoinAndSelect('concierto.artista', 'artista')

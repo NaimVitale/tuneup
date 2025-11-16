@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRecintoDto } from './dto/create-recinto.dto';
 import { UpdateRecintoDto } from './dto/update-recinto.dto';
-import { Recinto } from './entities/recinto.entity';
+import { ALLOWED_FILE_FIELDS, Recinto } from './entities/recinto.entity';
 import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seccion } from 'src/secciones/entities/seccion.entity';
 import { Ciudad } from 'src/ciudades/entities/ciudad.entity';
 import { Concierto } from 'src/conciertos/entities/concierto.entity';
+import { UploadService } from 'src/upload/upload.service';
 
 @Injectable()
 export class RecintosService {
@@ -14,18 +15,17 @@ export class RecintosService {
     @InjectRepository(Recinto) private repo: Repository<Recinto>,
 
     @InjectRepository(Concierto) private conciertoRepo: Repository<Concierto>,
+
+    private readonly uploadService: UploadService,
   ) {}
 
-  async create(dto: CreateRecintoDto) {
+  async create(dto: CreateRecintoDto, files?: Record<string, Express.Multer.File[]>): Promise<Recinto> {
     const { nombre, ciudad, secciones, svg_map } = dto;
 
+    // Validar secciones repetidas como antes
     const sec = secciones ?? [];
-
     if (sec.length > 1) {
-      const nombres = sec
-        .map(s => s.nombre?.trim().toLowerCase())
-        .filter(Boolean);
-
+      const nombres = sec.map(s => s.nombre?.trim().toLowerCase()).filter(Boolean);
       if (new Set(nombres).size !== nombres.length) {
         throw new BadRequestException('No puede haber secciones con nombres repetidos');
       }
@@ -43,15 +43,19 @@ export class RecintosService {
       })) || []
     });
 
+    // Subir imágenes a Cloudinary si vienen
+    if (files) {
+      for (const [key, fileArray] of Object.entries(files)) {
+        if (ALLOWED_FILE_FIELDS.includes(key) && fileArray[0]) {
+          const uploaded = await this.uploadService.handleUploads({ [key]: [fileArray[0]] }, 'tuneup/recintos', ALLOWED_FILE_FIELDS);
+          recinto[key] = uploaded[key];
+        }
+      }
+    }
+
     const saved = await this.repo.save(recinto);
 
-    return {
-      id: saved.id,
-      nombre: saved.nombre,
-      ciudad: saved.ciudad,
-      svg_map: saved.svg_map,
-      secciones: saved.secciones,
-    };
+    return saved;
   }
 
   findAll() {
@@ -84,7 +88,7 @@ export class RecintosService {
     });
   }
 
-  async update(id: number, dto: UpdateRecintoDto) {
+  async update(id: number, dto: UpdateRecintoDto, files?: Record<string, Express.Multer.File[]>) {
     const recinto = await this.repo.findOne({
       where: { id },
       relations: ['secciones'],
@@ -135,6 +139,20 @@ export class RecintosService {
           seccion.svg_path = s.svg_path || '';
           seccion.recinto = recinto;
           recinto.secciones.push(seccion);
+        }
+      }
+    }
+
+    // Manejar archivos
+    if (files) {
+      for (const [key, fileArray] of Object.entries(files)) {
+        if (fileArray[0]) {
+          const uploaded = await this.uploadService.handleUploads(
+            { [key]: [fileArray[0]] },
+            'tuneup/recintos',
+            ['img_card', 'img_hero']
+          );
+          recinto[key] = uploaded[key];
         }
       }
     }

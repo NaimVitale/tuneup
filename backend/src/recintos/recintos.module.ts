@@ -8,9 +8,10 @@ import { ArtistaService } from 'src/artistas/artista.service';
 import { SearchService } from 'src/search/search.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { Concierto } from 'src/conciertos/entities/concierto.entity';
+import { UploadModule } from 'src/upload/upload.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recinto, Seccion, Concierto]), AuthModule],
+  imports: [TypeOrmModule.forFeature([Recinto, Seccion, Concierto]), AuthModule, UploadModule],
   controllers: [RecintosController],
   providers: [RecintosService],
   exports: [RecintosService],
