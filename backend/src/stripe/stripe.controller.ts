@@ -185,4 +185,12 @@ export class StripeController {
     const total = await this.stripeService.getGananciasMensuales();
     return { total: total / 100 };
   }
+
+  @UseGuards(JwtRolesGuard)
+  @Get('ganancias-diarias')
+  @Roles('admin')
+  async gananciasHoy() {
+    const total = await this.stripeService.getGananciasHoy();
+    return { total: total / 100 };
+  }
 }

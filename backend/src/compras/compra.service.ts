@@ -1,6 +1,6 @@
 // src/compras/compra.service.ts
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { Repository, EntityManager } from 'typeorm';
+import { Repository, EntityManager, Between } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Compra } from './entities/compra.entity';
 import { StripeService } from 'src/stripe/stripe.service';
@@ -68,4 +68,21 @@ export class CompraService {
     .loadRelationCountAndMap('compra.total_entradas', 'compra.entradas') // cuenta las entradas y lo mapea como total_entradas
     .getMany()
   }
+
+  async comprasDiarias() {
+    const now = new Date();
+
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+    try {
+      const count = await this.compraRepo.count({
+        where: { fecha_creacion: Between(startOfDay, endOfDay) },
+      });
+      return count; // devuelve número de compras hoy
+    } catch (err) {
+      console.error('Error en comprasDiarias:', err);
+      return 0; // devolver 0 si hay error para no romper el dashboard
+    }
+}
 }

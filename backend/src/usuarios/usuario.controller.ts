@@ -31,6 +31,13 @@ export class UsuarioController {
   }
 
   @UseGuards(JwtRolesGuard)
+  @Get('new-users')
+  @Roles('admin')
+  getNewUsers() {
+    return this.usuarioService.newUsers();
+  }
+
+  @UseGuards(JwtRolesGuard)
   @Get(':id')
   @Roles('admin', 'usuario')
   async getPerfil(@Param('id', ParseIntPipe) id: number, @Request() req) {

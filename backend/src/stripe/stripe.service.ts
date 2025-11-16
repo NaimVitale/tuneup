@@ -55,37 +55,43 @@ export class StripeService {
 
   async getGananciasMensuales() {
     const now = new Date();
-    // Inicio: hoy a las 00:00:00 UTC
-    const start = Math.floor(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      0, 0, 0
-    ) / 1000);
-
-    // Fin: mismo día del mes siguiente a las 23:59:59 UTC
-    const nextMonth = new Date(now);
-    nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1);
-
-    const end = Math.floor(Date.UTC(
-      nextMonth.getUTCFullYear(),
-      nextMonth.getUTCMonth(),
-      nextMonth.getUTCDate(),
-      23, 59, 59
-    ) / 1000);
+    const startOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth(), 1).getTime() / 1000);
+    const endOfMonth = Math.floor(new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).getTime() / 1000);
 
     let total = 0;
 
+    await this.stripe.paymentIntents.list({ limit: 100 }).autoPagingEach(async (pi) => {
+      if (
+        pi.status === 'succeeded' &&
+        pi.created >= startOfMonth &&
+        pi.created <= endOfMonth
+      ) {
+        total += pi.amount ?? 0;
+      }
+    });
+
+    return total; // en centavos
+  }
+
+  async getGananciasHoy() {
+    const now = new Date();
+
+    // Inicio y fin del día actual
+    const startOfDay = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
+    const endOfDay = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59).getTime() / 1000);
+
+    let total: number = 0;
+
     await this.stripe.paymentIntents.list({
       limit: 100,
-      created: { gte: start, lte: end } // FILTRO EN LA API
+      created: { gte: startOfDay, lte: endOfDay }
     }).autoPagingEach((pi) => {
       if (pi.status === 'succeeded') {
         total += pi.amount ?? 0;
       }
     });
 
-    return total; // en centavos
+    return total 
   }
 }
 

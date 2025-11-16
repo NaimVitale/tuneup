@@ -32,4 +32,11 @@ export class CompraController {
   async getAll(){
     return await this.compraService.getAll();
   }
+
+  @UseGuards(JwtRolesGuard)
+  @Get('admin/compras-diarias')
+  @Roles('admin')
+  async getComprasDiarias(){
+    return await this.compraService.comprasDiarias();
+  }
 }

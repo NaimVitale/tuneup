@@ -20,7 +20,6 @@ export class GeneroService {
   }
 
   findAll(incluirEliminados = false) {
-    console.log(incluirEliminados)
     return this.generoRepository.find({
       withDeleted: incluirEliminados,
     });

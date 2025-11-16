@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Usuario } from './usuario.entity';
 import { CreateUsuarioDto } from './dtos/create-usuario.dto'
 import { UpdateUsuarioDto } from './dtos/update-usuario.dto';
@@ -63,6 +63,23 @@ export class UsuarioService {
         rol: true,
       }
     });
+  }
+
+  async newUsers() {
+    const now = new Date();
+
+    // Inicio y fin del día actual
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+    // Contar usuarios creados hoy
+    const count = await this.usuarioRepo.count({
+      where: {
+        createdAt: Between(startOfDay, endOfDay),
+      },
+    });
+
+    return count; // devuelve un número
   }
 
   async findByEmail(email: string) {
