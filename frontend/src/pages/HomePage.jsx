@@ -43,7 +43,7 @@ function Homepage() {
                 <div id="proximos" className='w-[90%] m-auto'>
                     <div className='flex justify-between items-center mb-8'>
                         <div>
-                            <h2 className='text-3xl font-bold text-gray-900 mb-1'>Próximos conciertos</h2>
+                            <h2 className='text-3xl font-bold text-gray-900 mb-1'>Próximamente a la venta</h2>
                             <div className='h-1 w-20 mt-3 bg-gradient-to-r from-[#C122ED] to-[#a01bc7] rounded-full'></div>
                         </div>
                         <Link 
