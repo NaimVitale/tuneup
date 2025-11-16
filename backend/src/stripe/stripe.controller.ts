@@ -1,5 +1,5 @@
 // src/stripe/stripe.controller.ts
-import { Controller, Post, Req, Res, Body, Headers, Logger, Get } from '@nestjs/common';
+import { Controller, Post, Req, Res, Body, Headers, Logger, Get, UseGuards } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { CompraService } from '../compras/compra.service';
 import { EntradaService } from '../entradas/entrada.service';
@@ -8,6 +8,8 @@ import { Request, Response } from 'express';
 import Stripe from 'stripe';
 import { PreciosSeccionConciertoService } from 'src/precios-seccion-concierto/precios-seccion-concierto.service';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('stripe')
 export class StripeController {
@@ -176,7 +178,9 @@ export class StripeController {
     return res.json({ received: true });
   }
 
+  @UseGuards(JwtRolesGuard)
   @Get('ganancias-mensuales')
+  @Roles('admin')
   async gananciasMensuales() {
     const total = await this.stripeService.getGananciasMensuales();
     return { total: total / 100 };

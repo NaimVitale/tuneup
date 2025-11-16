@@ -68,9 +68,23 @@ export class ConciertosController {
     return this.conciertosService.update(+id, updateConciertoDto);
   }
   
-  /*
+  @UseGuards(JwtRolesGuard)
+  @Roles('admin')
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.conciertosService.remove(+id);
-  }*/
+  async softDelete(@Param('id') id: string) {
+    return await this.conciertosService.softDelete(+id);
+  }
+
+  @UseGuards(JwtRolesGuard)
+  @Roles('admin')
+  @Patch('restore/:id')
+  async restore(@Param('id') id: string) {
+    return await this.conciertosService.restore(+id);
+  }
+
+  // Controller
+  @Get('restore-warnings/:id')
+  getRestoreWarnings(@Param('id') id: string) {
+    return this.conciertosService.getRestoreWarnings(+id);
+  }
 }

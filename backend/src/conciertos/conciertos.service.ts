@@ -513,7 +513,60 @@ export class ConciertosService {
     return await this.conciertoRepository.save(concierto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} concierto`;
+  async softDelete(id: number) {
+    const concierto = await this.conciertoRepository.findOne({
+      where: { id },
+      relations: ['artista', 'recinto'],
+    });
+
+    if (!concierto) throw new NotFoundException('Concierto no encontrado');
+
+    await this.conciertoRepository.softDelete(id);
+
+    return {
+      message: 'Concierto eliminado correctamente',
+      id,
+    };
+  }
+
+  async restore(id: number) {
+    const concierto = await this.conciertoRepository.findOne({
+      where: { id },
+      relations: ['artista', 'recinto'],
+      withDeleted: true,
+    });
+
+    if (!concierto) throw new NotFoundException('Concierto no encontrado');
+
+    const warnings: string[] = [];
+
+    if (concierto.artista.deleted_at) {
+      await this.conciertoRepository.manager.restore(Artista, { id: concierto.artista.id });
+      warnings.push('Se restauró el artista automáticamente');
+    }
+
+    if (concierto.recinto.deleted_at) {
+      await this.conciertoRepository.manager.restore(Recinto, { id: concierto.recinto.id });
+      warnings.push('Se restauró el recinto automáticamente');
+    }
+
+    await this.conciertoRepository.restore(id);
+
+    return { message: 'Concierto restaurado correctamente', id, warnings };
+  }
+
+  async getRestoreWarnings(id: number) {
+    const concierto = await this.conciertoRepository.findOne({
+      where: { id },
+      relations: ['artista', 'recinto'],
+      withDeleted: true,
+    });
+
+    if (!concierto) throw new NotFoundException('Concierto no encontrado');
+
+    return {
+      artistaEliminado: !!concierto.artista.deleted_at,
+      recintoEliminado: !!concierto.recinto.deleted_at,
+    };
   }
 }
