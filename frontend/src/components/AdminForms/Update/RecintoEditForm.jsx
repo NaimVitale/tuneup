@@ -7,7 +7,7 @@ import { useGetCiudades } from "../../../hooks/ciudades/useGetCiudades";
 
 export default function RecintoEditForm({data}) {
 
-  const { formData, updateField, updateSections, handleSubmit, loading } = useRecintoUpdate(data);
+  const { formData, updateField, updateSections, updateFile, handleSubmit, loading } = useRecintoUpdate(data);
   const { data: ciudades, isLoading: isLoadingGeneros } = useGetCiudades();
 
   const onSubmit = async (e) => {
@@ -37,8 +37,8 @@ export default function RecintoEditForm({data}) {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 mt-8 mb-10">
-          <InputFile label="Imagen tarjeta" />
-          <InputFile label="Imagen banner" />
+          <InputFile label="Imagen tarjeta" field="img_card" initialUrl={formData.img_card} onChange={updateFile} />
+          <InputFile label="Imagen banner" field="img_hero" initialUrl={formData.img_hero} onChange={updateFile} />
         </div>
         <div>
           <TableSections sections={formData?.secciones || []} onSectionsChange={updateSections} mode="recinto" showActions={true}></TableSections>

@@ -1,91 +1,85 @@
-// hooks/useRecintoCreate.js
 import { useState } from "react";
-import { CreateRecinto } from "../../services/recintoServices";
 import toast from "react-hot-toast";
+import { CreateRecinto } from "../../services/recintoServices";
 
 export const useRecintoCreate = () => {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     nombre: "",
     ciudad: "",
-    // img_card: null,
-    // img_banner: null,
     secciones: [],
   });
 
+  const [files, setFiles] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
 
-  // Actualizar campo simple
   const updateField = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setForm(prev => ({ ...prev, [field]: value }));
+    setErrors(prev => ({ ...prev, [field]: "" }));
   };
 
-  // Actualizar secciones
   const updateSections = (newSections) => {
-    setFormData(prev => ({ ...prev, secciones: newSections }));
+    setForm(prev => ({ ...prev, secciones: newSections }));
   };
 
-  // Futuro: actualizar archivos
-  // const updateFile = (field, file) => {
-  //   setFormData(prev => ({ ...prev, [field]: file }));
-  // };
+  const updateFile = (file, field) => {
+    setFiles(prev => ({ ...prev, [field]: file || null }));
+    setErrors(prev => ({ ...prev, [field]: "" }));
+  };
 
-  // Enviar creación
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
+    if (!form.ciudad) newErrors.ciudad = "Debes seleccionar una ciudad";
+    if (!files.img_card) newErrors.img_card = "La imagen de tarjeta es obligatoria";
+    if (!files.img_hero) newErrors.img_hero = "La imagen banner es obligatoria";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      toast.error("Por favor, completa los campos obligatorios");
+      return false;
+    }
+
+    const token = localStorage.getItem("token");
     setLoading(true);
-    setError(null);
 
     try {
-      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("nombre", form.nombre);
+      formData.append("ciudad", form.ciudad);
+      formData.append("secciones", JSON.stringify(form.secciones));
 
-      const dataToSend = {
-        nombre: formData.nombre,
-        ciudad: formData.ciudad, // ID numérico
-        secciones: formData.secciones?.length
-          ? formData.secciones.map(s => ({
-              nombre: s.nombre,
-              capacidad: s.capacidad,
-              tipo_svg: s.tipo_svg,
-              svg_path: s.svg_path,
-            }))
-          : undefined,
-        // img_card: formData.img_card,
-        // img_banner: formData.img_banner,
-      };
+      Object.entries(files).forEach(([key, file]) => {
+        if (file) formData.append(key, file);
+      });
 
-      const response = await CreateRecinto(token, dataToSend);
-
+      const response = await CreateRecinto(token, formData);
       toast.success("Recinto creado correctamente");
 
       // Limpiar formulario
-      setFormData({
-        nombre: "",
-        ciudad: "",
-        // img_card: null,
-        // img_banner: null,
-        secciones: [],
-      });
-      
-
-      setLoading(false);
+      setForm({ nombre: "", ciudad: "", secciones: [] });
+      setFiles({});
+      setErrors({});
       return response;
-
     } catch (err) {
       console.error(err);
-      setError(err);
-      toast.error("Error al crear el recinto");
-      setLoading(false);
+      toast.error(err?.error || "Error al crear el recinto");
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
   return {
-    formData,
+    form,
     updateField,
     updateSections,
-    // updateFile,
+    updateFile,
     handleSubmit,
     loading,
-    error,
+    errors
   };
 };

@@ -23,7 +23,6 @@ export default function AdminUsersPage() {
     },
     {
       icon: <Trash size={18} />,
-      onClick: (c) => console.log("Eliminar", c.id),
       className: "bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer",
     },
   ];

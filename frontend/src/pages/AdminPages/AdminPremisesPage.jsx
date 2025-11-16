@@ -18,6 +18,8 @@ export default function AdminPremisesPage() {
     { key: "nombre", label: "Nombre", render: (c) => c.nombre },
     { key: "secciones", label: "Secciones", render: (c) => c.seccionesCount},
     { key: "ciudad", label: "Ciudad", render: (c) => c.ciudad.nombre },
+        { key: "img_card", label: "Imagen Tarjeta", render: (c) => c.img_card },
+    { key: "img_hero", label: "Imagen Banner", render: (c) => c.img_hero },
   ];
 
   const actions = [
@@ -42,7 +44,6 @@ export default function AdminPremisesPage() {
             "¿Está seguro que quiere restaurar este recinto? Se restaurarán también los conciertos asociados.",
             async () => {
               const success = await handleRestore(c.id);
-              if (success) console.log("Restaurado", c.id);
               closeConfirm();
             }
           );
@@ -52,7 +53,6 @@ export default function AdminPremisesPage() {
             "¿Está seguro que quiere eliminar este recinto? Se eliminarán también los conciertos asociados.",
             async () => {
               const success = await handleSoftDelete(c.id);
-              if (success) console.log("Eliminado", c.id);
               closeConfirm();
             }
           );
@@ -66,6 +66,8 @@ export default function AdminPremisesPage() {
   ];
 
   const { data: recintos, isLoading, isError } = useGetRecintos();
+
+  console.log(recintos)
 
   if (isLoading) return <Spinner size={20} color="border-white"/>;
   if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los recintos</p>

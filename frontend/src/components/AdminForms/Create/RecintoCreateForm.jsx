@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function RecintoCreateForm() {
   const navigate = useNavigate();
-  const { formData, updateField, updateSections, handleSubmit, loading } = useRecintoCreate();
+  const { form, updateField, updateSections, updateFile, handleSubmit, loading } = useRecintoCreate();
   const { data: ciudades, isLoading: isLoadingGeneros } = useGetCiudades();
 
   const onSubmit = async (e) => {
@@ -24,10 +24,10 @@ export default function RecintoCreateForm() {
       <form onSubmit={onSubmit} className="w-[95%] gap-10">
 
         <div className="grid lg:grid-cols-2 gap-8">
-          <InputForm label={"Nombre"} id={"nombre"} type="text" value={formData?.nombre} onChange={(e) => updateField('nombre', e.target.value)} />
+          <InputForm label={"Nombre"} id={"nombre"} type="text" value={form?.nombre} onChange={(e) => updateField('nombre', e.target.value)} />
           <InputSelect
             placeholder="Ciudad"
-            value={formData?.ciudad}
+            value={form?.ciudad}
             onChange={(value) => updateField("ciudad", value)}
             options={[
                 ...(ciudades?.map((c) => ({
@@ -39,11 +39,21 @@ export default function RecintoCreateForm() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 mt-8 mb-10">
-          <InputFile label="Imagen tarjeta" />
-          <InputFile label="Imagen banner" />
+            <InputFile
+              label="Imagen tarjeta"
+              field="img_card"
+              initialUrl={form?.img_card}
+              onChange={updateFile}
+            />
+            <InputFile
+              label="Imagen banner"
+              field="img_hero"
+              initialUrl={form?.img_hero}
+              onChange={updateFile}
+            />
         </div>
         <div>
-          <TableSections sections={formData.secciones} onSectionsChange={updateSections} mode="recinto" showActions={true}></TableSections>
+          <TableSections sections={form.secciones} onSectionsChange={updateSections} mode="recinto" showActions={true}></TableSections>
         </div>
           <button className="btn-primary py-2 px-4 text-md w-max mt-10" disabled={loading}>
             Crear Recinto

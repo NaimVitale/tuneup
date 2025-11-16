@@ -40,7 +40,6 @@ export default function AdminGeneroPage() {
             "¿Está seguro que quiere restaurar este genero?",
             async () => {
               const success = await handleRestore(c.id);
-              if (success) console.log("Restaurado", c.id);
               closeConfirm();
             }
           );
@@ -50,7 +49,6 @@ export default function AdminGeneroPage() {
             "¿Está seguro que quiere eliminar este genero?",
             async () => {
               const success = await handleSoftDelete(c.id);
-              if (success) console.log("Eliminado", c.id);
               closeConfirm();
             }
           );

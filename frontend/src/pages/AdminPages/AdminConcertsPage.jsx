@@ -66,7 +66,6 @@ export default function AdminConcertsPage() {
         // 3️⃣ Abrir popup
         openConfirm(message, async () => {
           const success = await handleRestore(c.id);
-          if (success) console.log("Restaurado", c.id);
           closeConfirm();
         });
 
@@ -76,7 +75,6 @@ export default function AdminConcertsPage() {
           "¿Está seguro que quiere eliminar este concierto?",
           async () => {
             const success = await handleSoftDelete(c.id);
-            if (success) console.log("Eliminado", c.id);
             closeConfirm();
           }
         );
@@ -91,8 +89,6 @@ export default function AdminConcertsPage() {
 
   if (isLoading) return <Spinner size={20} color="border-white"/>;
   if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los conciertos</p>
-
-  console.log(conciertos);
 
    return (
     <div className="w-full min-h-screen">

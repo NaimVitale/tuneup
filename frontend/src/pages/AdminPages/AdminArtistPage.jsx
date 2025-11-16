@@ -44,7 +44,6 @@ export default function AdminArtistPage() {
             "¿Está seguro que quiere restaurar este artista? Se restaurarán también los conciertos asociados.",
             async () => {
               const success = await handleRestore(c.id);
-              if (success) console.log("Restaurado", c.id);
               closeConfirm();
             }
           );
@@ -54,7 +53,6 @@ export default function AdminArtistPage() {
             "¿Está seguro que quiere eliminar este artista? Se eliminarán también los conciertos asociados.",
             async () => {
               const success = await handleSoftDelete(c.id);
-              if (success) console.log("Eliminado", c.id);
               closeConfirm();
             }
           );
