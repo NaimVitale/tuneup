@@ -13,6 +13,7 @@ export class AuthService {
   ) {}
 
   async login(dto: LoginUsuarioDto, res: Response) {
+    
     const usuario = await this.usuarioService.findByEmail(dto.email.toLowerCase());
 
     if (!usuario) throw new UnauthorizedException('Credenciales incorrectas');
