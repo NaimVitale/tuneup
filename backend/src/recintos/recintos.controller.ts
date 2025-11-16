@@ -49,6 +49,11 @@ export class RecintosController {
     return this.recintosService.findAll(incluir);
   }
 
+  @Get('public')
+  findAllPublic(@Query('ciudad') idCiudad?: string) {
+    return this.recintosService.findAllPublic(idCiudad ? Number(idCiudad) : undefined);
+  }
+
   @Get('select')
   findAllSelect() {
     return this.recintosService.findAllSelect();
@@ -59,6 +64,11 @@ export class RecintosController {
   @Roles('admin')
   findOne(@Param('id') id: string) {
     return this.recintosService.findOne(+id);
+  }
+
+  @Get('public/:id')
+  GetOnePublic(@Param('id') id: number) {
+    return this.recintosService.findOnePublic(id);
   }
 
   @UseGuards(JwtRolesGuard)

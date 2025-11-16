@@ -101,6 +101,7 @@ export class ArtistaService {
     });
   }
 
+  //Get Artist Publico
   async findBySlugWithConciertos(slug: string) {
     const results = await this.artistaRepo
     .createQueryBuilder('artista')
@@ -125,6 +126,8 @@ export class ArtistaService {
       'artista.descripcion',
       'concierto.id',
       'concierto.fecha',
+      'concierto.fecha_venta',
+      'concierto.estado', 
       'MIN(psc.precio) AS precio_minimo',
       'recinto.id',
       'recinto.nombre',
@@ -153,6 +156,8 @@ export class ArtistaService {
       conciertos: results.filter(row => row.concierto_id !== null).map(row => ({
         id: row.concierto_id,
         fecha: row.concierto_fecha,
+        fecha_venta: row.concierto_fecha_venta,
+        estado: row.concierto_estado,  
         precio_minimo: row.precio_minimo,
         recinto: {
           id: row.recinto_id,

@@ -6,7 +6,7 @@ import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seccion } from 'src/secciones/entities/seccion.entity';
 import { Ciudad } from 'src/ciudades/entities/ciudad.entity';
-import { Concierto } from 'src/conciertos/entities/concierto.entity';
+import { Concierto, EstadoConcierto } from 'src/conciertos/entities/concierto.entity';
 import { UploadService } from 'src/upload/upload.service';
 
 @Injectable()
@@ -58,6 +58,20 @@ export class RecintosService {
     return saved;
   }
 
+  findAllPublic(idCiudad?: number) {
+    const whereCondition = idCiudad ? { ciudad: { id: idCiudad } } : {};
+
+    return this.repo.find({
+      select: {
+        id: true,
+        nombre: true,
+        img_card: true,
+      },
+      relations: ['ciudad'],
+      where: whereCondition,
+    });
+  }
+
   findAll(incluirEliminados = false) {
     const query = this.repo
       .createQueryBuilder('recinto')
@@ -81,6 +95,67 @@ export class RecintosService {
       }
     })
   }
+
+  async findOnePublic(id: number) {
+    const results = await this.repo
+      .createQueryBuilder('recinto')
+      .leftJoin('recinto.conciertos', 'concierto', 'concierto.estado != :finalizado', { finalizado: EstadoConcierto.FINALIZADO })
+      .leftJoin('concierto.preciosPorSeccion', 'psc')
+      .leftJoin('concierto.artista', 'artista')
+      .leftJoin('recinto.ciudad', 'ciudad')
+      .where('recinto.id = :id', { id })
+      .select([
+        'recinto.id',
+        'recinto.nombre',
+        'recinto.ubicacion',
+        'recinto.img_card',
+        'recinto.img_hero',
+        'ciudad.id',
+        'ciudad.nombre',
+        'concierto.id',
+        'concierto.fecha',
+        'concierto.fecha_venta',
+        'concierto.estado',
+        'artista.id',
+        'artista.nombre',
+        'artista.slug',
+        'artista.img_card',
+        'MIN(psc.precio) AS precio_minimo',
+      ])
+      .groupBy('recinto.id, ciudad.id, concierto.id, artista.id')
+      .getRawMany();
+
+    if (!results.length) return null;
+
+    const first = results[0];
+    return {
+      id: first.recinto_id,
+      nombre: first.recinto_nombre,
+      ubicacion: first.recinto_ubicacion,
+      img_card: first.recinto_img_card,
+      img_hero: first.recinto_img_hero,
+      ciudad: {
+        id: first.ciudad_id,
+        nombre: first.ciudad_nombre,
+      },
+      conciertos: results
+        .filter(r => r.concierto_id !== null)
+        .map(r => ({
+          id: r.concierto_id,
+          fecha: r.concierto_fecha,
+          fecha_venta: r.concierto_fecha_venta,
+          estado: r.concierto_estado,
+          precio_minimo: Number(r.precio_minimo),
+          artista: {
+            id: r.artista_id,
+            nombre: r.artista_nombre,
+            slug: r.artista_slug,
+            img_card: r.artista_img_card,
+          },
+        })),
+    };
+  }
+
 
   findOne(id: number) {
     return this.repo.findOne({where: {id} , relations:['secciones'] });
