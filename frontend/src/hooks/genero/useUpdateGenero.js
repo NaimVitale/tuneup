@@ -55,11 +55,6 @@ export const useUpdateGenero = (initialData) => {
       return false;
     }
 
-    if (!hasChanges()) {
-      toast.error("No hubo cambios para guardar");
-      return false;
-    }
-
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
