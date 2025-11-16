@@ -1,4 +1,4 @@
-import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
+import { Eye, EyeOff, Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import DataTable from "../../components/DataTable";
 import Spinner from "../../components/Spinner";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,9 +7,11 @@ import { useConfirmPopup } from "../../hooks/useConfirmPopup";
 import { useSoftDeleteRecinto } from "../../hooks/recintos/useSoftDeleteRecinto";
 import ConfirmPopup from "../../components/ConfirmPopup";
 import { useRestoreRecinto } from "../../hooks/recintos/useRestoreRecinto";
+import { useState } from "react";
 
 export default function AdminPremisesPage() {
   const navigate = useNavigate()
+  const [incluirEliminados, setIncluirEliminados] = useState(false);
   const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
   const { handleSoftDelete } = useSoftDeleteRecinto();
   const { handleRestore } = useRestoreRecinto();
@@ -18,7 +20,7 @@ export default function AdminPremisesPage() {
     { key: "nombre", label: "Nombre", render: (c) => c.nombre },
     { key: "secciones", label: "Secciones", render: (c) => c.seccionesCount},
     { key: "ciudad", label: "Ciudad", render: (c) => c.ciudad.nombre },
-        { key: "img_card", label: "Imagen Tarjeta", render: (c) => c.img_card },
+    { key: "img_card", label: "Imagen Tarjeta", render: (c) => c.img_card },
     { key: "img_hero", label: "Imagen Banner", render: (c) => c.img_hero },
   ];
 
@@ -65,9 +67,8 @@ export default function AdminPremisesPage() {
     },
   ];
 
-  const { data: recintos, isLoading, isError } = useGetRecintos();
+  const { data: recintos, isLoading, isError } = useGetRecintos({incluirEliminados});
 
-  console.log(recintos)
 
   if (isLoading) return <Spinner size={20} color="border-white"/>;
   if (isError) return <p className="text-center mt-10 text-red-500">Error al cargar los recintos</p>
@@ -90,23 +91,18 @@ export default function AdminPremisesPage() {
               <div className="flex flex-col sm:flex-row gap-3 lg:w-auto">
                 
                 {/* Botón mostrar/ocultar eliminados */}
-                {/*<button
+                {<button
                   onClick={() => setIncluirEliminados(prev => !prev)}
-                  disabled={eliminadosCount === 0}
-                className={`flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold transition-all shadow-md
-                  ${eliminadosCount === 0
-                    ? "bg-white/10 border border-white/20 text-white/50 cursor-not-allowed"
-                    : "bg-white/20 hover:bg-white/30 border border-white/30 text-white backdrop-blur-sm hover:shadow-lg"
-                  }`}
+                  className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-3 rounded-full transition-all shadow-md hover:shadow-lg"
                 >
-                  {/*incluirEliminados ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {incluirEliminados ? <EyeOff size={20} /> : <Eye size={20} />}
                   <span className="hidden sm:inline">
                     {incluirEliminados ? "Ocultar eliminados" : "Mostrar eliminados"}
                   </span>
                   <span className="sm:hidden">
                     {incluirEliminados ? "Ocultar" : "Mostrar"}
                   </span>
-                </button>*/}
+                </button>}
 
                 {/* Botón crear */}
                 <Link 

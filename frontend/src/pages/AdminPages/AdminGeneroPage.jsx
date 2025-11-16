@@ -1,4 +1,4 @@
-import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
+import { Eye, EyeOff, Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import DataTable from "../../components/DataTable";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetGeneros } from "../../hooks/genero/useGetGeneros"
@@ -6,9 +6,11 @@ import { useRestoreGenero } from "../../hooks/genero/useRestoreGenero";
 import { useSoftDeleteGenero } from "../../hooks/genero/useSoftDeleteGenero";
 import { useConfirmPopup } from "../../hooks/useConfirmPopup";
 import ConfirmPopup from "../../components/ConfirmPopup";
+import { useState } from "react";
 
 export default function AdminGeneroPage() {
   const navigate = useNavigate()
+  const [incluirEliminados, setIncluirEliminados] = useState(false);
   const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
   const { handleSoftDelete } = useSoftDeleteGenero();
   const { handleRestore } = useRestoreGenero();
@@ -61,7 +63,7 @@ export default function AdminGeneroPage() {
     },
   ];
 
-    const { data: artistas, isLoading, isError } = useGetGeneros();
+    const { data: artistas, isLoading, isError } = useGetGeneros({incluirEliminados});
 
     return (
       <div className="w-full min-h-screen">
@@ -81,23 +83,18 @@ export default function AdminGeneroPage() {
                 <div className="flex flex-col sm:flex-row gap-3 lg:w-auto">
                   
                   {/* Botón mostrar/ocultar eliminados */}
-                  {/*<button
-                    onClick={() => setIncluirEliminados(prev => !prev)}
-                    disabled={eliminadosCount === 0}
-                  className={`flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold transition-all shadow-md
-                    ${eliminadosCount === 0
-                      ? "bg-white/10 border border-white/20 text-white/50 cursor-not-allowed"
-                      : "bg-white/20 hover:bg-white/30 border border-white/30 text-white backdrop-blur-sm hover:shadow-lg"
-                    }`}
-                  >
-                    {/*incluirEliminados ? <EyeOff size={20} /> : <Eye size={20} />}
-                    <span className="hidden sm:inline">
-                      {incluirEliminados ? "Ocultar eliminados" : "Mostrar eliminados"}
-                    </span>
-                    <span className="sm:hidden">
-                      {incluirEliminados ? "Ocultar" : "Mostrar"}
-                    </span>
-                  </button>*/}
+                {<button
+                  onClick={() => setIncluirEliminados(prev => !prev)}
+                  className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-3 rounded-full transition-all shadow-md hover:shadow-lg"
+                >
+                  {incluirEliminados ? <EyeOff size={20} /> : <Eye size={20} />}
+                  <span className="hidden sm:inline">
+                    {incluirEliminados ? "Ocultar eliminados" : "Mostrar eliminados"}
+                  </span>
+                  <span className="sm:hidden">
+                    {incluirEliminados ? "Ocultar" : "Mostrar"}
+                  </span>
+                </button>}
   
                   {/* Botón crear */}
                   <Link 

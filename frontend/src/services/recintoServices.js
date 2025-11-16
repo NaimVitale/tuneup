@@ -18,12 +18,13 @@ export const CreateRecinto = async(token, recintoData) => {
 };
 
 //Consulta sobre todos los recintos panel admin
-export const getAllRecintos = async(token) => {
+export const getAllRecintos = async(token, params) => {
   try{
     const response = await axios.get(`${API_URL}`,{
       headers: {
         Authorization: `Bearer ${token}`
-      }
+      },
+      params
     })
     return response.data;
   }catch{

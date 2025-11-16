@@ -1,4 +1,4 @@
-import { Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
+import { Eye, EyeOff, Pencil, Plus, RotateCw, SearchIcon, Trash } from "lucide-react";
 import { useGetArtists } from "../../hooks/artist/useGetArtists";
 import DataTable from "../../components/DataTable";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,9 +6,11 @@ import { useSoftDeleteArtist } from "../../hooks/artist/useSoftDeleteArtist";
 import { useRestoreArtist } from "../../hooks/artist/useRestoreArtist";
 import { useConfirmPopup } from "../../hooks/useConfirmPopup";
 import ConfirmPopup from "../../components/ConfirmPopup";
+import { useState } from "react";
 
 export default function AdminArtistPage() {
   const navigate = useNavigate()
+  const [incluirEliminados, setIncluirEliminados] = useState(false);
   const { isOpen, message, onConfirm, openConfirm, closeConfirm } = useConfirmPopup();
   const { handleSoftDelete } = useSoftDeleteArtist();
   const { handleRestore } = useRestoreArtist();
@@ -65,7 +67,7 @@ export default function AdminArtistPage() {
     },
   ];
 
-    const { data: artistas, isLoading, isError } = useGetArtists();
+    const { data: artistas, isLoading, isError } = useGetArtists({incluirEliminados});
 
     return (
     <div className="w-full min-h-screen">
@@ -85,23 +87,18 @@ export default function AdminArtistPage() {
               <div className="flex flex-col sm:flex-row gap-3 lg:w-auto">
                 
                 {/* Botón mostrar/ocultar eliminados */}
-                {/*<button
+                {<button
                   onClick={() => setIncluirEliminados(prev => !prev)}
-                  disabled={eliminadosCount === 0}
-                 className={`flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold transition-all shadow-md
-                  ${eliminadosCount === 0
-                    ? "bg-white/10 border border-white/20 text-white/50 cursor-not-allowed"
-                    : "bg-white/20 hover:bg-white/30 border border-white/30 text-white backdrop-blur-sm hover:shadow-lg"
-                  }`}
+                  className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold px-5 py-3 rounded-full transition-all shadow-md hover:shadow-lg"
                 >
-                  {/*incluirEliminados ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {incluirEliminados ? <EyeOff size={20} /> : <Eye size={20} />}
                   <span className="hidden sm:inline">
                     {incluirEliminados ? "Ocultar eliminados" : "Mostrar eliminados"}
                   </span>
                   <span className="sm:hidden">
                     {incluirEliminados ? "Ocultar" : "Mostrar"}
                   </span>
-                </button>*/}
+                </button>}
 
                 {/* Botón crear */}
                 <Link 

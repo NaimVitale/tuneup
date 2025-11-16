@@ -78,9 +78,7 @@ export const AuthProvider = ({ children }) => {
         refreshTimeout = setTimeout(async () => {
           try {
             const newToken = await refreshToken();
-            console.log("Token refrescado automáticamente");
           } catch (err) {
-            console.log("No se pudo refrescar el token automáticamente");
           }
         }, timeout);
       }
