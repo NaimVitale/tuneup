@@ -15,7 +15,7 @@ function Homepage() {
 
     const { data: conciertos_activos, isLoading } = useConcertsHomeActive();
     const { data: conciertos_proximos, isLoading : isProximosLoading } = useGetConcertsHomeProximamente();
-    const { data: entradas, isError, isLoading : isEntradasLoading } = useGetEntradasByUser(user.id, 2);
+    const { data: entradas, isError, isLoading : isEntradasLoading } = useGetEntradasByUser(user?.id, 2);
 
     return (
         <div id="container">
