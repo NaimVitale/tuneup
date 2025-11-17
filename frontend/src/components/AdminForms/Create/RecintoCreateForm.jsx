@@ -26,7 +26,7 @@ export default function RecintoCreateForm() {
         <div className="grid lg:grid-cols-2 gap-8">
           <InputForm label={"Nombre"} id={"nombre"} type="text" value={form?.nombre} onChange={(e) => updateField('nombre', e.target.value)} />
           <InputSelect
-            placeholder="Ciudad"
+            placeholder="Seleccione ciudad"
             value={form?.ciudad}
             onChange={(value) => updateField("ciudad", value)}
             options={[

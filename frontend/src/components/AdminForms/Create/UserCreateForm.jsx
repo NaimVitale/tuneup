@@ -50,6 +50,7 @@ export default function UserCreateForm() {
           />
           <InputSelect
             id="rol"
+            placeholder="Seleccione rol"
             value={formData.rol || "user"}
             onChange={(value) => handleChange({ target: { id: "rol", value } })}
             options={[

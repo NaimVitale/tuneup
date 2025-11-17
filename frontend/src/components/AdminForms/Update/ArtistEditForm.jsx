@@ -29,7 +29,7 @@ export default function ArtistEditForm(artist) {
                     <div className="grid lg:grid-cols-2 gap-8">
                         <InputForm label={"Nombre"} id={"nombre"} type="text" value={form?.nombre} onChange={handleChange}></InputForm>
                         <InputSelect
-                            placeholder="Género"
+                            placeholder="Seleccione género"
                             value={form?.genero}
                             onChange={(value) => handleSelectChange("genero", value)}
                             options={[

@@ -32,7 +32,7 @@ export const usePatchArtist = (slug, artistData) => {
         img_card: data.img_card || "",
         img_hero: data.img_hero || "",
         images: data.images || "",
-        genero:data.genero.id || "",
+        genero:data.genero?.id || "",
       });
     }
   }, [artistData, updatedArtist]);

@@ -124,7 +124,7 @@ export default function AdminConcertsPage() {
                 {/* Botón crear */}
                 <Link 
                   to="crear"
-                  className="flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-[#C122ED] font-bold px-6 py-3 rounded-full transition-all shadow-md hover:shadow-xl hover:scale-105"
+                  className="flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-[#C122ED] font-bold px-6 py-3 rounded-full transition-all shadow-md"
                 >
                   <Plus size={20} strokeWidth={3} />
                   Crear concierto
