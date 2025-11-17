@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import ErrorMessages from "./ErrorMessages";
 
 export default function InputSelect({
   value,
@@ -7,7 +8,8 @@ export default function InputSelect({
   options = [],
   placeholder = "Selecciona una opción",
   isLoading = false,
-  type = "default", 
+  type = "default",
+  error 
 }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
@@ -86,6 +88,9 @@ export default function InputSelect({
           }`}
         />
       </button>
+      {error && (
+              <ErrorMessages errors={error}></ErrorMessages>
+      )}
 
       {open && !isLoading && (
         <ul className="absolute z-10 mt-2 w-full bg-white border rounded-2xl shadow-lg overflow-y-auto max-h-64">

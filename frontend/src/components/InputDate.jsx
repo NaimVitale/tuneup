@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { Calendar, X } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import ErrorMessages from "./ErrorMessages";
 
-export default function InputDate({ value, onChange, placeholder = "Selecciona una fecha" }) {
+export default function InputDate({ value, onChange, placeholder = "Selecciona una fecha", error }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -46,6 +47,9 @@ export default function InputDate({ value, onChange, placeholder = "Selecciona u
           <Calendar size={20} className="text-gray-400" />
         </div>
       </button>
+      {error && (
+        <ErrorMessages errors={error}></ErrorMessages>
+      )}
 
       {/* Calendario popover */}
       {open && (

@@ -5,6 +5,7 @@ import { useGetArtistsSelect } from "../../../hooks/artist/useGetArtistsSelect";
 import { useGetRecintosSelect } from "../../../hooks/recintos/useGetRecintosSelect";
 import { useConcertCreate } from "../../../hooks/concerts/useConcertCreate";
 import { useNavigate } from "react-router-dom";
+import ErrorMessages from "../../ErrorMessages";
 
 export default function ConcertCreateForm() {
     const navigate = useNavigate();
@@ -19,6 +20,8 @@ export default function ConcertCreateForm() {
             navigate('/admin/dashboard/conciertos')
         }
     };
+
+    console.log(errors)
 
     return(
         <div className="min-h-[60vh] w-full flex justify-center text-black">
@@ -35,6 +38,7 @@ export default function ConcertCreateForm() {
                                 value: g.id,
                                 })) || []),
                             ]}
+                            error={errors?.id_artista}
                         />
                         <InputSelect
                             placeholder="Seleccione recinto" 
@@ -46,14 +50,16 @@ export default function ConcertCreateForm() {
                                 value: g.id,
                                 })) || []),
                             ]}
+                            error={errors?.id_recinto}
                         />
-                        <InputDate value={fecha} onChange={setFecha}/>
-                        <InputSelect type="hour"  placeholder="Seleccione hora" value={hora} onChange={setHora}/>
+                        <InputDate value={fecha} onChange={setFecha} error={errors?.fecha} />
+                        <InputSelect type="hour"  placeholder="Seleccione hora" value={hora} onChange={setHora} error={errors?.hora}/>
                         <InputDate placeholder="Seleccione fecha de venta de entradas" value={fechaVenta} onChange={setFechaVenta}/>
                         <InputSelect type="hour" placeholder="Seleccione hora de venta" value={horaVenta} onChange={setHoraVenta}/>
                     </div>
-                    <div>
+                    <div className="mt-15">
                     <TableSections sections={form.secciones} onSectionsChange={updateSections} mode="precio" showActions={true}></TableSections>
+                    {errors?.precio && (<ErrorMessages errors={errors?.precio}></ErrorMessages>)}
                     <button className="btn-primary py-2 px-4 text-md w-max mt-10">Crear Concierto</button>
                     </div>
                     </fieldset>

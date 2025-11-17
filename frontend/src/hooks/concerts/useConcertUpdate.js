@@ -145,7 +145,6 @@ export const useConcertUpdate = (slug, initialData) => {
       setForm(prev => ({ ...prev, secciones: seccionesConPrecios }));
     } catch (err) {
       toast.error("Error al cargar secciones del recinto");
-      console.error(err);
     }
   };
 
