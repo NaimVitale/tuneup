@@ -14,7 +14,7 @@ export default function NavCategories() {
       path: "/conciertos",
       subcategories: generos?.map(g => ({
         name: g.genero,
-        path: `/conciertos/${g.genero.toLowerCase()}`,
+        path: `/conciertos/${g?.genero?.toLowerCase()}`,
       })) || [],
     },
     {
@@ -22,7 +22,7 @@ export default function NavCategories() {
       path: "/artistas",
       subcategories: artist?.map(a => ({
         name: a.nombre,
-        path: `/artistas/detalle/${a.slug}`,
+        path: `/artistas/detalle/${a?.slug}`,
       })) || [],
     },
     {
@@ -30,7 +30,7 @@ export default function NavCategories() {
       path: "/recintos",
       subcategories: recintos?.map(r => ({
         name: r.nombre,
-        path: `/recintos/detalle/${r.id}`,
+        path: `/recintos/detalle/${r?.id}`,
       })) || [],
     },
   ], [generos, artist, recintos]);
