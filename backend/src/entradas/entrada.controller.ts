@@ -11,7 +11,7 @@ export class EntradaController {
   @UseGuards(JwtRolesGuard)
   @Get()
   async findAll(@Query('id_usuario') id_usuario?: number, @Query('limit') limit?: string, @Req() req?: any,) {
-    if (id_usuario && req.user.id !== Number(id_usuario)) {
+    if (id_usuario && req.user.sub !== Number(id_usuario)) {
       throw new ForbiddenException('No tienes permiso para ver estas entradas');
     }
     return this.entradaService.findAllByUsuario(id_usuario, limit ? Number(limit) : undefined);
