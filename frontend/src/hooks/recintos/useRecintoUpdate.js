@@ -33,6 +33,20 @@ export const useRecintoUpdate = (initialData) => {
   };
 
   const updateFile = (file, field) => {
+
+     // Validar que sea imagen
+    if (!file.type.startsWith("image/")) {
+      toast.error("Solo se permiten archivos de imagen");
+      return;
+    }
+
+    // Opcional: limitar tamaño máximo (ej. 5MB)
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    if (file.size > MAX_SIZE) {
+      toast.error("El archivo excede el tamaño máximo de 5MB");
+      return;
+    }
+
     setFiles(prev => ({ ...prev, [field]: file || null }));
   };
 

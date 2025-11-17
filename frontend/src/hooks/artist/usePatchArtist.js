@@ -43,7 +43,25 @@ export const usePatchArtist = (slug, artistData) => {
   };
 
   const handleFileChange = (file, field) => {
-    setFiles((prev) => ({ ...prev, [field]: file || null }));
+    if (!file) {
+      setFiles(prev => ({ ...prev, [field]: null }));
+      return;
+    }
+
+    // Validar que sea imagen
+    if (!file.type.startsWith("image/")) {
+      toast.error("Solo se permiten archivos de imagen");
+      return;
+    }
+
+    // Opcional: validar tamaño máximo (ej. 5MB)
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    if (file.size > MAX_SIZE) {
+      toast.error("El archivo excede el tamaño máximo de 5MB");
+      return;
+    }
+
+    setFiles(prev => ({ ...prev, [field]: file }));
   };
 
   const handleSelectChange = (field, value) => {
