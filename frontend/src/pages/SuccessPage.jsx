@@ -114,7 +114,7 @@ export default function SuccessPage() {
             </div>
 
             {/* Botones de acción */}
-            <div className="space-y-3 lg:space-y-2">
+            {/*<div className="space-y-3 lg:space-y-2">
               <button className="w-full flex items-center justify-center gap-2 bg-white border-2 border-[#C122ED] text-[#C122ED] hover:bg-[#f3e0ff] font-semibold py-3.5 lg:py-3 rounded-3xl transition-all">
                 <Download size={20} lg:size={18} />
                 Descargar PDF
@@ -123,7 +123,7 @@ export default function SuccessPage() {
                 <Mail size={20} lg:size={18} />
                 Reenviar email
               </button>
-            </div>
+            </div>*/}
 
             {/* Info importante */}
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 lg:p-3 text-sm lg:text-xs text-blue-900">
