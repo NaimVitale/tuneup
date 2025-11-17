@@ -32,10 +32,13 @@ export class GeneroService {
   async getGenerosNavbar() {
     return this.artistaRepository
       .createQueryBuilder("artista")
-      .leftJoin("generos", "genero", "artista.id_genero = genero.id")
+      .innerJoin("artista.genero", "genero")  // ⬅️ evita género null
       .select("genero.nombre", "genero")
       .addSelect("COUNT(artista.id)", "cantidad")
-      .groupBy("genero.nombre")
+      .where("artista.deleted_at IS NULL")
+      .andWhere("genero.deleted_at IS NULL")
+      .groupBy("genero.id")
+      .addGroupBy("genero.nombre")
       .orderBy("cantidad", "DESC")
       .limit(4)
       .getRawMany();
