@@ -29,8 +29,8 @@ export default function SectionsTable({
 
   const handleAdd = () => {
     const template = mode === "recinto" 
-      ? { nombre: "", capacidad: 0, tipo_svg: "rect", svg_path: "" }
-      : { nombre: "", precio: 0 };
+      ? { id: Date.now(),  nombre: "", capacidad: 0, tipo_svg: "rect", svg_path: "" }
+      : { id: Date.now(), nombre: "", precio: 0 };
     setNewSection(template);
   };
 

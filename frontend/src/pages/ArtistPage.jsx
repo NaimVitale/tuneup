@@ -42,7 +42,7 @@ export default function ArtistPage() {
                             ]}
                         />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mt-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 mt-12">
                         {artistas.map( c => (
                             <CardArtist information={c} key={c.id} />
                         ))}
