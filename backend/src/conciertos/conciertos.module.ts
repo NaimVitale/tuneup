@@ -9,9 +9,10 @@ import { PreciosSeccionConciertoModule } from 'src/precios-seccion-concierto/pre
 import { AuthModule } from 'src/auth/auth.module';
 import { PreciosSeccionConciertoService } from 'src/precios-seccion-concierto/precios-seccion-concierto.service';
 import { Seccion } from 'src/secciones/entities/seccion.entity';
+import { Entrada } from 'src/entradas/entities/entrada.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Concierto, Artista, Recinto, Seccion]), PreciosSeccionConciertoModule, AuthModule],
+  imports: [TypeOrmModule.forFeature([Concierto, Artista, Recinto, Seccion, Entrada]), PreciosSeccionConciertoModule, AuthModule],
   controllers: [ConciertosController],
   providers: [ConciertosService, PreciosSeccionConciertoService],
 })

@@ -11,6 +11,7 @@ import { Recinto } from 'src/recintos/entities/recinto.entity';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { Artista } from 'src/artistas/entities/artista.entity';
+import { Entrada } from 'src/entradas/entities/entrada.entity';
 
 @Injectable()
 export class ConciertosService {
@@ -33,6 +34,9 @@ export class ConciertosService {
 
     @InjectRepository(Artista)
     private artistaRepo: Repository<Artista>,
+
+    @InjectRepository(Entrada)
+    private entradaRepo: Repository<Entrada>,
 
     private readonly preciosService: PreciosSeccionConciertoService,
   )  {
@@ -470,6 +474,22 @@ export class ConciertosService {
 
         if (p.id) {
           const precioExistente = concierto.preciosPorSeccion.find(pr => pr.id === p.id);
+
+          if (precioExistente?.precio !== p.precio) {
+            const entradasVendidas = await this.entradaRepo.count({
+              where: {
+                id_concierto: concierto.id,
+                id_seccion: p.id_seccion,
+                estado_entrada: 'activa'
+              }
+            });
+
+            if (entradasVendidas > 0) {
+              throw new BadRequestException(
+                `No se puede modificar el precio de la sección ${seccion.nombre} porque ya hay ${entradasVendidas} entradas vendidas en esa sección.`
+              );
+            }
+          }
 
           if (precioExistente) {
             // Crear nuevo Price en Stripe si no existe o si el precio cambió
