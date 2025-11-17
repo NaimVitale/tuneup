@@ -24,6 +24,14 @@ export class RecintosService {
 
     // Validar secciones repetidas como antes
     const sec = secciones ?? [];
+
+    // Validar nombre y capacidad obligatorios
+    for (const s of sec) {
+      if (!s.nombre?.trim() || s.capacidad === undefined || s.capacidad === null) {
+        throw new BadRequestException('Cada sección debe tener nombre y capacidad');
+      }
+    }
+
     if (sec.length > 1) {
       const nombres = sec.map(s => s.nombre?.trim().toLowerCase()).filter(Boolean);
       if (new Set(nombres).size !== nombres.length) {
@@ -215,8 +223,8 @@ export class RecintosService {
       recinto.secciones = recinto.secciones.filter(s => incomingIds.includes(s.id));
 
       for (const s of dto.secciones) {
-        if (!s.id && !s.nombre?.trim() && !s.capacidad) {
-          throw new BadRequestException('Cada sección nueva debe tener al menos nombre o capacidad');
+        if (!s.nombre?.trim() || s.capacidad === undefined || s.capacidad === null) {
+          throw new BadRequestException('Cada sección debe tener nombre y capacidad');
         }
 
         let seccion = s.id
