@@ -10,14 +10,16 @@ export class SearchService {
   ) {}
 
   async globalSearch(query: string) {
+    if (!query) return { artistas: [], recintos: [] };
+
     const [artistas, recintos] = await Promise.all([
       this.artistasService.searchByName(query),
       this.recintosService.searchByName(query),
     ]);
 
     return {
-      artistas,
-      recintos,
+      artistas: artistas.slice(0, 3),
+      recintos: recintos.slice(0, 3),
     };
   }
 }

@@ -156,6 +156,24 @@ export class RecintosService {
     };
   }
 
+ async recintosNavbar() {
+    const recintos = await this.repo
+    .createQueryBuilder("recinto")
+    .addSelect((subQuery) => {
+      return subQuery
+        .select("COUNT(c.id)")
+        .from("conciertos", "c")
+        .where("c.id_recinto = recinto.id")
+        .andWhere("c.deleted_at IS NULL");
+    }, "conciertosCount")
+    .where("recinto.deleted_at IS NULL")
+    .orderBy("conciertosCount", "DESC")
+    .limit(4)
+    .getMany();
+
+    return recintos;
+  }
+
 
   findOne(id: number) {
     return this.repo.findOne({where: {id} , relations:['secciones'] });

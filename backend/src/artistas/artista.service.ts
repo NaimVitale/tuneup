@@ -88,6 +88,27 @@ export class ArtistaService {
     });
   }
 
+  async getArtistNavbar() {
+    const artistas = await this.artistaRepo
+      .createQueryBuilder("artista")
+      .leftJoin("artista.conciertos", "concierto")
+      .where("artista.deleted_at IS NULL")
+      .andWhere("concierto.deleted_at IS NULL")
+      .groupBy("artista.id")
+      .orderBy("COUNT(concierto.id)", "DESC") // aquí sí funciona
+      .limit(4)
+      .select(["artista.id", "artista.nombre", "artista.slug"])
+      .getRawMany();
+
+    // getRawMany devuelve objetos tipo { artista_id, artista_nombre, artista_slug }
+    return artistas.map(a => ({
+      id: a.artista_id,
+      nombre: a.artista_nombre,
+      slug: a.artista_slug,
+    }));
+  }
+
+
   async getAllPublic(filtroGenero?: string) {
     const where: any = {};
 

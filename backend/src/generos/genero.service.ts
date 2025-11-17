@@ -4,12 +4,16 @@ import { IsNull, Repository } from 'typeorm';
 import { Genero } from './entities/genero.entity';
 import { CreateGeneroDto } from './dto/create-genero.dto';
 import { UpdateGeneroDto } from './dto/update-genero.dto';
+import { Artista } from 'src/artistas/entities/artista.entity';
 
 @Injectable()
 export class GeneroService {
   constructor(
     @InjectRepository(Genero)
     private readonly generoRepository: Repository<Genero>,
+
+    @InjectRepository(Artista)
+    private readonly artistaRepository: Repository<Artista>,
   ) {}
 
   findAllPublic() {
@@ -23,6 +27,18 @@ export class GeneroService {
     return this.generoRepository.find({
       withDeleted: incluirEliminados,
     });
+  }
+
+  async getGenerosNavbar() {
+    return this.artistaRepository
+      .createQueryBuilder("artista")
+      .leftJoin("generos", "genero", "artista.id_genero = genero.id")
+      .select("genero.nombre", "genero")
+      .addSelect("COUNT(artista.id)", "cantidad")
+      .groupBy("genero.nombre")
+      .orderBy("cantidad", "DESC")
+      .limit(4)
+      .getRawMany();
   }
   
   findOne(id: number) {

@@ -18,7 +18,7 @@ export class EntradaService {
   }
 
   // Método para listar entradas por usuario (o todas si no se pasa)
-  async findAllByUsuario(id_usuario?: number) {
+  async findAllByUsuario(id_usuario?: number, limit?: number) {
     const qb = this.entradaRepo.createQueryBuilder('entrada')
       .select([
         'entrada.id',
@@ -30,7 +30,7 @@ export class EntradaService {
         'artista.nombre',
         'recinto.id',
         'recinto.nombre',
-        'recinto.ciudad'
+        'recinto.ciudad',
       ])
       .leftJoin('entrada.seccion', 'seccion')
       .leftJoin('entrada.concierto', 'concierto')
@@ -39,11 +39,15 @@ export class EntradaService {
 
     if (id_usuario) {
       qb.innerJoin('entrada.compra', 'compra')
-        .innerJoin('compra.usuario', 'usuario')
-        .andWhere('usuario.id = :id_usuario', { id_usuario });
+      .innerJoin('compra.usuario', 'usuario')
+      .andWhere('usuario.id = :id_usuario', { id_usuario })
+      .addSelect(['compra.fecha_creacion']);
+      qb.orderBy('compra.fecha_creacion', 'DESC');
     }
 
-    //qb.take(2);
+    if (limit) {
+      qb.take(limit); 
+    }
 
     return qb.getMany();
   }

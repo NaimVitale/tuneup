@@ -33,6 +33,11 @@ export class GeneroController {
     return this.generoService.findAll(incluir);
   }
 
+  @Get('nav-categories')
+  generosNavBar() {
+    return this.generoService.getGenerosNavbar();
+  }
+
   @UseGuards(JwtRolesGuard)
   @Get(':id')
   @Roles('admin')

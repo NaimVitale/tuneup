@@ -59,12 +59,18 @@ export class RecintosController {
     return this.recintosService.findAllSelect();
   }
 
+  @Get('nav-categories')
+  getRecintosNavBar() {
+    return this.recintosService.recintosNavbar();
+  }
+
   @UseGuards(JwtRolesGuard)
   @Get(':id')
   @Roles('admin')
   findOne(@Param('id') id: string) {
     return this.recintosService.findOne(+id);
   }
+
 
   @Get('public/:id')
   GetOnePublic(@Param('id') id: number) {

@@ -10,7 +10,7 @@ export class EntradaController {
   // Listar todas las entradas o filtradas por id_usuario (via query)
   @UseGuards(JwtRolesGuard)
   @Get()
-  async findAll(@Query('id_usuario') id_usuario?: number) {
-    return this.entradaService.findAllByUsuario(id_usuario);
+  async findAll(@Query('id_usuario') id_usuario?: number, @Query('limit') limit?: string) {
+    return this.entradaService.findAllByUsuario(id_usuario, limit ? Number(limit) : undefined);
   }
 }

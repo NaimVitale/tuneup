@@ -25,6 +25,11 @@ export class ArtistaController {
     return this.artistaService.getAllPublic(genero);
   }
 
+  @Get('nav-categories')
+  getArtistNavbar() {
+    return this.artistaService.getArtistNavbar();
+  }
+
   @Get('select')
   findAllSelect() {
     return this.artistaService.getAllSelect();
