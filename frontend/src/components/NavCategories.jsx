@@ -38,7 +38,7 @@ export default function NavCategories() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
   return (
-    <div className="relative">
+    <div className="relative z-[998]">
       <nav 
         className="bg-[#C122ED] text-white relative z-20"
         onMouseLeave={() => setHoveredCategory(null)}

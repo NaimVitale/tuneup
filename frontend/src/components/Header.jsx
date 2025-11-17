@@ -49,7 +49,7 @@ function Header() {
   );
 
   return (
-    <header className="bg-[#f8f8f8] shadow-xl py-4 sticky top-0 z-50">
+    <header className="bg-[#f8f8f8] shadow-xl py-4 sticky top-0 z-[999]">
       {/* Desktop */}
       <div className="hidden md:flex items-center w-[90%] m-auto">
         <div className="w-[30%]">

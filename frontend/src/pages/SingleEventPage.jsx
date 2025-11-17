@@ -4,7 +4,7 @@ import SeatMap from "../components/SeatMap";
 import CardTicket from "../components/CardTicket";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import { useGetConcert } from "../hooks/concerts/useGetConcert";
-import { Armchair, MapIcon, ShoppingCart} from "lucide-react";
+import { Armchair, Frown, MapIcon, ShoppingCart} from "lucide-react";
 import ListTickets from "../components/ListTickets";
 import { useTickets } from "../hooks/useTickets";
 import { useMediaQuery } from "../hooks/useMediaQuery";
@@ -41,7 +41,7 @@ export default function SingleEventPage() {
 
   // -----------------------------
   // NUEVA LÓGICA DE DISPONIBILIDAD
-  const [entradasDisponibles, setEntradasDisponibles] = useState(true);
+  const [entradasDisponibles, setEntradasDisponibles] = useState(false);
   const [contador, setContador] = useState("");
 
   useEffect(() => {
@@ -73,10 +73,18 @@ export default function SingleEventPage() {
       const minutos = Math.floor((diff / (1000 * 60)) % 60);
       const segundos = Math.floor((diff / 1000) % 60);
       setContador(`${dias}d ${horas}h ${minutos}m ${segundos}s`);
-    }, 1000);
+    });
 
     return () => clearInterval(intervalo);
   }, [data?.fecha_venta]);
+
+  const todasAgotadas = useMemo(() => {
+    if (!data?.recinto?.secciones) return false;
+
+    return data.recinto.secciones.every(
+      (s) => s.capacidad === 0 || s.capacidad_disponible === 0
+    );
+  }, [data?.recinto?.secciones]);
   // -----------------------------
 
   return (
@@ -84,13 +92,13 @@ export default function SingleEventPage() {
       <HeroSingleEvent eventData={data}></HeroSingleEvent>
       <div className="flex flex-col lg:flex-row">
         {/* Columna izquierda - Tickets */}
-        <div className="w-full lg:w-[40%] relative p-0 lg:border-r lg:border-[#C122ED] overflow-y-auto  max-h-[calc(100vh-0px)]" style={{ boxShadow: isMobile ? 'none' : '1px 0px 20px -10px #C122ED' }}>
+        <div className={`relative w-full lg:w-[40%] p-0 lg:border-r lg:border-[#C122ED]  ${!entradasDisponibles || todasAgotadas ? 'overflow-visible' : 'overflow-y-auto'} max-h-[calc(100vh-0px)]`} style={{ boxShadow: isMobile ? 'none' : '1px 0px 20px -10px #C122ED' }}>
           {/* OVERLAY si entradas NO disponibles */}
-          {!entradasDisponibles ? (
-            <div className="absolute inset-0 z-50 bg-white/80 flex flex-col items-center justify-center pointer-events-auto">
-              <Armchair className="text-[#C122ED] mb-2" size={60} />
-              <p className="font-semibold text-xl text-gray-700">Entradas disponibles en:</p>
-              <p className="text-lg text-gray-500 mt-1">{contador}</p>
+          {!entradasDisponibles || todasAgotadas ? (
+            <div className="absolute w-full top-[200px] md:top-[0px] left-1/2 -translate-x-1/2 inset-0 z-50 bg-white/80 flex flex-col items-center justify-center pointer-events-auto">
+              {!entradasDisponibles ? <Armchair className="text-[#C122ED] mb-2 z-50" size={60}/> : <Frown className="text-[#C122ED] mb-2 z-50" size={60}></Frown>}
+              <p className="font-semibold text-xl text-gray-700">{todasAgotadas ? "Entradas agotadas" : "Entradas disponibles en:"}</p>
+              {!todasAgotadas && ( <p className="text-lg text-gray-500 mt-1">{contador}</p> )}
             </div>
           ) : (
             <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col pb-10 md:pb-1 lg:pb-20"> 

@@ -8,9 +8,15 @@ export default function ListTickets({
   manejarSeleccionSeccion
 }) {
 
-  const seccionesDisponibles = secciones?.filter(
-    (seccion) => seccion.capacidad > 0 && seccion.precio && seccion.precio > 0
-  ) || [];
+  console.log(secciones)
+
+  const seccionesDisponibles =
+    secciones?.filter(
+      (seccion) =>
+        seccion.precio > 0 &&
+        Number(seccion.capacidad) > 0 &&
+        Number(seccion.capacidad_disponible) > 0
+    ) || [];
 
   return (
     <div className="mt-6">
