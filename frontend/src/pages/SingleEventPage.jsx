@@ -84,7 +84,7 @@ export default function SingleEventPage() {
       <HeroSingleEvent eventData={data}></HeroSingleEvent>
       <div className="flex flex-col lg:flex-row">
         {/* Columna izquierda - Tickets */}
-        <div className="w-full lg:w-[40%] relative p-0 lg:border-r lg:border-[#C122ED]" style={{ boxShadow: isMobile ? 'none' : '1px 0px 20px -10px #C122ED' }}>
+        <div className="w-full lg:w-[40%] relative p-0 lg:border-r lg:border-[#C122ED] overflow-y-auto  max-h-[calc(100vh-0px)]" style={{ boxShadow: isMobile ? 'none' : '1px 0px 20px -10px #C122ED' }}>
           {/* OVERLAY si entradas NO disponibles */}
           {!entradasDisponibles ? (
             <div className="absolute inset-0 z-50 bg-white/80 flex flex-col items-center justify-center pointer-events-auto">
@@ -93,7 +93,7 @@ export default function SingleEventPage() {
               <p className="text-lg text-gray-500 mt-1">{contador}</p>
             </div>
           ) : (
-            <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col pb-10 md:pb-1"> 
+            <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col pb-10 md:pb-1 lg:pb-20"> 
             {/* Lista de secciones disponibles */}
             {(!tieneSVG || isMobile) && data?.recinto?.secciones && (
               <div className="mb-4 sm:mb-6">
@@ -134,7 +134,7 @@ export default function SingleEventPage() {
                 </div>
               ) : (
                 <div className="flex flex-col flex-1 min-h-0">
-                  <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-2 sm:space-y-3 mb-3 sm:mb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#C122ED #f1f1f1' }}>
+                  <div className="flex-1 pr-1 sm:pr-2 space-y-2 sm:space-y-3 mb-3 sm:mb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#C122ED #f1f1f1' }}>
                     {ticketsSeleccionados.map((ticket) => (
                       <CardTicket
                         key={ticket.seccion.id}
@@ -191,7 +191,7 @@ export default function SingleEventPage() {
         </div>
           
         {/* Columna derecha - Mapa */}
-        <div className="hidden lg:flex w-full lg:w-[60%] justify-center bg-gradient-to-r from-[#C122ED]/60 via-[#6B21A8]/40 to-[#9333EA]/30 min-h-[400px] lg:min-h-0 relative">
+        <div className="hidden lg:flex w-full lg:w-[60%] justify-center bg-gradient-to-r from-[#C122ED]/60 via-[#6B21A8]/40 to-[#9333EA]/30 min-h-[400px] lg:min-h-0 relative lg:sticky lg:top-0">
           {!entradasDisponibles && <div className="absolute inset-0 z-50 bg-white/60 pointer-events-auto"></div>}
           {tieneSVG && !isMobile ? (
             <SeatMap
