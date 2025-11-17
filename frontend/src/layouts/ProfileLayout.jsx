@@ -36,7 +36,7 @@ export default function ProfileLayout() {
                 <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
             </div>
 
-            <div className="relative w-full lg:w-8/12 mx-auto">
+            <div className="relative w-full lg:w-9/12 mx-auto">
                 
                 {/* Card principal */}
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
