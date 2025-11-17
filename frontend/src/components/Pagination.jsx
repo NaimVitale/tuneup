@@ -5,7 +5,7 @@ export default function Pagination({ page, setPage, totalPages }) {
         <button
           key={i}
           onClick={() => setPage(i + 1)}
-          className={`px-3 py-1 rounded ${page === i + 1 ? 'bg-[#C122ED] text-white' : 'bg-gray-200'}`}
+          className={`px-3 py-1 rounded-3xl ${page === i + 1 ? 'bg-[#C122ED] text-white' : 'bg-gray-200'}`}
         >
           {i + 1}
         </button>

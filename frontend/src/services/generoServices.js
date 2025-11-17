@@ -25,6 +25,15 @@ export const getGenerosPublic = async () => {
   }
 };
 
+export const getGenerosNavbar = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/nav-categories`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
+
 export const getGeneros= async (token, params) => {
   try {
     const response = await axios.get(`${API_URL}`,{

@@ -77,6 +77,16 @@ export const getRecintoPublic = async(id) => {
   }
 }
 
+//Consulta sobre un recinto navbar
+export const getRecintosNavbar = async() => {
+  try{
+    const response = await axios.get(`${API_URL}/nav-categories`)
+    return response.data;
+  }catch{
+    throw error.response?.data || error;
+  }
+}
+
 //Actualizar un recinto en panel admin
 export const UpdateRecinto = async(token, id, recintoData, files = {}) => {
   try{

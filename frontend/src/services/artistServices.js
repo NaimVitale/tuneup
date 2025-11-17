@@ -30,6 +30,17 @@ export const getArtist = async(slug) => {
 }
 
 //Consulta sobre un artista
+export const getArtistNavBar = async() => {
+  try{
+    const response = await axios.get(`${API_URL}/nav-categories`, {
+    })
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
+
+//Consulta sobre un artista
 export const getArtistAdmin = async(slug, token) => {
   try{
     const response = await axios.get(`${API_URL}/${slug}`, {

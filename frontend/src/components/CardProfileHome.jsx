@@ -1,10 +1,11 @@
 import { Music, Settings, Ticket, Calendar, MapPin } from "lucide-react";
+import CardProfileTicket from "./CardProfileTicket";
 
 export default function CardProfileHome({ usuario, entradas = [] }) {
     const hasEntradas = entradas && entradas.length > 0;
-
+    
     return (
-        <div className="bg-white py-6 px-4 md:px-8 rounded-2xl shadow-md">
+        <div className="bg-white py-6 px-4 md:px-8 rounded-2xl shadow-md pb-10">
             {/* Header del perfil */}
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-6">
@@ -59,49 +60,7 @@ export default function CardProfileHome({ usuario, entradas = [] }) {
                 {hasEntradas ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {entradas.slice(0, 4).map((entrada) => (
-                            <div 
-                                key={entrada.id}
-                                className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-4 hover:border-[#C122ED] hover:shadow-md transition-all group"
-                            >
-                                <div className="flex items-start justify-between mb-3">
-                                    <h4 className="font-bold text-gray-900 group-hover:text-[#C122ED] transition-colors">
-                                        {entrada.concierto?.artista?.nombre || "Artista"}
-                                    </h4>
-                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                                        {entrada.estado_entrada || "Activa"}
-                                    </span>
-                                </div>
-                                
-                                <div className="space-y-2 text-sm text-gray-600">
-                                    <div className="flex items-center gap-2">
-                                        <Calendar size={16} className="text-[#C122ED] flex-shrink-0" />
-                                        <span className="truncate">
-                                            {entrada.concierto?.fecha 
-                                                ? new Date(entrada.concierto.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
-                                                : "Fecha por confirmar"
-                                            }
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <MapPin size={16} className="text-[#C122ED] flex-shrink-0" />
-                                        <span className="truncate">
-                                            {entrada.concierto?.recinto?.nombre || "Recinto"}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
-                                    <span className="text-xs text-gray-500 font-medium">
-                                        {entrada.seccion?.nombre || "Sección"}
-                                    </span>
-                                    <a 
-                                        href={`/perfil/entradas/${usuario?.id}`}
-                                        className="text-xs text-[#C122ED] hover:text-[#a01bc7] font-semibold hover:underline"
-                                    >
-                                        Ver entrada →
-                                    </a>
-                                </div>
-                            </div>
+                            <CardProfileTicket entrada={entrada} key={entrada.id} />
                         ))}
                     </div>
                 ) : (

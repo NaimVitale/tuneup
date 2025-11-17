@@ -3,8 +3,6 @@ import { Link } from "react-router-dom"
 import { dateFormatWithTime } from "../utils/dateFormat.jsx"
 
 function Cardproduct ({information}) {
-
-    console.log(information)
     return (
         <div className="rounded-2xl shadow-md overflow-hidden bg-white">
             <img src={information?.artista_img_card || information?.artista?.img_card || 'https://brandemia.org/contenido/subidas/2012/07/the-rolling-stones-logo.webp'} alt="" loading="lazy" className="h-[20vh] object-cover w-full" />

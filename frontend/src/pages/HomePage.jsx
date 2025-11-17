@@ -8,12 +8,14 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from 'react-router-dom';
 import { useConcertsHomeActive } from '../hooks/concerts/useConcertsHomeActive';
 import { useGetConcertsHomeProximamente } from '../hooks/concerts/useGetConcertsHomeProximamente';
+import { useGetEntradasByUser } from '../hooks/entradas/UseGetEntradasByUser';
 
 function Homepage() {
     const { user, token} = useAuth();
 
     const { data: conciertos_activos, isLoading } = useConcertsHomeActive();
     const { data: conciertos_proximos, isLoading : isProximosLoading } = useGetConcertsHomeProximamente();
+    const { data: entradas, isError, isLoading : isEntradasLoading } = useGetEntradasByUser(user.id, 2);
 
     return (
         <div id="container">
@@ -83,7 +85,7 @@ function Homepage() {
                             </Link>
                         </div>
                         <div className='mt-2'>
-                            <CardProfileHome usuario={user}></CardProfileHome>
+                            <CardProfileHome usuario={user} entradas={entradas}></CardProfileHome>
                         </div>
                         <Link to={`perfil/ajustes/${user.id}`} className='flex md:hidden items-center justify-center gap-1 text-[#C122ED] hover:text-[#a01bc7] font-semibold text-lg bg-[#f3e0ff] hover:bg-[#e6d0ff] pl-6 pr-3 py-2.5 rounded-full transition-all duration-300 group-hover:gap-3 shadow-sm group mt-10 w-[80%] mx-auto'
                             >Ver perfil completo

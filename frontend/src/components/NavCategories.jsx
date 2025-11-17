@@ -1,39 +1,39 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useGetGenerosNavbar } from "../hooks/genero/useGetGenerosNavbar";
+import { useGetArtistNavbar } from "../hooks/artist/useGetArtistNavBar";
+import { useGetRecintosNavbar } from "../hooks/recintos/useGetRecintosNavbar";
 
 export default function NavCategories() {
-  const [categories] = useState([
+  const { data: generos, isLoadingGeneros, isErrorGeneros} = useGetGenerosNavbar()
+  const { data: artist, isLoadingArtist, isErrorArtist} = useGetArtistNavbar()
+  const { data: recintos, isLoadingRecintos, isErrorRecintos} = useGetRecintosNavbar()
+
+  const categories = useMemo(() => [
     {
       name: "Conciertos",
       path: "/conciertos",
-      subcategories: [
-        { name: "Rock", path: "/conciertos/rock" },
-        { name: "Pop", path: "/conciertos/pop" },
-        { name: "Indie", path: "/conciertos/indie" },
-        { name: "Rap / Trap", path: "/conciertos/rap-trap" },
-        { name: "Electrónica", path: "/conciertos/electronica" },
-      ],
+      subcategories: generos?.map(g => ({
+        name: g.genero,
+        path: `/conciertos/${g.genero.toLowerCase()}`,
+      })) || [],
     },
     {
       name: "Artistas",
       path: "/artistas",
-      subcategories: [
-        { name: "The Rolling Stones", path: "/artistas/detalle/the-rolling-stones" },
-        { name: "Dua Lipa", path: "/artistas/detalle/dua-lipa" },
-        { name: "Ed Sheeran", path: "/artistas/detalle/ed-sheeran" },
-        { name: "Guns 'N Roses", path: "#" },
-      ],
+      subcategories: artist?.map(a => ({
+        name: a.nombre,
+        path: `/artistas/detalle/${a.slug}`,
+      })) || [],
     },
     {
       name: "Recintos",
       path: "/recintos",
-      subcategories: [
-        { name: "Madrid", path: "/ciudades/madrid" },
-        { name: "Barcelona", path: "/ciudades/barcelona" },
-        { name: "Valencia", path: "/ciudades/valencia" },
-        { name: "Bilbao", path: "/ciudades/bilbao" },
-      ],
+      subcategories: recintos?.map(r => ({
+        name: r.nombre,
+        path: `/recintos/detalle/${r.id}`,
+      })) || [],
     },
-  ]);
+  ], [generos, artist, recintos]);
 
   const [hoveredCategory, setHoveredCategory] = useState(null);
 

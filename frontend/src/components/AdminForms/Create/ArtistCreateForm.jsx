@@ -10,7 +10,7 @@ import { useCreateArtist } from "../../../hooks/artist/useCreateArtist";
 export default function ArtistCreateForm() {
     const { slug } = useParams();
     const navigate = useNavigate();
-    const { form, handleChange, handleFileChange, handleSelectChange, handleSubmit, newSlug, success, errors} = useCreateArtist()
+    const { form, handleChange, handleFileChange, handleSelectChange, handleSubmit, newSlug, success, errors, loading} = useCreateArtist()
     const { data: generos, isLoading: isLoadingGeneros } = useGetGenerosPublic();
 
     /*useEffect(() => {
@@ -52,7 +52,7 @@ export default function ArtistCreateForm() {
                     <InputFile label="Imagen banner" initialUrl={form?.img_hero} field="img_hero" onChange={handleFileChange}></InputFile>
                     <InputFile label="Imagen about" initialUrl={form?.images} field="images" onChange={handleFileChange}></InputFile>
                 </div>
-                <button className="btn-primary py-2 px-4 text-md w-max">Crear Artista</button>
+                <button className="btn-primary py-2 px-4 text-md w-max" disabled={loading}>Crear Artista</button>
             </form>
         </div>
     )

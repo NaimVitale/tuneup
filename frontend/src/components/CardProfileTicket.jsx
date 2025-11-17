@@ -2,7 +2,6 @@ import { Calendar, MapPin, Ticket, CheckCircle } from "lucide-react";
 
 // Componente CardProfileTicket
 export default function CardProfileTicket({ entrada }) {
-  console.log(entrada)
   const formatFecha = (fecha) => {
     return new Date(fecha).toLocaleDateString('es-ES', {
       day: 'numeric',
@@ -36,9 +35,9 @@ export default function CardProfileTicket({ entrada }) {
             {entrada?.concierto.artista.nombre}</h3>
           </div>
         </div>
-        <span className={`${estadoBadge.bg} ${estadoBadge.text} text-xs font-semibold px-3 py-1 rounded-full`}>
+        {/*<span className={`${estadoBadge.bg} ${estadoBadge.text} text-xs font-semibold px-3 py-1 rounded-full`}>
           {estadoBadge.label}
-        </span>
+        </span>*/}
       </div>
 
       {/* Contenido */}

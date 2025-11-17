@@ -93,7 +93,7 @@ export default function SingleEventPage() {
               <p className="text-lg text-gray-500 mt-1">{contador}</p>
             </div>
           ) : (
-            <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col"> 
+            <div className="w-full px-4 sm:w-[90%] lg:w-[75%] m-auto pt-4 sm:pt-6 lg:pt-2 min-h-[50vh] lg:h-[calc(100vh-200px)] flex flex-col pb-10 md:pb-1"> 
             {/* Lista de secciones disponibles */}
             {(!tieneSVG || isMobile) && data?.recinto?.secciones && (
               <div className="mb-4 sm:mb-6">

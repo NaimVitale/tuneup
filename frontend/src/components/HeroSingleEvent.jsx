@@ -49,11 +49,9 @@ export default function HeroSingleEvent({eventData}){
                             <div className="text-left min-w-0">
                                 <p className="text-xs text-white/70 uppercase tracking-wide">Ubicación</p>
                                 <p className="flex gap-1.5 font-semibold truncate">
-                                    <Link to={`/ciudad/${eventData?.recinto?.ciudad?.id}`} className="hover:underline">
-                                        {eventData?.recinto?.ciudad?.nombre}
-                                    </Link>
+                                    {eventData?.recinto?.ciudad?.nombre}
                                     <span>·</span>
-                                    <Link to={`/recinto/${eventData?.id_recinto}`} className="hover:underline">
+                                    <Link to={`/recintos/detalle/${eventData?.id_recinto}`} className="hover:underline">
                                         {eventData?.recinto?.nombre}
                                     </Link>
                                 </p>
