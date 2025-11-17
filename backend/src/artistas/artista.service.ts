@@ -45,14 +45,32 @@ export class ArtistaService {
     }
 
     if (files) {
-      for (const [key, fileArray] of Object.entries(files)) {
-        if (ALLOWED_FILE_FIELDS.includes(key) && fileArray[0]) {
-          const file = fileArray[0];
-          const uploaded = await this.uploadService.handleUploads({ [key]: [file] }, 'tuneup/artistas', ALLOWED_FILE_FIELDS);
-          artista[key] = uploaded[key];
+    for (const [key, fileArray] of Object.entries(files)) {
+      if (ALLOWED_FILE_FIELDS.includes(key) && fileArray[0]) {
+        const file = fileArray[0];
+
+        // Validar tipo de archivo
+        if (!file.mimetype.startsWith('image/')) {
+          throw new BadRequestException(`El archivo ${file.originalname} debe ser una imagen`);
         }
+
+        // Validar tamaño máximo (ej. 5MB)
+        const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+        if (file.size > MAX_SIZE) {
+          throw new BadRequestException(`El archivo ${file.originalname} excede el tamaño máximo de 5MB`);
+        }
+
+        // Subir imagen a Cloudinary
+        const uploaded = await this.uploadService.handleUploads(
+          { [key]: [file] },
+          'tuneup/artistas',
+          ALLOWED_FILE_FIELDS
+        );
+
+        artista[key] = uploaded[key];
       }
     }
+  }
 
     return await this.artistaRepo.save(artista);
   }
@@ -248,14 +266,32 @@ export class ArtistaService {
     }
 
     if (files) {
-      for (const [key, fileArray] of Object.entries(files)) {
-        if (ALLOWED_FILE_FIELDS.includes(key) && fileArray[0]) {
-          const file = fileArray[0];
-          const uploaded = await this.uploadService.handleUploads({ [key]: [file] }, 'tuneup/artistas', ALLOWED_FILE_FIELDS);
-          artista[key] = uploaded[key];
+    for (const [key, fileArray] of Object.entries(files)) {
+      if (ALLOWED_FILE_FIELDS.includes(key) && fileArray[0]) {
+        const file = fileArray[0];
+
+        // Validar tipo de archivo
+        if (!file.mimetype.startsWith('image/')) {
+          throw new BadRequestException(`El archivo ${file.originalname} debe ser una imagen`);
         }
+
+        // Validar tamaño máximo (5MB por ejemplo)
+        const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+        if (file.size > MAX_SIZE) {
+          throw new BadRequestException(`El archivo ${file.originalname} excede el tamaño máximo de 5MB`);
+        }
+
+        // Subir a Cloudinary
+        const uploaded = await this.uploadService.handleUploads(
+          { [key]: [file] },
+          'tuneup/artistas',
+          ALLOWED_FILE_FIELDS
+        );
+
+        artista[key] = uploaded[key];
       }
     }
+  }
 
     return await this.artistaRepo.save(artista);
   }

@@ -51,11 +51,25 @@ export class RecintosService {
       })) || []
     });
 
-    // Subir imágenes a Cloudinary si vienen
+    // Validar y subir imágenes si vienen
     if (files) {
       for (const [key, fileArray] of Object.entries(files)) {
         if (ALLOWED_FILE_FIELDS.includes(key) && fileArray[0]) {
-          const uploaded = await this.uploadService.handleUploads({ [key]: [fileArray[0]] }, 'tuneup/recintos', ALLOWED_FILE_FIELDS);
+          const file = fileArray[0];
+
+          // Validar tipo de archivo
+          if (!file.mimetype.startsWith('image/')) {
+            throw new BadRequestException(`El archivo ${file.originalname} debe ser una imagen`);
+          }
+
+          // Validar tamaño (ej. máximo 5MB)
+          const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+          if (file.size > MAX_SIZE) {
+            throw new BadRequestException(`El archivo ${file.originalname} excede el tamaño máximo de 5MB`);
+          }
+
+          // Subir imagen a Cloudinary
+          const uploaded = await this.uploadService.handleUploads({ [key]: [file] }, 'tuneup/recintos', ALLOWED_FILE_FIELDS);
           recinto[key] = uploaded[key];
         }
       }
@@ -253,12 +267,26 @@ export class RecintosService {
     // Manejar archivos
     if (files) {
       for (const [key, fileArray] of Object.entries(files)) {
-        if (fileArray[0]) {
+        const file = fileArray[0];
+        if (file) {
+          // Validar tipo de archivo
+          if (!file.mimetype.startsWith('image/')) {
+            throw new BadRequestException(`El archivo ${file.originalname} debe ser una imagen`);
+          }
+
+          // Validar tamaño (máx. 5MB, por ejemplo)
+          const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+          if (file.size > MAX_SIZE) {
+            throw new BadRequestException(`El archivo ${file.originalname} excede el tamaño máximo de 5MB`);
+          }
+
+          // Subir imagen a Cloudinary
           const uploaded = await this.uploadService.handleUploads(
-            { [key]: [fileArray[0]] },
+            { [key]: [file] },
             'tuneup/recintos',
             ['img_card', 'img_hero']
           );
+
           recinto[key] = uploaded[key];
         }
       }
