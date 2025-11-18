@@ -41,9 +41,9 @@ export const CreateConcierto = async(token, conciertoData) => {
 }
 
 //Consulta publica sobre un artista
-export const getConcert = async(id) => {
+export const getConcert = async(id, slug) => {
   try{
-    const response = await axios.get(`${API_URL}/public/${id}`, {
+    const response = await axios.get(`${API_URL}/public/${slug}/${id}`, {
     })
     return response.data;
   } catch (error) {

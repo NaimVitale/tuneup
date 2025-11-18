@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import HeroSingleEvent from "../components/HeroSingleEvent";
 import SeatMap from "../components/SeatMap";
 import CardTicket from "../components/CardTicket";
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetConcert } from "../hooks/concerts/useGetConcert";
 import { Armchair, Frown, MapIcon, ShoppingCart} from "lucide-react";
 import ListTickets from "../components/ListTickets";
@@ -10,10 +10,12 @@ import { useTickets } from "../hooks/useTickets";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { useAuth } from "../context/AuthContext";
 import CheckoutButton from "../components/CheckoutButton";
+import Spinner from "../components/Spinner";
 
 export default function SingleEventPage() {
+  const navigate = useNavigate();
   const MAX_ENTRADAS_TOTAL = 6;
-  const { evento, id } = useParams();
+  const { evento, id, slug } = useParams();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -21,8 +23,18 @@ export default function SingleEventPage() {
     return <Navigate to="/404" replace state={{ from: location }} />;
   }
 
-  const { data, isLoading, isError } = useGetConcert(id);
+  const { data, isLoading, isError, error } = useGetConcert(id, slug);
   const { token, userID } = useAuth();
+
+
+  useEffect(() => {
+    if (!isLoading && isError) {
+      // Solo redirige si el backend devolvió 404
+      if (error?.statusCode === 404) {
+        navigate("/404");
+      }
+    }
+  }, [isError, error, isLoading, navigate]);
 
   const {
     ticketsSeleccionados,
@@ -86,6 +98,14 @@ export default function SingleEventPage() {
     );
   }, [data?.recinto?.secciones]);
   // -----------------------------
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
