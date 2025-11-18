@@ -29,7 +29,12 @@ export const useCreateGenero = () => {
     if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
     else if (formData.nombre.length > 50) newErrors.nombre = "Máximo 50 caracteres";
 
-    else if (formData.descripcion.length > 200) newErrors.descripcion = "Máximo 200 caracteres";
+    // Descripción
+    if (!formData.descripcion.trim()) {
+      newErrors.descripcion = "La descripción es obligatoria";
+    } else if (formData.descripcion.length > 200) {
+      newErrors.descripcion = "Máximo 200 caracteres";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -54,8 +59,8 @@ export const useCreateGenero = () => {
       setLoading(false);
       return response;
     } catch (err) {
-      console.error(err);
       toast.error(err?.response?.data?.message || "Error al crear el género");
+      toast.error(err?.message)
       setLoading(false);
       return false;
     }

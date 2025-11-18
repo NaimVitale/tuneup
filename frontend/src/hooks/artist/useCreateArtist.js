@@ -86,8 +86,8 @@ export const useCreateArtist = () => {
 
       return created.slug;
     } catch (error) {
-      toast.error(error?.error || "Error al crear el artista");
-      console.log(error);
+      toast.error("Error al crear el artista");
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
