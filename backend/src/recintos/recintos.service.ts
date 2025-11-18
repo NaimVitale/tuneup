@@ -8,6 +8,7 @@ import { Seccion } from 'src/secciones/entities/seccion.entity';
 import { Ciudad } from 'src/ciudades/entities/ciudad.entity';
 import { Concierto, EstadoConcierto } from 'src/conciertos/entities/concierto.entity';
 import { UploadService } from 'src/upload/upload.service';
+import { PreciosSeccionConcierto } from 'src/precios-seccion-concierto/entities/precios-seccion-concierto.entity';
 
 @Injectable()
 export class RecintosService {
@@ -15,6 +16,10 @@ export class RecintosService {
     @InjectRepository(Recinto) private repo: Repository<Recinto>,
 
     @InjectRepository(Concierto) private conciertoRepo: Repository<Concierto>,
+
+    @InjectRepository(Seccion) private seccionRepo: Repository<Seccion>,
+
+    @InjectRepository(PreciosSeccionConcierto) private preciosRepo: Repository<PreciosSeccionConcierto>,
 
     private readonly uploadService: UploadService,
   ) {}
@@ -231,38 +236,53 @@ export class RecintosService {
 
     // Procesar secciones
     if (dto.secciones) {
-      const incomingIds = dto.secciones.map(s => s.id).filter(Boolean);
+    const incomingIds = dto.secciones.map(s => s.id).filter(Boolean);
 
-      // Eliminar secciones que no vienen en DTO
-      recinto.secciones = recinto.secciones.filter(s => incomingIds.includes(s.id));
+    // Iterar sobre secciones existentes para eliminar las que no vienen en DTO
+    for (const s of [...recinto.secciones]) {
+      if (!incomingIds.includes(s.id)) {
+        const tienePrecios = await this.preciosRepo.count({
+          where: { seccion: { id: s.id } },
+        });
 
-      for (const s of dto.secciones) {
-        if (!s.nombre?.trim() || s.capacidad === undefined || s.capacidad === null) {
-          throw new BadRequestException('Cada sección debe tener nombre y capacidad');
+        if (tienePrecios > 0) {
+          throw new BadRequestException(
+            `No se puede eliminar la sección "${s.nombre}" porque tiene precios asignados`
+          );
         }
 
-        let seccion = s.id
-          ? recinto.secciones.find(sec => sec.id === s.id) // actualizar existente
-          : null;
-
-        if (seccion) {
-          // Actualizar existente
-          seccion.nombre = s.nombre;
-          seccion.capacidad = s.capacidad;
-          seccion.tipo_svg = s.tipo_svg || '';
-          seccion.svg_path = s.svg_path || '';
-        } else if (s.nombre?.trim() || s.capacidad) {
-          // Crear nueva sección solo si tiene nombre o capacidad
-          seccion = new Seccion();
-          seccion.nombre = s.nombre || '';
-          seccion.capacidad = s.capacidad || 0;
-          seccion.tipo_svg = s.tipo_svg || '';
-          seccion.svg_path = s.svg_path || '';
-          seccion.recinto = recinto;
-          recinto.secciones.push(seccion);
-        }
+        // Si no tiene precios, eliminar de la DB y del array
+        await this.seccionRepo.remove(s);
+        recinto.secciones = recinto.secciones.filter(sec => sec.id !== s.id);
       }
     }
+
+    // Actualizar secciones existentes o crear nuevas
+    for (const s of dto.secciones) {
+      if (!s.nombre?.trim() || s.capacidad === undefined || s.capacidad === null) {
+        throw new BadRequestException('Cada sección debe tener nombre y capacidad');
+      }
+
+      let seccion = recinto.secciones.find(sec => sec.id === s.id);
+
+      if (seccion) {
+        // Actualizar existente
+        seccion.nombre = s.nombre;
+        seccion.capacidad = s.capacidad;
+        seccion.tipo_svg = s.tipo_svg || '';
+        seccion.svg_path = s.svg_path || '';
+      } else {
+        // Crear nueva sección
+        seccion = new Seccion();
+        seccion.nombre = s.nombre;
+        seccion.capacidad = s.capacidad;
+        seccion.tipo_svg = s.tipo_svg || '';
+        seccion.svg_path = s.svg_path || '';
+        seccion.recinto = recinto;
+        recinto.secciones.push(seccion);
+      }
+    }
+  }
 
     // Manejar archivos
     if (files) {
