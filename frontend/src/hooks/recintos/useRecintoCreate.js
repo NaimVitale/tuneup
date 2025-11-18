@@ -79,7 +79,7 @@ export const useRecintoCreate = () => {
       return response;
     } catch (err) {
       console.error(err);
-      toast.error(err?.error || "Error al crear el recinto");
+      toast.error(err?.message || "Error al crear el recinto");
       return false;
     } finally {
       setLoading(false);

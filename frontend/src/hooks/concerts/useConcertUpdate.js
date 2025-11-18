@@ -182,9 +182,8 @@ export const useConcertUpdate = (slug, initialData) => {
 
     } catch (err) {
       setErrorUpdate(err);
-      console.error(err);
+      toast.error(err?.message);
       return false;
-
     } finally {
       setLoading(false);
     }

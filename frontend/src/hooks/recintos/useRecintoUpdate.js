@@ -66,7 +66,7 @@ export const useRecintoUpdate = (initialData) => {
     } catch (err) {
       toast.error("Error al actualizar el recinto");
       setError(err);
-      console.log(err);
+      toast.error(err?.message);
       setLoading(false);
       return false;
     }
