@@ -368,7 +368,7 @@ export class ConciertosService {
 
 
 
-  async findOnePublic(id: number) {
+  async findOnePublic(id: number, slug: string) {
     const concierto = await this.conciertoRepository.findOne({
       where: { id },
       relations: ['recinto', 'recinto.secciones', 'artista'],
@@ -381,7 +381,19 @@ export class ConciertosService {
       },
     });
 
-    if (!concierto) return null;
+    if (!concierto || concierto.artista.slug !== slug) {
+      throw new NotFoundException("Concierto no disponible");
+    }
+
+    // Validar si el concierto está finalizado
+    const ahora = new Date();
+    const fechaConcierto = new Date(concierto.fecha); // asegúrate que concierto.fecha está incluida en el entity
+
+    if (fechaConcierto < ahora) {
+      // también puedes usar GoneException
+      throw new NotFoundException("Concierto no disponible");
+    }
+
 
     const precios = await this.preciosService.findByConcierto(id);
 

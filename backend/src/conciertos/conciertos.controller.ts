@@ -49,9 +49,9 @@ export class ConciertosController {
   }
 
 
-  @Get('public/:id')
-  findOnePublic(@Param('id') id: string) {
-    return this.conciertosService.findOnePublic(+id);
+  @Get('public/:slug/:id')
+  findOnePublic(@Param('slug') slug: string, @Param('id') id: string) {
+    return this.conciertosService.findOnePublic(+id, slug);
   }
 
   @UseGuards(JwtRolesGuard)
