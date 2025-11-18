@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { Genero } from './entities/genero.entity';
@@ -50,8 +50,22 @@ export class GeneroService {
 
   // Crear género
   async create(createGeneroDto: CreateGeneroDto) {
-    const genero = this.generoRepository.create(createGeneroDto);
-    return this.generoRepository.save(genero);
+    try {
+      const genero = this.generoRepository.create(createGeneroDto);
+      return await this.generoRepository.save(genero);
+
+    } catch (error) {
+
+      // Error MySQL: duplicate key
+      if (error.code === "ER_DUP_ENTRY") {
+        throw new BadRequestException({
+          field: "nombre",
+          message: `El género '${createGeneroDto.nombre}' ya existe`,
+        });
+      }
+
+      throw error; // otros errores no controlados
+    }
   }
 
   // Actualizar género
