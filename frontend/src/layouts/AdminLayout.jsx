@@ -8,7 +8,7 @@ export default function AdminLayout(){
     const { token, rol, loading } = useAuth();
     const isMobile = useMediaQuery("(max-width: 768px)");
 
-    if (loading) return <Spinner></Spinner>;
+    if (loading) return <div className='flex justify-center items-center h-[100dvh]'><Spinner></Spinner></div>;
 
     if (!token) return <Navigate to="/404" replace/>;
     if (rol !== "admin") return <Navigate to="/404" replace/>;
@@ -18,7 +18,7 @@ export default function AdminLayout(){
             <div className={isMobile ? "w-full" : ""}>
                 <HeaderAdmin></HeaderAdmin>
             </div>
-            <div className="w-full bg-gradient-to-r from-[#D946EF]/70 via-[#A21CAF]/50 to-[#7C3AED]/40">
+            <div className="w-full">
                 <Outlet></Outlet>
             </div>
         </div>
