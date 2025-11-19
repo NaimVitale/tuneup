@@ -435,6 +435,7 @@ export class ConciertosService {
       return {
         ...seccion,
         precio: precioObj?.precio ?? 0,
+        capacidad_disponible: precioObj?.capacidad_disponible ?? seccion.capacidad,
       };
     });
 
