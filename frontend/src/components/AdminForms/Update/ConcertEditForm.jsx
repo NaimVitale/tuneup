@@ -12,6 +12,7 @@ export default function ConcertEditForm({ data }) {
     const { data: recintos, isLoading: isLoadingRecintos } = useGetRecintosSelect();
     const { form, handleRecintoChange, handleSelectChange, updateSections, fecha, setFecha, hora, setHora, fechaVenta, setFechaVenta, horaVenta, setHoraVenta, handleSubmit, loading, success, errorUpdate, errors} = useConcertUpdate(slug, data)
 
+    console.log(data)
     const onSubmit = async (e) => {
         e.preventDefault();
         await handleSubmit();

@@ -55,7 +55,8 @@ export const useConcertUpdate = (slug, initialData) => {
         nombre: s.nombre,
         precio: precioObj?.precio ?? 0,
         id_precio: precioObj?.id,
-        capacidad: s.capacidad // <--- agregado
+        capacidad: s.capacidad, // <--- agregado
+        capacidad_disponible: precioObj?.capacidad_disponible ?? s.capacidad
       };
     }) || [];
 
