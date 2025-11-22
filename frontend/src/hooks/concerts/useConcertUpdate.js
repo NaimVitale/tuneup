@@ -41,6 +41,7 @@ export const useConcertUpdate = (slug, initialData) => {
   const [errorUpdate, setErrorUpdate] = useState(null);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const conciertoId = initialData?.id;
 
   // ----------------------------
   // Inicialización de datos
@@ -53,7 +54,7 @@ export const useConcertUpdate = (slug, initialData) => {
       return {
         id: s.id,
         nombre: s.nombre,
-        precio: precioObj?.precio ?? 0,
+        precio: precioObj?.precio ? Number(precioObj.precio) : 0,
         id_precio: precioObj?.id,
         capacidad: s.capacidad, // <--- agregado
         capacidad_disponible: precioObj?.capacidad_disponible ?? s.capacidad
@@ -132,18 +133,24 @@ export const useConcertUpdate = (slug, initialData) => {
   const handleRecintoChange = async (id_recinto) => {
     handleSelectChange("id_recinto", id_recinto);
 
+    console.log(id_recinto)
+
     try {
       const secciones = await getSeccionesByRecinto(id_recinto, slug);
+      
+      const seccionesConPrecios = secciones.map(s => {
+      const precioObj = s.conciertosConPrecio?.find(p => p.concierto && p.concierto.id === conciertoId);
 
-      const seccionesConPrecios = secciones.map(s => ({
+      return {
         id: s.id,
         nombre: s.nombre,
-        precio: s.precio ?? 0,
-        id_precio: s.id_precio,
-        capacidad: s.capacidad // <--- agregado
-      }));
-
-      setForm(prev => ({ ...prev, secciones: seccionesConPrecios }));
+        precio: precioObj ? Number(precioObj.precio) : 0,
+        id_precio: precioObj?.id ?? null,
+        capacidad: s.capacidad,
+        capacidad_disponible: precioObj?.capacidad_disponible ?? s.capacidad
+      };
+    });
+    setForm(prev => ({ ...prev, secciones: seccionesConPrecios }));
     } catch (err) {
       toast.error("Error al cargar secciones del recinto");
     }
@@ -176,6 +183,8 @@ export const useConcertUpdate = (slug, initialData) => {
           precio: s.precio
         }))
       };
+
+      console.log("Datos que se van a enviar:", dataToSend);
 
       await mutation.mutateAsync({ token, slug, data: dataToSend });
       setSuccess(true);

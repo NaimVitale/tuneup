@@ -141,12 +141,22 @@ export default function SectionsTable({
                   <>
                     {columns.map(col => (
                       <td key={col.key} className="p-4 text-gray-700">
-                        {col.key === "svg_path"
-                          ? truncate(s[col.key], 30)
-                          : col.key === "precio"
-                            ? `${s[col.key] || 0}€`
-                            : s[col.key]
-                        }
+                        {col.key === "svg_path" ? (
+                          truncate(s[col.key], 30)
+                        ) : col.key === "precio" ? (
+                          editingId === s.id ? (
+                            <input
+                              type="number"
+                              value={s[col.key]}
+                              onChange={(e) => handleChange(s.id, col.key, Number(e.target.value))}
+                              className="border border-gray-300 rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#C122ED]"
+                            />
+                          ) : (
+                            `${Number(s[col.key]).toFixed(2)}€` // mostrar siempre 2 decimales
+                          )
+                        ) : (
+                          s[col.key]
+                        )}
                       </td>
                     ))}
                     {showActions && (

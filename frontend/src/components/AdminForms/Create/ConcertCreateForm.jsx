@@ -13,6 +13,8 @@ export default function ConcertCreateForm() {
     const { data: recintos, isLoading: isLoadingRecintos } = useGetRecintosSelect();
     const { form, fecha, setFecha, hora, setHora , fechaVenta, setFechaVenta, horaVenta, setHoraVenta, handleSelectChange, handleRecintoChange, updateSections, handleSubmit, loading, errors } = useConcertCreate();
 
+    console.log(form.secciones)
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const ok = await handleSubmit();

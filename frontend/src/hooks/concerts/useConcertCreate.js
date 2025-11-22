@@ -74,7 +74,8 @@ export const useConcertCreate = () => {
         id: s.id,
         nombre: s.nombre,
         capacidad: s.capacidad,
-        precio: 0
+        capacidad_disponible: s.capacidad_disponible ?? s.capacidad,
+        precio: s.precio ? Number(s.precio) : 0
       }));
       setForm(prev => ({ ...prev, secciones: mapped }));
     } catch (err) {
