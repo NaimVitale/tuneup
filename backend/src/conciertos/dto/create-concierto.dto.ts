@@ -6,7 +6,8 @@ class PrecioSeccionDto {
   @IsNotEmpty()
   id_seccion: number;
 
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'El precio debe ser un número válido' })
   @Min(0)
   precio: number;
 }

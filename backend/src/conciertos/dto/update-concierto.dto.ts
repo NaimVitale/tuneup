@@ -1,4 +1,4 @@
-import { IsOptional, IsNumber, IsDate, ValidateNested, IsDateString } from 'class-validator';
+import { IsOptional, IsNumber, IsDate, ValidateNested, IsDateString, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class UpdatePrecioSeccionDto {
@@ -10,7 +10,9 @@ export class UpdatePrecioSeccionDto {
   @IsNumber()
   id_seccion?: number;
 
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'El precio debe ser un número válido' })
+  @Min(0)
   precio: number;
 }
 

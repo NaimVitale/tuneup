@@ -23,7 +23,7 @@ export class SeccionesService {
     if (id_concierto) {
       // Mapeamos las secciones para adjuntar el precio del concierto actual
       return secciones.map(s => {
-        const precioExistente = s.conciertosConPrecio?.find(c => c.concierto.id === id_concierto);
+        const precioExistente = s.conciertosConPrecio?.find(c => c.concierto && c.concierto.id === id_concierto);
         return {
           ...s,
           precio: precioExistente?.precio ?? 0,

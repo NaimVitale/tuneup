@@ -454,13 +454,38 @@ export class ConciertosService {
       where: { id },
       relations: ['preciosPorSeccion', 'preciosPorSeccion.seccion', 'artista', 'recinto']
     });
+    console.log(dto)
 
     if (!concierto) throw new NotFoundException('Concierto no encontrado');
 
     // Actualizar campos básicos
     if (dto.fecha) concierto.fecha = new Date(dto.fecha);
     if (dto.id_artista) concierto.id_artista = dto.id_artista;
-    if (dto.id_recinto) concierto.id_recinto = dto.id_recinto;
+    if (dto.id_recinto && dto.id_recinto !== concierto.recinto?.id) {
+      // Verificar si hay entradas vendidas
+      const entradasVendidas = await this.entradaRepo.count({
+        where: {
+          id_concierto: concierto.id,
+          estado_entrada: 'activa'
+        }
+      });
+
+      if (entradasVendidas > 0) {
+        throw new BadRequestException(
+          `No se puede cambiar el recinto porque ya hay ${entradasVendidas} entradas vendidas para este concierto.`
+        );
+      }
+
+      // No hay entradas, se puede cambiar
+      const nuevoRecinto = await this.recintoRepo.findOne({
+        where: { id: dto.id_recinto }
+      });
+
+      if (!nuevoRecinto) throw new NotFoundException(`Recinto ${dto.id_recinto} no encontrado`);
+
+      concierto.recinto = nuevoRecinto;
+      concierto.id_recinto = nuevoRecinto.id;
+    }
 
     if (dto.fecha_venta !== undefined) {
       concierto.fecha_venta = dto.fecha_venta ? new Date(dto.fecha_venta) : null;
