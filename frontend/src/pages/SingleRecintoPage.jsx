@@ -31,9 +31,9 @@ export default function SingleRecintoPage(){
                     </div>
                 </div>
             </div>
-            <div className='m-auto bg-gradient-to-br from-[#D946EF] via-[#A21CAF] to-[#7C3AED] flex flex-col lg:flex-row gap-10 items-center mt-10 px-4 py-20'>
+            <div className='m-auto bg-gradient-to-br from-[#D946EF] via-[#A21CAF] to-[#7C3AED] flex flex-col lg:flex-row gap-10 items-center mt-10 md:px-4 md:py-20'>
                 <iframe
-                    className="w-[90%] mx-auto h-[60vh] rounded-2xl"
+                    className="md:w-[90%] w-full mx-auto h-[60vh] md:rounded-2xl"
                     loading="lazy"
                     allowFullScreen
                     src={`https://www.google.com/maps?q=${encodeURIComponent(`${recinto?.nombre}, ${recinto?.ciudad?.nombre}`)}&output=embed`}

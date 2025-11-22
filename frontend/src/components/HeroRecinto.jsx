@@ -12,7 +12,7 @@ export default function HeroRecinto ({ nombre, imagen, data }) {
                         {nombre}
                     </h1>
                     <button
-                        className="btn-hero py-3 px-5 text-lg w-max"
+                        className="btn-hero py-3 px-5 text-sm w-max"
                         onClick={() => {
                             const query = encodeURIComponent(`${data[0]}, ${data[1]}`);
                             window.open(`https://www.google.com/maps/dir/?api=1&destination=${query}`, "_blank");

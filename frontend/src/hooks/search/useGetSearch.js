@@ -14,6 +14,7 @@ export const useGetSearch = (query) => {
       setError(null);
       try {
         const res = await getSearch(query);
+        console.log(res)
 
         const formattedResults = [];
 
@@ -36,7 +37,7 @@ export const useGetSearch = (query) => {
               id: r.id,
               nombre: r.nombre,
               slug: r.nombre.toLowerCase().replace(/ /g, "-"),
-              imagen: r.ciudad?.img_card ?? "https://res.cloudinary.com/dppp5mhk1/image/upload/v1762105506/1573_zbsvcs.avif",
+              imagen: r?.img_card ?? "https://res.cloudinary.com/dppp5mhk1/image/upload/v1762105506/1573_zbsvcs.avif",
               tipo: "Recinto",
               ciudad: r.ciudad?.nombre ?? "No especificada",
               numConciertos: r.conciertos?.length ?? 0,
