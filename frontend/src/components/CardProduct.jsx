@@ -33,8 +33,8 @@ function Cardproduct ({information}) {
                         </div>
                     ) : (
                         <>
-                        <p className="text-md text-[#C122ED]">
-                            Desde <span className="font-semibold">{information?.precio_minimo || '79'}€</span>
+                        <p className="text-sm text-[#C122ED]">
+                            Desde <span className="font-semibold text-base">{information?.precio_minimo || '79'}€</span>
                         </p>
                         <Link
                             to={`/conciertos/${information?.artista_slug || information?.artista?.slug}/${information?.concierto_id || information?.id}`}

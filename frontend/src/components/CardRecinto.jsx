@@ -14,9 +14,11 @@ export default function CardRecinto({ recinto }) {
         />
         
         {/* Overlay con info */}
+        <div className="absolute inset-0 bg-black/50"></div>
+
         <Link
           to={`/recintos/detalle/${recinto?.id || recinto?.slug}`}
-          className="absolute bottom-0 w-full px-5 py-4 backdrop-blur-md bg-[#C122ED]/80 hover:bg-[#C122ED]/90 transition-colors"
+          className="absolute bottom-0 w-full px-5 py-4 transition-colors"
         >
           <div className="flex items-center justify-between text-white">
             <div className="flex-1 min-w-0">
@@ -31,7 +33,7 @@ export default function CardRecinto({ recinto }) {
               </div>
             </div>
             <ArrowRight 
-              size={22} 
+              size={24} 
               className="flex-shrink-0 ml-3 transition-transform" 
             />
           </div>

@@ -12,12 +12,13 @@ export default function CardArtist({ information }) {
         />
         <Link
           to={`/artistas/detalle/${information?.slug}`}
-          className="absolute bottom-0 w-full px-4 py-3
-                     text-lg font-semibold text-white
-                     backdrop-blur-md bg-purple-opacity
-                     flex items-center justify-between"
+             className="absolute bottom-0 w-full px-4 py-3
+             text-lg font-semibold text-white
+             flex items-center justify-between
+             backdrop-blur-md
+             bg-gradient-to-t from-[#C122ED]/100 to-[#C122ED]/0"
         >
-          <span>{information?.nombre}</span>
+          <span className="text-lg">{information?.nombre}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22" height="22"
