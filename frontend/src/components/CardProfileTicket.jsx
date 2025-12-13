@@ -32,7 +32,7 @@ export default function CardProfileTicket({ entrada }) {
           <div className="flex gap-2">
             <Ticket className="text-white mt-1.5" size={20} />
             <h3 className="text-xl font-bold text-white transition-colors">
-            {entrada?.concierto.artista.nombre}</h3>
+            {entrada?.concierto?.artista?.nombre}</h3>
           </div>
         </div>
         {/*<span className={`${estadoBadge.bg} ${estadoBadge.text} text-xs font-semibold px-3 py-1 rounded-full`}>
@@ -49,7 +49,7 @@ export default function CardProfileTicket({ entrada }) {
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Fecha</p>
               <p className="text-sm font-medium text-gray-900 capitalize">
-                {formatFecha(entrada?.concierto.fecha)}
+                {formatFecha(entrada?.concierto?.fecha)}
               </p>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function CardProfileTicket({ entrada }) {
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Ubicación</p>
               <p className="text-sm font-medium text-gray-900">
-                {entrada?.concierto.recinto.nombre}
+                {entrada?.concierto?.recinto?.nombre}
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@ export default function CardProfileTicket({ entrada }) {
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Sección</p>
               <p className="text-sm font-medium text-gray-900">
-                {entrada?.seccion.nombre}
+                {entrada?.seccion?.nombre}
               </p>
             </div>
           </div>

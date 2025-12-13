@@ -8,8 +8,6 @@ export default function ListTickets({
   manejarSeleccionSeccion
 }) {
 
-  console.log(secciones)
-
   const seccionesDisponibles =
     secciones?.filter(
       (seccion) =>

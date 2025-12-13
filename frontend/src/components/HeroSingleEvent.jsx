@@ -23,7 +23,7 @@ export default function HeroSingleEvent({eventData}){
                 {/* Info del evento */}
                 <div className="w-full pb-4 md:pb-0">
                     <h2 className='text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-3 text-center md:text-left'>
-                        <Link to={`/artistas/${eventData?.artista?.slug}`} className="hover:text-[#C122ED] transition-colors">
+                        <Link to={`/artistas/detalle/${eventData?.artista?.slug}`} className="hover:text-[#C122ED] transition-colors">
                             {eventData?.artista?.nombre}
                         </Link>
                     </h2>

@@ -14,7 +14,6 @@ export const useGetSearch = (query) => {
       setError(null);
       try {
         const res = await getSearch(query);
-        console.log(res)
 
         const formattedResults = [];
 
