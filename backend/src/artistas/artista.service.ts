@@ -114,6 +114,7 @@ export class ArtistaService {
       .andWhere("concierto.deleted_at IS NULL")
       .groupBy("artista.id")
       .orderBy("COUNT(concierto.id)", "DESC") // aquí sí funciona
+      .addOrderBy("artista.id", "ASC") 
       .limit(4)
       .select(["artista.id", "artista.nombre", "artista.slug"])
       .getRawMany();
