@@ -195,7 +195,7 @@ export class RecintosService {
     }, "conciertosCount")
     .where("recinto.deleted_at IS NULL")
     .orderBy("conciertosCount", "DESC")
-    .limit(4)
+    .limit(7)
     .getMany();
 
     return recintos;

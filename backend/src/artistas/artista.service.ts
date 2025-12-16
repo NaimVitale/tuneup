@@ -115,7 +115,7 @@ export class ArtistaService {
       .groupBy("artista.id")
       .orderBy("COUNT(concierto.id)", "DESC") // aquí sí funciona
       .addOrderBy("artista.id", "ASC") 
-      .limit(4)
+      .limit(7)
       .select(["artista.id", "artista.nombre", "artista.slug"])
       .getRawMany();
 

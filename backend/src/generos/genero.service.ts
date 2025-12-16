@@ -40,7 +40,7 @@ export class GeneroService {
       .groupBy("genero.id")
       .addGroupBy("genero.nombre")
       .orderBy("cantidad", "DESC")
-      .limit(4)
+      .limit(7)
       .getRawMany();
   }
   
