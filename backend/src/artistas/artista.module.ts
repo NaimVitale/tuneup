@@ -7,9 +7,10 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UploadModule } from 'src/upload/upload.module';
 import { Genero } from 'src/generos/entities/genero.entity';
 import { Concierto } from 'src/conciertos/entities/concierto.entity';
+import { SpotifyModule } from 'src/spotify/spotify.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Artista, Genero, Concierto]), AuthModule, UploadModule],
+  imports:[TypeOrmModule.forFeature([Artista, Genero, Concierto]), AuthModule, UploadModule, SpotifyModule],
   controllers: [ArtistaController],
   providers: [ArtistaService],
   exports: [ArtistaService]

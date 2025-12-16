@@ -8,6 +8,7 @@ import slugify from 'slugify';
 import { UploadService } from 'src/upload/upload.service';
 import { Genero } from 'src/generos/entities/genero.entity';
 import { Concierto, EstadoConcierto } from 'src/conciertos/entities/concierto.entity';
+import { SpotifyService } from 'src/spotify/spotify.service';
 
 @Injectable()
 export class ArtistaService {
@@ -19,6 +20,7 @@ export class ArtistaService {
       @InjectRepository(Concierto)
       private readonly conciertoRepo: Repository<Concierto>,
       private readonly uploadService: UploadService,
+      private readonly spotifyService: SpotifyService
     ) {}
   
   async create(dto: CreateArtistaDto, files?: Record<string, Express.Multer.File[]>): Promise<Artista> {
@@ -185,6 +187,9 @@ export class ArtistaService {
     if (!results.length) return null;
 
     const first = results[0];
+
+    const canciones = await this.spotifyService.getArtistTopTracksByName(first.artista_nombre);
+
     return {
       id: first.artista_id,
       nombre: first.artista_nombre,
@@ -193,6 +198,7 @@ export class ArtistaService {
       img_hero: first.artista_img_hero,
       images: first.artista_images,
       descripcion: first.artista_descripcion,
+      canciones,
       conciertos: results.filter(row => row.concierto_id !== null).map(row => ({
         id: row.concierto_id,
         fecha: row.concierto_fecha,
