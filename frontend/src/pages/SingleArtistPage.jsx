@@ -3,6 +3,7 @@ import Cardproduct from "../components/CardProduct";
 import HeroArtist from "../components/HeroArtist";
 import { useGetArtist } from "../hooks/artist/useGetArtist";
 import { formatDescription } from "../utils/descriptionFormat";
+import TrackList from "../components/TrackList";
 
 export default function ArtistPage(){
     const { slug: artistSlug } = useParams();
@@ -32,14 +33,26 @@ export default function ArtistPage(){
                     </div>
                 </div>
             </div>
-            <div className='w-[90%] m-auto flex flex-col lg:flex-row gap-10 items-center mb-10 bg-[#f8f8f8]'>
-                <div className="lg:w-[50%]">
-                    <h2 className="text-lg mb-6">Sobre {artist?.nombre}</h2>
-                    {formatDescription(artist?.descripcion)}
+            <div className="m-auto bg-gradient-to-br from-gray-100 via-gray-150 to-gray-100 flex flex-col lg:flex-row gap-10 items-center mt-10 md:px-4 md:py-20">
+                <div className='w-[90%] m-auto flex flex-col lg:flex-row gap-10 items-center mb-10 mt-10 lg:mt-0'>
+                    <div className="lg:w-[50%]">
+                        <h2 className="text-lg mb-4">Sobre {artist?.nombre}</h2>
+                        {formatDescription(artist?.descripcion)}
 
+                    </div>
+                    <img src={artist?.images} className="lg:w-[50%] mix-blend-multiply h-[60vh] object-contain"/>
                 </div>
-                <img src={artist?.images} className="lg:w-[50%] mix-blend-multiply h-[60vh] object-contain "/>
             </div>
+            {artist?.canciones?.length > 0 && (
+            <div className='m-auto bg-gradient-to-br from-[#D946EF] via-[#A21CAF] to-[#7C3AED] flex flex-col lg:flex-row gap-10 items-center md:px-4 md:py-20'>
+                <div className="w-[90%] m-auto mb-16 mt-10 lg:mt-0">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+                        Canciones más escuchadas
+                    </h2>
+                    <TrackList tracks={artist.canciones} />
+                </div>
+            </div>
+            )}
         </div>
     )
 }
