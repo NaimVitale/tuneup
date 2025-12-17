@@ -359,7 +359,7 @@ export class ConciertosService {
       .addGroupBy('recinto.id')
       .addGroupBy('ciudad.id')
       .addGroupBy('genero.id')
-      .orderBy('concierto.fecha', 'DESC')
+      .orderBy('concierto.fecha_venta', 'ASC')
       .limit(5)
       .cache(true);
 
