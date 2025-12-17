@@ -13,7 +13,7 @@ export const useConcertUpdate = (slug, initialData) => {
       toast.success("Concierto actualizado correctamente");
 
       // ✅ Invalidar queries relacionadas con este concierto
-      queryClient.invalidateQueries({ queryKey: ["conciertos"] });
+      queryClient.invalidateQueries({ queryKey: ["conciertos-admin"] });
       queryClient.invalidateQueries({ queryKey: ["concierto", slug] });
       queryClient.invalidateQueries({ queryKey: ['concierto-public', slug] });
     },

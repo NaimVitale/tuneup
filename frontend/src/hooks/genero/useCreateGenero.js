@@ -1,8 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { createGenero } from "../../services/generoServices";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 export const useCreateGenero = () => {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -51,6 +54,8 @@ export const useCreateGenero = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await createGenero(formData, token);
+
+      queryClient.invalidateQueries({ queryKey: ["generos-admin"] });
 
       setFormData({ nombre: "", descripcion: "" });
       setErrors({});

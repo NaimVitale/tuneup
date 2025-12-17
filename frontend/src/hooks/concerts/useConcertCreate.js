@@ -11,7 +11,7 @@ export const useConcertCreate = () => {
     mutationFn: ({ token, data }) => CreateConcierto(token, data),
     onSuccess: () => {
       toast.success("Concierto creado correctamente");
-      queryClient.invalidateQueries({ queryKey: ["conciertos"] });
+      queryClient.invalidateQueries({ queryKey: ["conciertos-admin"] });
     },
     onError: () => {
       toast.error("Error al crear el concierto");

@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { updateGenero } from "../../services/generoServices";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const useUpdateGenero = (initialData) => {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: ""
@@ -59,6 +61,8 @@ export const useUpdateGenero = (initialData) => {
     try {
       const token = localStorage.getItem("token");
       const response = await updateGenero(initialData.id, formData, token);
+
+      queryClient.invalidateQueries({ queryKey: ["generos-admin"] });
 
       setFormData({
         nombre: response.nombre,
