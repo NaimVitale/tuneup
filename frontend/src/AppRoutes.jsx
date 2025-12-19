@@ -27,6 +27,7 @@ const AdminGeneroPage = React.lazy(() => import('./pages/AdminPages/AdminGeneroP
 const AdminCreatePage = React.lazy(() => import('./pages/AdminPages/AdminCreatePage'));
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 const SuccessPage = React.lazy(() => import('./pages/SuccessPage'));
+const VerifyEmailPage = React.lazy(() => import('./pages/VerifyEmailPage'));
 const CancelPage = React.lazy(() => import('./pages/CancelPage'));
 
 
@@ -62,6 +63,7 @@ export default function AppRoutes() {
         </Route>
 
         <Route path='success' element={<SuccessPage />} />
+        <Route path='verify-email/:token' element={<VerifyEmailPage/>} />
         <Route path='cancel' element={<CancelPage />} />
         <Route path='*' element={<NotFoundPage />} />
     </Routes>

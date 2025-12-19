@@ -25,6 +25,15 @@ export const createUserAdmin = async (token, userData) => {
   }
 };
 
+export const verifyEmail = async (token_verification) => {
+  try {
+    const response = await axios.get(`${API_URL}/verify-email/${token_verification}`, {});
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
+
 export const userLogin = async (userData) => {
   try {
     const response = await axios.post(AUTH_URL, userData, { withCredentials: true });
