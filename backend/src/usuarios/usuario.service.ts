@@ -1,19 +1,23 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { Usuario } from './usuario.entity';
+import { AuthProvider, Usuario } from './usuario.entity';
 import { CreateUsuarioDto } from './dtos/create-usuario.dto'
 import { UpdateUsuarioDto } from './dtos/update-usuario.dto';
 import { UpdatePasswordDto } from './dtos/update-password-usuario.dto';
 import * as bcrypt from 'bcrypt';
 import { UsuarioReadDto } from './dtos/read-usuario.dto';
 import { CreateUsuarioAdminDto } from './dtos/create-usuario-admin.dto';
+import { randomBytes } from 'crypto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UsuarioService {
   constructor(
     @InjectRepository(Usuario)
     private readonly usuarioRepo: Repository<Usuario>,
+
+    private readonly mailService: MailService,
   ) {}
 
   async create(dto: CreateUsuarioDto) {
@@ -23,11 +27,46 @@ export class UsuarioService {
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    const token = crypto.randomUUID();
+
     const usuario = this.usuarioRepo.create({
-      ...dto,
+      nombre: dto.nombre,
+      apellido: dto.apellido,
+      email: dto.email,
       password: hashedPassword,
+      authProvider: AuthProvider.LOCAL,
+      emailVerified: false,
+      emailVerificationToken: token,
+      emailVerificationExpires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
-    return this.usuarioRepo.save(usuario);
+
+    await this.usuarioRepo.save(usuario);
+
+    await this.mailService.sendVerificationEmail(usuario.email, token);
+
+    return {
+      message: 'Usuario creado. Verifica tu email para continuar.',
+    };
+  }
+
+  async verifyEmailToken(token: string) {
+    const usuario = await this.usuarioRepo.findOne({ 
+      where: { emailVerificationToken: token } 
+    });
+
+    if (!usuario) return null;
+
+    if (usuario.emailVerificationExpires && usuario.emailVerificationExpires < new Date()) {
+      return null;
+    }
+
+    usuario.emailVerified = true;
+    usuario.emailVerificationToken = null;
+    usuario.emailVerificationExpires = null;
+
+    await this.usuarioRepo.save(usuario);
+    return usuario;
   }
 
   async createAdmin(dto: CreateUsuarioAdminDto) {

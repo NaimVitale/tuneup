@@ -1,9 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsuarioService } from '../usuarios/usuario.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUsuarioDto } from '../usuarios/dtos/login-usuario.dto';
 import { Response } from 'express';
+import { AuthProvider } from 'src/usuarios/usuario.entity';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,19 @@ export class AuthService {
     const usuario = await this.usuarioService.findByEmail(dto.email.toLowerCase());
 
     if (!usuario) throw new UnauthorizedException('Credenciales incorrectas');
+
+    if (usuario.authProvider !== AuthProvider.LOCAL) {
+      throw new UnauthorizedException(
+        'Este usuario debe iniciar sesión con Google',
+      );
+    }
+
+    // 📧 Email verificado
+    if (!usuario.emailVerified) {
+      throw new ForbiddenException(
+        'Debes verificar tu email antes de iniciar sesión',
+      );
+    }
 
     const passwordMatch = await bcrypt.compare(dto.password, usuario.password);
     if (!passwordMatch) throw new UnauthorizedException('Credenciales incorrectas');

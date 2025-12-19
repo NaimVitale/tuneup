@@ -4,9 +4,10 @@ import { Usuario } from './usuario.entity';
 import { UsuarioService } from './usuario.service';
 import { UsuarioController } from './usuario.controller';
 import { AuthModule } from 'src/auth/auth.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Usuario]), forwardRef(() => AuthModule),],
+  imports: [TypeOrmModule.forFeature([Usuario]), forwardRef(() => AuthModule), MailModule,],
   controllers: [UsuarioController],
   providers: [UsuarioService],
   exports: [UsuarioService],

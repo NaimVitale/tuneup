@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards, ParseIntPipe, Request, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards, ParseIntPipe, Request, ForbiddenException, Query, BadRequestException } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dtos/create-usuario.dto';
 import { JwtRolesGuard } from 'src/auth/jwt-roles.guard';
@@ -14,6 +14,13 @@ export class UsuarioController {
   @Post()
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
     return this.usuarioService.create(createUsuarioDto);
+  }
+
+  @Get('verify-email/:token')
+  async verifyEmail(@Param('token') token: string) {
+    const usuario = await this.usuarioService.verifyEmailToken(token);
+    if (!usuario) throw new BadRequestException('Token inválido o expirado');
+    return { message: 'Email verificado correctamente' };
   }
 
   @UseGuards(JwtRolesGuard)
